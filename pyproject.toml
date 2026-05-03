@@ -1,0 +1,74 @@
+[project]
+name = "govlink"
+version = "0.1.0"
+description = "Open data API for Gambian government datasets"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = "MIT"
+authors = [
+    { name = "TODO" },
+]
+keywords = [
+    "gambia",
+    "open-data",
+    "government",
+    "fastapi",
+    "civic-tech",
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+]
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "sqlalchemy>=2.0",
+    "beautifulsoup4>=4.12",
+    "pdfplumber>=0.11",
+    "structlog>=24.4",
+    "slowapi>=0.1.9",
+    "python-multipart>=0.0.12",
+]
+
+[project.scripts]
+govlink = "govlink.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/TODO/govlink"
+Repository = "https://github.com/TODO/govlink"
+Issues = "https://github.com/TODO/govlink/issues"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "pytest-cov>=6.0",
+    "ruff>=0.7",
+    "mypy>=1.13",
+    "pre-commit>=4.0",
+    "types-beautifulsoup4",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["govlink"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "--strict-markers -v"
+
+[tool.coverage.run]
+source = ["govlink"]
+omit = ["*/tests/*"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
