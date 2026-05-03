@@ -1,6 +1,11 @@
 target-version = "py312"
 line-length = 100
 
+# Alembic autogenerates migration files with its own (long-line) style; we
+# preserve them verbatim so re-running ``alembic revision --autogenerate``
+# produces clean diffs.
+extend-exclude = ["alembic/versions"]
+
 [lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
 

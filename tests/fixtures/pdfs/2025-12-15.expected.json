@@ -1,0 +1,203 @@
+{
+  "snapshot_date": "2025-12-15",
+  "records": [
+    {
+      "currency_code": "USD",
+      "currency_name": "US DOLLAR",
+      "rate": "71.97",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "EUR",
+      "currency_name": "EURO",
+      "rate": "85.10",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "GBP",
+      "currency_name": "GBP",
+      "rate": "96.36",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "CHF",
+      "currency_name": "SWISS FRANC",
+      "rate": "90.42",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "XOF",
+      "currency_name": "CFA FRANC (5000)",
+      "rate": "631.93",
+      "unit_multiplier": 5000
+    },
+    {
+      "currency_code": "EGP",
+      "currency_name": "EGYPTIAN POUND",
+      "rate": "1.52",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "GNF",
+      "currency_name": "GUINEAN FRANC",
+      "rate": "0.01",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "GHS",
+      "currency_name": "NEW GHANIAN CEDI",
+      "rate": "6.27",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "NGN",
+      "currency_name": "NIGERIAN NAIRA",
+      "rate": "0.05",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "SLL",
+      "currency_name": "SIERRALEONE LEONE",
+      "rate": "3.13",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "ZAR",
+      "currency_name": "SOUTH AFRICAN RAND",
+      "rate": "4.28",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "WAUA",
+      "currency_name": "WAUA",
+      "rate": "98.38",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "XDR",
+      "currency_name": "SDR",
+      "rate": "98.37",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "DKK",
+      "currency_name": "DANISH KRONE (100)",
+      "rate": "1131.27",
+      "unit_multiplier": 100
+    },
+    {
+      "currency_code": "NOK",
+      "currency_name": "NORWEGIAN KRONER (100)",
+      "rate": "710.32",
+      "unit_multiplier": 100
+    },
+    {
+      "currency_code": "SEK",
+      "currency_name": "SWEDISH KRONA (100)",
+      "rate": "776.41",
+      "unit_multiplier": 100
+    },
+    {
+      "currency_code": "CAD",
+      "currency_name": "CANADIAN DOLLAR",
+      "rate": "52.25",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "BRL",
+      "currency_name": "BRAZIL REAL",
+      "rate": "13.28",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "TRY",
+      "currency_name": "TURKISH LIRA",
+      "rate": "1.69",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "AUD",
+      "currency_name": "AUSTRALIAN DOLLAR",
+      "rate": "47.89",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "CNY",
+      "currency_name": "CHINA RENMINBI",
+      "rate": "10.20",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "HKD",
+      "currency_name": "HONG KONG DOLLAR",
+      "rate": "9.25",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "JPY",
+      "currency_name": "JAPANESE YEN (100)",
+      "rate": "46.21",
+      "unit_multiplier": 100
+    },
+    {
+      "currency_code": "INR",
+      "currency_name": "INDIAN RUPEE",
+      "rate": "0.79",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "TWD",
+      "currency_name": "TAIWANESE DOLLAR",
+      "rate": "2.30",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "SGD",
+      "currency_name": "SINGAPORE DOLLAR",
+      "rate": "55.72",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "LKR",
+      "currency_name": "SRI LANKAN RUPEE",
+      "rate": "0.23",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "THB",
+      "currency_name": "THAILAND BAHT",
+      "rate": "2.28",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "AED",
+      "currency_name": "U. A. E DIRHAM",
+      "rate": "19.60",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "KWD",
+      "currency_name": "KUWAITI DINAR",
+      "rate": "234.54",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "SAR",
+      "currency_name": "SAUDI RIYAL",
+      "rate": "19.19",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "NZD",
+      "currency_name": "NEWZEALAND DOLLAR",
+      "rate": "41.91",
+      "unit_multiplier": 1
+    },
+    {
+      "currency_code": "PHP",
+      "currency_name": "PHILLIPINE PESO",
+      "rate": "1.22",
+      "unit_multiplier": 1
+    }
+  ]
+}
