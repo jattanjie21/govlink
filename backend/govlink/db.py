@@ -43,13 +43,30 @@ def _enable_sqlite_foreign_keys(dbapi_connection: Any, _connection_record: Any) 
     cursor.close()
 
 
+def _normalise_postgres_url(url: str) -> str:
+    """Pin Postgres URLs to the psycopg v3 driver.
+
+    Why: Railway, Heroku, and similar PaaS providers set ``DATABASE_URL`` as
+    ``postgres://`` or ``postgresql://``. SQLAlchemy resolves the latter to
+    the legacy ``psycopg2`` driver, which we do not depend on — we ship
+    ``psycopg[binary]`` (v3). Explicit ``postgresql+<driver>://`` URLs are
+    left untouched.
+    """
+    if url.startswith("postgres://"):
+        return "postgresql+psycopg://" + url[len("postgres://") :]
+    if url.startswith("postgresql://"):
+        return "postgresql+psycopg://" + url[len("postgresql://") :]
+    return url
+
+
 def create_engine_from_url(url: str, echo: bool = False) -> Engine:
     """Build a SQLAlchemy ``Engine`` with backend-appropriate tuning.
 
     SQLite URLs get ``StaticPool`` and ``check_same_thread=False`` so a
     single in-memory database is shared across threads in tests, plus a
-    ``connect`` listener that enables ``PRAGMA foreign_keys=ON``. All
-    other backends use SQLAlchemy's default pool with no overrides.
+    ``connect`` listener that enables ``PRAGMA foreign_keys=ON``. Postgres
+    URLs are routed through psycopg v3 (see :func:`_normalise_postgres_url`).
+    All other backends use SQLAlchemy's default pool with no overrides.
     """
     if url.startswith("sqlite"):
         engine = create_engine(
@@ -60,7 +77,7 @@ def create_engine_from_url(url: str, echo: bool = False) -> Engine:
         )
         event.listen(engine, "connect", _enable_sqlite_foreign_keys)
         return engine
-    return create_engine(url, echo=echo)
+    return create_engine(_normalise_postgres_url(url), echo=echo)
 
 
 def init_db(database_url: str | None = None) -> None:
