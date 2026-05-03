@@ -16,10 +16,10 @@ When the backend grows new capabilities, flip 🔴 → 🟢 and start building.
 
 | # | Mock                          | Status | Backend dependency                                                  | Implemented |
 |---|-------------------------------|--------|---------------------------------------------------------------------|:-----------:|
-| 1 | `index.html`                  | 🟢     | `GET /datasets`                                                     |     [ ]     |
-| 2 | `browse.html`                 | 🟡     | `GET /datasets` (server-side faceted filters by category/org/country/tags don't exist — implement client-side filter only) | [ ]         |
-| 3 | `dataset-detail.html`         | 🟢     | `GET /datasets/:slug`, `GET /datasets/:slug/latest`, `GET /datasets/:slug/historical` (drives the Preview tab) |     [ ]     |
-| 4 | `dataset-api.html`            | 🟢     | Static docs page — endpoints already exist; live "Try it" calls `GET /datasets/:slug/{latest,historical,csv}` | [ ] |
+| 1 | `index.html`                  | 🟢     | `GET /datasets`                                                     |     [x]     |
+| 2 | `browse.html`                 | 🟡     | `GET /datasets` (server-side faceted filters by category/org/country/tags don't exist — implement client-side filter only) | [x]         |
+| 3 | `dataset-detail.html`         | 🟢     | `GET /datasets/:slug`, `GET /datasets/:slug/latest`, `GET /datasets/:slug/historical` (drives the Preview tab) |     [x]     |
+| 4 | `dataset-api.html`            | 🟢     | Static docs page — endpoints already exist; live "Try it" calls `GET /datasets/:slug/{latest,historical,csv}` | [x] |
 | 5 | `reports.html`                | 🔴     | No `/reports` backend                                               |     [ ]     |
 | 6 | `report-read.html`            | 🔴     | No `/reports/:slug` backend                                         |     [ ]     |
 | 7 | `developer.html`              | 🔴     | No `/me/api-keys`, no quota endpoints, no auth                      |     [ ]     |
@@ -41,8 +41,9 @@ When the backend grows new capabilities, flip 🔴 → 🟢 and start building.
 
 | Mock | Status | Backend dependency | Implemented |
 |------|--------|--------------------|:-----------:|
-| **Operator health** (`/operator`) — no mock; mirror `style-guide.html` patterns | 🟢 | `GET /admin/health` | [ ] |
-| **404** | 🟢 | none | [ ] |
+| **Operator health** (`/operator`) — no mock; mirror `style-guide.html` patterns | 🟢 | `GET /admin/health` | [x] |
+| **API docs landing** (`/api-docs`) — no mock; complements per-dataset API tab | 🟢 | `GET /datasets` | [x] |
+| **404** | 🟢 | none | [x] |
 
 ## System artifacts (reference only, not React routes)
 
@@ -64,16 +65,17 @@ When the backend grows new capabilities, flip 🔴 → 🟢 and start building.
 
 ---
 
-## v0 buildable scope (locked)
+## v0 buildable scope (shipped)
 
-Six pages get us to a useful, deployable site against today's backend:
+Pages live against today's backend on `feat/frontend-public`:
 
-1. ☐ Home (`/`)
-2. ☐ Browse (`/datasets`)
-3. ☐ Dataset detail (`/datasets/:slug`) — Overview + Preview + API tabs
-4. ☐ Dataset API tab (`/datasets/:slug/api`) — sub-route or tab
-5. ☐ Operator health (`/operator`)
-6. ☐ 404 (`*`)
+1. ☑ Home (`/`)
+2. ☑ Browse (`/datasets`)
+3. ☑ Dataset detail (`/datasets/:slug`) — Overview + Preview + API tabs
+4. ☑ Dataset API tab (`/datasets/:slug/api`) — live try-it + 4-language snippets
+5. ☑ Operator health (`/operator`)
+6. ☑ API docs landing (`/api-docs`)
+7. ☑ 404 (`*`)
 
 Everything else is parked until the backend ships the underlying endpoints.
 

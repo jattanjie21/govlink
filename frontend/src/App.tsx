@@ -7,7 +7,8 @@ import DatasetOverview from "@/routes/dataset/Overview";
 import DatasetPreview from "@/routes/dataset/Preview";
 import DatasetApi from "@/routes/dataset/Api";
 import Operator from "@/routes/Operator";
-import Placeholder from "@/routes/Placeholder";
+import ApiDocs from "@/routes/ApiDocs";
+import NotFound from "@/routes/NotFound";
 
 export default function App() {
   return (
@@ -23,14 +24,8 @@ export default function App() {
         </Route>
 
         <Route path="/operator" element={<Operator />} />
-        <Route
-          path="/api-docs"
-          element={<Placeholder title="API documentation" step="Step 7" />}
-        />
-        <Route
-          path="*"
-          element={<Placeholder title="Page not found (404)" step="Step 9" />}
-        />
+        <Route path="/api-docs" element={<ApiDocs />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );
