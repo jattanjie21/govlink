@@ -7,6 +7,7 @@ import { InstitutionCard } from "@/components/InstitutionCard";
 import { EmptyState, ErrorState, LoadingCardGrid } from "@/components/States";
 import { useDatasets } from "@/lib/queries";
 import { slugify } from "@/lib/utils";
+import { INSTITUTIONS } from "@/lib/institutions";
 import type { DatasetSummary } from "@/lib/types";
 
 interface Institution {
@@ -14,21 +15,6 @@ interface Institution {
   slug: string;
   datasets: DatasetSummary[];
 }
-
-interface InstitutionMeta {
-  description?: string;
-  sector?: string;
-  logoUrl?: string;
-}
-
-const INSTITUTIONS: Record<string, InstitutionMeta> = {
-  "central-bank-of-the-gambia": {
-    sector: "Central bank",
-    description:
-      "The central bank and primary monetary authority of The Gambia. Issues currency, regulates the financial system, and publishes official daily valuation exchange rates.",
-    // logoUrl: "/logos/central-bank-of-the-gambia.png",
-  },
-};
 
 function groupByInstitution(list: DatasetSummary[]): Institution[] {
   const map = new Map<string, Institution>();
@@ -147,8 +133,14 @@ export default function Home() {
               )}
               {filteredDatasets.length > 0 && (
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {filteredDatasets.map((d) => (
-                    <DatasetCard key={d.slug} dataset={d} />
+                  {filteredDatasets.map((d, i) => (
+                    <div
+                      key={d.slug}
+                      className="animate-fade-up"
+                      style={{ animationDelay: `${i * 50}ms` }}
+                    >
+                      <DatasetCard dataset={d} />
+                    </div>
                   ))}
                 </div>
               )}
@@ -165,18 +157,23 @@ export default function Home() {
               )}
               {institutions.length > 0 && (
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {institutions.map((inst) => {
+                  {institutions.map((inst, i) => {
                     const meta = INSTITUTIONS[inst.slug] ?? {};
                     return (
-                      <InstitutionCard
+                      <div
                         key={inst.slug}
-                        publisher={inst.publisher}
-                        slug={inst.slug}
-                        datasetCount={inst.datasets.length}
-                        sector={meta.sector}
-                        description={meta.description}
-                        logoUrl={meta.logoUrl}
-                      />
+                        className="animate-fade-up"
+                        style={{ animationDelay: `${i * 60}ms` }}
+                      >
+                        <InstitutionCard
+                          publisher={inst.publisher}
+                          slug={inst.slug}
+                          datasetCount={inst.datasets.length}
+                          sector={meta.sector}
+                          description={meta.description}
+                          logoUrl={meta.logoUrl}
+                        />
+                      </div>
                     );
                   })}
                 </div>

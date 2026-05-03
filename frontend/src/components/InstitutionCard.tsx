@@ -40,12 +40,16 @@ export function InstitutionCard({
       />
 
       <div className="absolute left-1/2 top-28 -translate-x-1/2 -translate-y-1/2">
-        <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-4 border-surface bg-surface-2 ring-1 ring-rule">
+        <div
+          className={`flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-4 border-surface ring-1 ring-rule ${
+            logoUrl && !logoBroken ? "bg-white" : "bg-surface-2"
+          }`}
+        >
           {logoUrl && !logoBroken ? (
             <img
               src={logoUrl}
               alt={`${publisher} logo`}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-contain p-2"
               onError={() => setLogoBroken(true)}
             />
           ) : (

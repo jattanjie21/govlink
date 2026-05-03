@@ -1,7 +1,8 @@
-import { NavLink, Outlet, useParams } from "react-router-dom";
-import { Download, ExternalLink, ShieldCheck } from "lucide-react";
+import { NavLink, Outlet, useLocation, useParams } from "react-router-dom";
+import { Download, ExternalLink } from "lucide-react";
 import { Container } from "@/components/Container";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { InstitutionBadge } from "@/components/InstitutionBadge";
 import { ErrorState } from "@/components/States";
 import { useDataset, useHealth } from "@/lib/queries";
 import { formatDate, formatDateTime, formatFrequency } from "@/lib/format";
@@ -11,6 +12,7 @@ export default function DatasetLayout() {
   const { slug = "" } = useParams<{ slug: string }>();
   const dataset = useDataset(slug);
   const health = useHealth(60_000);
+  const location = useLocation();
 
   if (dataset.isLoading) {
     return (
@@ -38,7 +40,7 @@ export default function DatasetLayout() {
   return (
     <>
       {/* Hero */}
-      <section className="border-b border-rule pb-10 pt-12 md:pt-16">
+      <section className="animate-fade-up border-b border-rule pb-10 pt-12 md:pt-16">
         <Container>
           <Breadcrumbs
             items={[
@@ -48,21 +50,7 @@ export default function DatasetLayout() {
           />
 
           <div className="mt-6 flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-2 rounded border border-rule bg-surface px-2.5 py-1 text-xs">
-              <span
-                aria-hidden
-                className="inline-flex h-4 w-4 items-center justify-center rounded-[2px] bg-accent-tint font-display text-[10px] font-semibold text-accent"
-              >
-                {initial(d.publisher)}
-              </span>
-              <span className="text-ink-2">{d.publisher}</span>
-              <span
-                className="inline-flex items-center gap-1 text-xs font-medium text-success"
-                title="Publisher source verified"
-              >
-                <ShieldCheck className="h-3 w-3" /> Verified
-              </span>
-            </span>
+            <InstitutionBadge publisher={d.publisher} linked />
           </div>
 
           <h1 className="mt-5 max-w-[22ch] font-display text-[clamp(32px,4vw,52px)] font-normal leading-[1.05] tracking-tight">
@@ -143,9 +131,9 @@ export default function DatasetLayout() {
         <Container>
           <div role="tablist" className="flex gap-1 overflow-x-auto">
             <Tab to={`/datasets/${slug}`} end>
-              Overview
+              Preview
             </Tab>
-            <Tab to={`/datasets/${slug}/preview`}>Preview</Tab>
+            <Tab to={`/datasets/${slug}/overview`}>Overview</Tab>
             <Tab to={`/datasets/${slug}/api`}>API</Tab>
           </div>
         </Container>
@@ -154,7 +142,12 @@ export default function DatasetLayout() {
       {/* Tab content */}
       <section className="py-10">
         <Container>
-          <Outlet context={{ slug, dataset: d, freshness }} />
+          <div
+            key={location.pathname}
+            className="animate-in fade-in-0 slide-in-from-bottom-1 duration-300"
+          >
+            <Outlet context={{ slug, dataset: d, freshness }} />
+          </div>
         </Container>
       </section>
     </>
@@ -200,7 +193,3 @@ function Meta({ label, children }: { label: string; children: React.ReactNode })
   );
 }
 
-function initial(name: string): string {
-  const first = name.trim().split(/\s+/)[0] ?? "?";
-  return first.charAt(0).toUpperCase();
-}

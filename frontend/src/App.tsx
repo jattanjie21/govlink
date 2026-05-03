@@ -23,8 +23,8 @@ export default function App() {
         />
 
         <Route path="/datasets/:slug" element={<DatasetLayout />}>
-          <Route index element={<DatasetOverview />} />
-          <Route path="preview" element={<DatasetPreview />} />
+          <Route index element={<DatasetPreview />} />
+          <Route path="overview" element={<DatasetOverview />} />
           <Route path="api" element={<DatasetApi />} />
         </Route>
 
