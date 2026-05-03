@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brand assets · GovLink</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,1,400;9..144,0,600;9..144,0,700&family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root[data-theme="light"]{--canvas:#FAF8F4;--surface:#FFFFFF;--surface-2:#F2EFE8;--ink:#1A1A1A;--ink-2:#3D3D3D;--ink-3:#6B6B6B;--rule:#E5E2DA;--rule-2:#D5D0C4;--accent:#0F4C5C;--accent-hover:#0A3A47;--accent-tint:#E5EFF1;--code-bg:#0E0D0C;--code-fg:#E5E2DA}
+  :root[data-theme="dark"]{--canvas:#141312;--surface:#1C1B19;--surface-2:#222020;--ink:#F0EDE6;--ink-2:#C0BBB0;--ink-3:#8A867D;--rule:#2A2826;--rule-2:#3A3835;--accent:#5FB8CC;--accent-hover:#7CCCDF;--accent-tint:#1F3A40;--code-bg:#0A0908;--code-fg:#E5E2DA}
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;padding:0;background:var(--canvas);color:var(--ink);font-family:'Geist','Inter Tight',ui-sans-serif,system-ui,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"ss01","cv11";transition:background 180ms ease,color 180ms ease}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
+  .num{font-variant-numeric:tabular-nums}
+  .mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 32px}
+
+  .nav{border-bottom:1px solid var(--rule);background:var(--canvas);position:sticky;top:0;z-index:50;backdrop-filter:saturate(120%) blur(8px)}
+  .nav-inner{display:flex;align-items:center;gap:32px;height:64px}
+  .brand{display:flex;align-items:baseline;gap:8px;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:21px;letter-spacing:-0.01em}
+  .brand-mark{display:inline-block;width:8px;height:24px;background:var(--accent);transform:translateY(4px)}
+  .brand .label{font-family:'Geist',sans-serif;font-weight:400;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-3);margin-left:6px;padding-left:10px;border-left:1px solid var(--rule-2);align-self:center}
+  .nav-right{margin-left:auto;display:flex;align-items:center;gap:14px;font-size:13px;color:var(--ink-2)}
+  .theme-toggle{width:32px;height:32px;border:1px solid var(--rule);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink-2);cursor:pointer}
+
+  .head{padding:64px 0 40px;border-bottom:1px solid var(--rule)}
+  .crumbs{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink-3);margin-bottom:24px;font-variant-numeric:tabular-nums}
+  .crumbs .sep{color:var(--rule-2)}
+  .eyebrow{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);font-weight:500;display:flex;align-items:center;gap:10px}
+  .eyebrow::before{content:"";width:24px;height:1px;background:var(--accent)}
+  .head h1{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:48px;line-height:1.05;letter-spacing:-0.02em;margin:18px 0 18px;max-width:18ch}
+  .head h1 em{font-style:italic;color:var(--accent)}
+  .head .lead{font-size:17px;line-height:1.55;color:var(--ink-2);margin:0;max-width:60ch}
+
+  section.bay{padding:56px 0;border-bottom:1px solid var(--rule)}
+  section.bay:last-child{border-bottom:none}
+  .bay-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);letter-spacing:0.08em;font-variant-numeric:tabular-nums}
+  .bay-head{margin-bottom:32px;display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap}
+  .bay-head h2{font-family:'Fraunces',serif;font-weight:400;font-size:32px;line-height:1.15;letter-spacing:-0.015em;margin:8px 0 6px}
+  .bay-head p{font-size:15px;color:var(--ink-2);margin:0;max-width:48ch;line-height:1.6}
+  .bay-head .acts{display:flex;gap:8px;flex-shrink:0}
+  .bay-head .acts a{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border:1px solid var(--rule-2);border-radius:3px;background:var(--surface);color:var(--ink-2);font-size:12.5px;font-weight:500}
+  .bay-head .acts a:hover{border-color:var(--ink-3);color:var(--ink)}
+
+  /* Wordmark display */
+  .word-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .word-card{background:var(--surface);border:1px solid var(--rule);border-radius:6px;display:flex;flex-direction:column;overflow:hidden}
+  .word-card.dark{background:var(--ink);color:var(--canvas)}
+  .word-card.dark .meta-row{border-top-color:rgba(250,248,244,0.08)}
+  .word-card.dark .meta-row span{color:rgba(250,248,244,0.55)}
+  .word-card.dark .meta-row .v{color:var(--canvas)}
+  .word-stage{flex:1;padding:64px 32px;display:flex;align-items:center;justify-content:center;min-height:240px}
+  .wordmark{display:flex;align-items:baseline;gap:14px;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:64px;letter-spacing:-0.02em;color:var(--ink)}
+  .word-card.dark .wordmark{color:var(--canvas)}
+  .wordmark-stripe{display:inline-block;width:14px;height:48px;background:var(--accent);transform:translateY(8px)}
+  .word-card.dark .wordmark-stripe{background:#5FB8CC}
+  .meta-row{padding:14px 20px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .meta-row .v{color:var(--ink);font-weight:500;font-family:'JetBrains Mono',monospace;font-size:11px}
+
+  /* Mark */
+  .mark-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .mark-card{background:var(--surface);border:1px solid var(--rule);border-radius:6px;display:flex;flex-direction:column;overflow:hidden;text-align:center}
+  .mark-card.dark{background:var(--ink)}
+  .mark-stage{padding:36px 24px;display:flex;align-items:center;justify-content:center;flex:1;min-height:160px}
+  .mark-card.dark .mark-stage{background:#0F4C5C}
+  .mark-meta{padding:10px 16px;border-top:1px solid var(--rule);font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums;display:flex;justify-content:space-between;background:var(--canvas)}
+  .mark-card.dark .mark-meta{background:var(--ink);border-top-color:rgba(250,248,244,0.08);color:rgba(250,248,244,0.55)}
+  .mark-meta strong{color:var(--ink);font-weight:500;font-family:'JetBrains Mono',monospace;font-size:11px}
+  .mark-card.dark .mark-meta strong{color:var(--canvas)}
+
+  /* Favicon row */
+  .favicon-row{background:var(--surface);border:1px solid var(--rule);border-radius:6px;display:flex;align-items:flex-end;justify-content:space-around;gap:14px;padding:36px 24px;flex-wrap:wrap}
+  .fav-it{display:flex;flex-direction:column;align-items:center;gap:14px}
+  .fav-it .frame{display:flex;align-items:center;justify-content:center;background:var(--surface-2);border:1px solid var(--rule);border-radius:3px}
+  .fav-it .lab{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-3);font-variant-numeric:tabular-nums;text-align:center;line-height:1.4}
+  .fav-it .lab strong{color:var(--ink);font-weight:500;display:block;margin-bottom:2px;font-size:11px}
+
+  /* OG image */
+  .og-frame{background:var(--surface);border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+  .og-canvas{aspect-ratio:1200/630;background:var(--canvas);display:flex;flex-direction:column;justify-content:space-between;padding:64px;position:relative;overflow:hidden;color:var(--ink);max-width:none}
+  .og-canvas::before{content:"";position:absolute;top:0;left:0;right:0;height:8px;background:linear-gradient(to right,#CE1126 0 33.3%,#FFFFFF 33.3% 33.6%,#0C1C8C 33.6% 66.6%,#FFFFFF 66.6% 66.9%,#3A7728 66.9% 100%)}
+  .og-canvas .top{display:flex;align-items:baseline;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-3);letter-spacing:0.06em;text-transform:uppercase;margin-top:8px}
+  .og-wordmark{display:flex;align-items:baseline;gap:18px;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:88px;letter-spacing:-0.02em;color:var(--ink);margin-bottom:6px}
+  .og-wordmark .stripe{display:inline-block;width:18px;height:64px;background:var(--accent);transform:translateY(10px)}
+  .og-headline{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:400;font-size:38px;line-height:1.2;color:var(--ink-2);max-width:18ch;letter-spacing:-0.01em;margin-bottom:32px}
+  .og-stats{display:flex;align-items:flex-end;gap:48px;border-top:1px solid var(--rule);padding-top:18px}
+  .og-stats .s{display:flex;flex-direction:column;gap:4px}
+  .og-stats .s .v{font-family:'Fraunces',serif;font-size:32px;font-weight:400;letter-spacing:-0.01em;color:var(--ink);line-height:1;font-variant-numeric:tabular-nums}
+  .og-stats .s .l{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
+  .og-stats .pr{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--ink-3);letter-spacing:0.06em;text-transform:uppercase}
+
+  .og-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+  .og-grid .og-frame{margin:0}
+
+  /* Code blocks */
+  .code-block{background:var(--code-bg);border:1px solid #2A2826;border-radius:6px;padding:18px 22px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12.5px;line-height:1.7;color:var(--code-fg);overflow-x:auto;position:relative;margin-top:18px}
+  [data-theme="dark"] .code-block{border-color:#1F1E1C}
+  .code-block .lang{position:absolute;top:10px;right:14px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#8A867D;letter-spacing:0.08em;text-transform:uppercase}
+  .code-block .copy{position:absolute;top:10px;right:60px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#8A867D;cursor:pointer;padding:2px 6px;border-radius:2px}
+  .code-block .copy:hover{color:#E5E2DA;background:rgba(255,255,255,0.06)}
+  .code-block .c-comment{color:#8A867D;font-style:italic}
+  .code-block .c-method{color:#7CCCDF}
+  .code-block .c-string{color:#D9B473}
+  .code-block .c-key{color:#C8A8DD}
+  .code-block .c-num{color:#9FCFA4}
+
+  /* Don'ts grid */
+  .dont-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .dont-card{background:var(--surface);border:1px solid var(--rule);border-radius:6px;overflow:hidden;display:flex;flex-direction:column}
+  .dont-stage{padding:36px 18px;display:flex;align-items:center;justify-content:center;min-height:140px;flex:1;background:var(--canvas);border-bottom:1px solid var(--rule);position:relative}
+  .dont-stage::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-15deg);width:140%;height:1px;background:var(--danger);opacity:0.65}
+  .dont-card.do .dont-stage::after{display:none}
+  .dont-card.do .dont-stage{background:color-mix(in oklch,var(--accent) 6%,var(--surface))}
+  .dont-meta{padding:12px 16px;font-size:12px;color:var(--ink-2);background:var(--surface);line-height:1.5}
+  .dont-meta strong{display:block;color:var(--ink);font-weight:500;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;font-variant-numeric:tabular-nums}
+  .dont-card.do .dont-meta strong{color:var(--accent)}
+  .dont-card.dont .dont-meta strong{color:var(--danger)}
+
+  /* Spec table */
+  .spec-table{width:100%;border-collapse:collapse;font-size:13.5px;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);background:var(--surface)}
+  .spec-table thead th{text-align:left;padding:10px 14px;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600;border-bottom:1px solid var(--rule);background:var(--surface-2);font-variant-numeric:tabular-nums}
+  .spec-table tbody td{padding:11px 14px;border-top:1px solid var(--rule);color:var(--ink-2);vertical-align:middle;font-variant-numeric:tabular-nums}
+  .spec-table tbody tr:first-child td{border-top:none}
+  .spec-table .file{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink);font-weight:500}
+  .spec-table .v{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .spec-table a{color:var(--accent);font-weight:500;border-bottom:1px solid var(--accent);padding-bottom:1px;font-size:12px}
+
+  @media (max-width:1024px){.word-grid{grid-template-columns:1fr}.mark-grid{grid-template-columns:1fr 1fr}.dont-grid{grid-template-columns:1fr}.og-grid{grid-template-columns:1fr}}
+  @media (max-width:640px){.wrap{padding:0 20px}.head{padding:48px 0 32px}.head h1{font-size:32px}.bay-head h2{font-size:24px}.wordmark{font-size:42px}.wordmark-stripe{width:9px;height:32px;transform:translateY(6px)}.og-canvas{padding:32px}.og-wordmark{font-size:54px}.og-headline{font-size:22px}.og-stats{gap:24px;flex-wrap:wrap}.mark-grid{grid-template-columns:1fr}}
+  *:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+  @keyframes fade-up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .fade-in{animation:fade-up 320ms cubic-bezier(0.2,0,0,1) both}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html"><span class="brand-mark"></span>GovLink<span class="label">Brand</span></a>
+    <div class="nav-right">
+      <a href="style-guide.html" style="color:var(--ink-2)">Style guide</a>
+      <a href="handoff.html" style="color:var(--ink-2)">Handoff</a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.5 3.5l1.4 1.4M11.1 11.1l1.4 1.4M3.5 12.5l1.4-1.4M11.1 4.9l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="head fade-in">
+  <div class="wrap">
+    <nav class="crumbs"><a href="index.html">Home</a><span class="sep">/</span><a href="style-guide.html">Design system</a><span class="sep">/</span><span>Brand assets</span></nav>
+    <span class="eyebrow">Brand assets · v1.4.2</span>
+    <h1>The wordmark, mark, and a small <em>considered nod</em> to national identity.</h1>
+    <p class="lead">A serif wordmark in Fraunces, anchored on a single deep-teal stripe — a quiet reference to printed-document authority. The Gambian flag appears once, deliberately, as an 8 px stripe across the OG card; nowhere else as UI chrome.</p>
+  </div>
+</section>
+
+<!-- WORDMARK -->
+<section class="bay">
+  <div class="wrap">
+    <header class="bay-head">
+      <div>
+        <span class="bay-num">01</span>
+        <h2>Wordmark</h2>
+        <p>The primary mark. Fraunces semi-bold at -0.02em tracking, paired with a single 14×48 px deep-teal stripe sitting on the baseline. Use this on light surfaces; reverse the colors for dark.</p>
+      </div>
+      <div class="acts">
+        <a href="#"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 2v9M4 7l4 4 4-4M2 14h12"/></svg>SVG</a>
+        <a href="#"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 2v9M4 7l4 4 4-4M2 14h12"/></svg>PNG</a>
+        <a href="#"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 2v9M4 7l4 4 4-4M2 14h12"/></svg>PDF</a>
+      </div>
+    </header>
+
+    <div class="word-grid">
+      <div class="word-card">
+        <div class="word-stage">
+          <span class="wordmark"><span class="wordmark-stripe"></span>GovLink</span>
+        </div>
+        <div class="meta-row"><span>Primary · light surface</span><span class="v">FAF8F4 · 0F4C5C · 1A1A1A</span></div>
+      </div>
+      <div class="word-card dark">
+        <div class="word-stage">
+          <span class="wordmark"><span class="wordmark-stripe"></span>GovLink</span>
+        </div>
+        <div class="meta-row"><span>Reversed · dark surface</span><span class="v">141312 · 5FB8CC · F0EDE6</span></div>
+      </div>
+    </div>
+
+    <pre class="code-block"><span class="lang">SVG · wordmark.svg</span><span class="copy">Copy</span><span class="c-key">&lt;svg</span> <span class="c-method">xmlns</span>=<span class="c-string">"http://www.w3.org/2000/svg"</span> <span class="c-method">viewBox</span>=<span class="c-string">"0 0 280 64"</span> <span class="c-method">role</span>=<span class="c-string">"img"</span> <span class="c-method">aria-label</span>=<span class="c-string">"GovLink"</span><span class="c-key">&gt;</span>
+  <span class="c-key">&lt;rect</span> <span class="c-method">x</span>=<span class="c-string">"0"</span> <span class="c-method">y</span>=<span class="c-string">"8"</span> <span class="c-method">width</span>=<span class="c-string">"14"</span> <span class="c-method">height</span>=<span class="c-string">"48"</span> <span class="c-method">fill</span>=<span class="c-string">"currentColor"</span> <span class="c-method">style</span>=<span class="c-string">"color:#0F4C5C"</span> <span class="c-key">/&gt;</span>
+  <span class="c-key">&lt;text</span> <span class="c-method">x</span>=<span class="c-string">"28"</span> <span class="c-method">y</span>=<span class="c-string">"50"</span>
+        <span class="c-method">font-family</span>=<span class="c-string">"Fraunces, Georgia, serif"</span>
+        <span class="c-method">font-weight</span>=<span class="c-string">"600"</span>
+        <span class="c-method">font-size</span>=<span class="c-string">"56"</span>
+        <span class="c-method">letter-spacing</span>=<span class="c-string">"-0.02em"</span>
+        <span class="c-method">fill</span>=<span class="c-string">"#1A1A1A"</span><span class="c-key">&gt;</span>GovLink<span class="c-key">&lt;/text&gt;</span>
+<span class="c-key">&lt;/svg&gt;</span></pre>
+  </div>
+</section>
+
+<!-- MARK -->
+<section class="bay">
+  <div class="wrap">
+    <header class="bay-head">
+      <div>
+        <span class="bay-num">02</span>
+        <h2>Mark</h2>
+        <p>Standalone mark for app icons, social avatars, and any place too narrow for the wordmark. A serif <strong>G</strong> in Fraunces inside a 1:1 frame, paired with the same deep-teal stripe. Works at every size from 16 px to 1024 px.</p>
+      </div>
+      <div class="acts">
+        <a href="#"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 2v9M4 7l4 4 4-4M2 14h12"/></svg>SVG</a>
+        <a href="#"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 2v9M4 7l4 4 4-4M2 14h12"/></svg>PNG · 1024</a>
+      </div>
+    </header>
+
+    <div class="mark-grid">
+      <div class="mark-card">
+        <div class="mark-stage">
+          <svg width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="GovLink mark">
+            <rect width="120" height="120" rx="8" fill="#FAF8F4"/>
+            <rect x="20" y="22" width="10" height="76" fill="#0F4C5C"/>
+            <text x="44" y="84" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="78" letter-spacing="-0.04em" fill="#1A1A1A">G</text>
+          </svg>
+        </div>
+        <div class="mark-meta"><strong>Primary</strong><span>120 × 120 · light</span></div>
+      </div>
+      <div class="mark-card dark">
+        <div class="mark-stage">
+          <svg width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="GovLink mark, reversed">
+            <rect width="120" height="120" rx="8" fill="#0F4C5C"/>
+            <rect x="20" y="22" width="10" height="76" fill="#FAF8F4"/>
+            <text x="44" y="84" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="78" letter-spacing="-0.04em" fill="#FAF8F4">G</text>
+          </svg>
+        </div>
+        <div class="mark-meta"><strong>Reversed · accent</strong><span>120 × 120 · accent fill</span></div>
+      </div>
+      <div class="mark-card">
+        <div class="mark-stage">
+          <svg width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="GovLink mark monochrome">
+            <rect width="120" height="120" rx="8" fill="none" stroke="#1A1A1A" stroke-width="2"/>
+            <rect x="20" y="22" width="10" height="76" fill="#1A1A1A"/>
+            <text x="44" y="84" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="78" letter-spacing="-0.04em" fill="#1A1A1A">G</text>
+          </svg>
+        </div>
+        <div class="mark-meta"><strong>Monochrome</strong><span>letterhead · embossing</span></div>
+      </div>
+      <div class="mark-card dark" style="background:#FFFFFF">
+        <div class="mark-stage" style="background:#FFFFFF">
+          <svg width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="GovLink mark, transparent">
+            <rect x="20" y="22" width="10" height="76" fill="#0F4C5C"/>
+            <text x="44" y="84" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="78" letter-spacing="-0.04em" fill="#1A1A1A">G</text>
+          </svg>
+        </div>
+        <div class="mark-meta" style="background:#FFFFFF;color:#6B6B6B"><strong style="color:#1A1A1A">Transparent</strong><span>web favicon · embed</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAVICON -->
+<section class="bay">
+  <div class="wrap">
+    <header class="bay-head">
+      <div>
+        <span class="bay-num">03</span>
+        <h2>Favicon set</h2>
+        <p>The mark, optimized for browser tabs, OS dock, and bookmarks. The 16 px and 32 px PNGs ship as bitmaps so the serif <em>G</em> stays crisp; everything 64 px+ is the SVG.</p>
+      </div>
+      <div class="acts">
+        <a href="#"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 2v9M4 7l4 4 4-4M2 14h12"/></svg>favicon.zip</a>
+      </div>
+    </header>
+
+    <div class="favicon-row">
+      <div class="fav-it">
+        <div class="frame" style="width:16px;height:16px">
+          <svg width="16" height="16" viewBox="0 0 120 120"><rect width="120" height="120" rx="8" fill="#FAF8F4"/><rect x="20" y="22" width="10" height="76" fill="#0F4C5C"/><text x="44" y="84" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="78" letter-spacing="-0.04em" fill="#1A1A1A">G</text></svg>
+        </div>
+        <span class="lab"><strong>16 × 16</strong>favicon.ico</span>
+      </div>
+      <div class="fav-it">
+        <div class="frame" style="width:32px;height:32px">
+          <svg width="32" height="32" viewBox="0 0 120 120"><rect width="120" height="120" rx="8" fill="#FAF8F4"/><rect x="20" y="22" width="10" height="76" fill="#0F4C5C"/><text x="44" y="84" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="78" letter-spacing="-0.04em" fill="#1A1A1A">G</text></svg>
+        </div>
+        <span class="lab"><strong>32 × 32</strong>icon-32.png</span>
+      </div>
+      <div class="fav-it">
+        <div class="frame" style="width:48px;height:48px">
+          <svg width="48" height="48" viewBox="0 0 120 120"><rect width="120" height="120" rx="8" fill="#FAF8F4"/><rect x="20" y="22" width="10" height="76" fill="#0F4C5C"/><text x="44" y="84" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="78" letter-spacing="-0.04em" fill="#1A1A1A">G</text></svg>
+        </div>
+        <span class="lab"><strong>48 × 48</strong>icon-48.png</span>
+      </div>
+      <div class="fav-it">
+        <div class="frame" style="width:64px;height:64px">
+          <svg width="64" height="64" viewBox="0 0 120 120"><rect width="120" height="120" rx="8" fill="#FAF8F4"/><rect x="20" y="22" width="10" height="76" fill="#0F4C5C"/><text x="44" y="84" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="78" letter-spacing="-0.04em" fill="#1A1A1A">G</text></svg>
+        </div>
+        <span class="lab"><strong>64 × 64</strong>icon.svg</span>
+      </div>
+      <div class="fav-it">
+        <div class="frame" style="width:96px;height:96px">
+          <svg width="96" height="96" viewBox="0 0 120 120"><rect width="120" height="120" rx="14" fill="#0F4C5C"/><rect x="20" y="22" width="10" height="76" fill="#FAF8F4"/><text x="44" y="84" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="78" letter-spacing="-0.04em" fill="#FAF8F4">G</text></svg>
+        </div>
+        <span class="lab"><strong>96 × 96</strong>icon-96.png</span>
+      </div>
+      <div class="fav-it">
+        <div class="frame" style="width:140px;height:140px">
+          <svg width="140" height="140" viewBox="0 0 120 120"><rect width="120" height="120" rx="22" fill="#0F4C5C"/><rect x="20" y="22" width="10" height="76" fill="#FAF8F4"/><text x="44" y="84" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="78" letter-spacing="-0.04em" fill="#FAF8F4">G</text></svg>
+        </div>
+        <span class="lab"><strong>180 × 180</strong>apple-touch-icon.png</span>
+      </div>
+    </div>
+
+    <pre class="code-block"><span class="lang">HTML · &lt;head&gt;</span><span class="copy">Copy</span><span class="c-key">&lt;link</span> <span class="c-method">rel</span>=<span class="c-string">"icon"</span> <span class="c-method">type</span>=<span class="c-string">"image/svg+xml"</span> <span class="c-method">href</span>=<span class="c-string">"/icon.svg"</span> <span class="c-key">/&gt;</span>
+<span class="c-key">&lt;link</span> <span class="c-method">rel</span>=<span class="c-string">"icon"</span> <span class="c-method">type</span>=<span class="c-string">"image/png"</span> <span class="c-method">sizes</span>=<span class="c-string">"32x32"</span> <span class="c-method">href</span>=<span class="c-string">"/icon-32.png"</span> <span class="c-key">/&gt;</span>
+<span class="c-key">&lt;link</span> <span class="c-method">rel</span>=<span class="c-string">"icon"</span> <span class="c-method">type</span>=<span class="c-string">"image/png"</span> <span class="c-method">sizes</span>=<span class="c-string">"16x16"</span> <span class="c-method">href</span>=<span class="c-string">"/icon-16.png"</span> <span class="c-key">/&gt;</span>
+<span class="c-key">&lt;link</span> <span class="c-method">rel</span>=<span class="c-string">"apple-touch-icon"</span> <span class="c-method">href</span>=<span class="c-string">"/apple-touch-icon.png"</span> <span class="c-key">/&gt;</span>
+<span class="c-key">&lt;link</span> <span class="c-method">rel</span>=<span class="c-string">"manifest"</span> <span class="c-method">href</span>=<span class="c-string">"/manifest.webmanifest"</span> <span class="c-key">/&gt;</span></pre>
+  </div>
+</section>
+
+<!-- OG IMAGE -->
+<section class="bay">
+  <div class="wrap">
+    <header class="bay-head">
+      <div>
+        <span class="bay-num">04</span>
+        <h2>Open Graph image</h2>
+        <p>Shared when a GovLink page is posted to social, messaging apps, or pasted into Slack. 1200 × 630 — the wordmark, an italic editorial line, and a single 8-pixel flag stripe at the very top.</p>
+      </div>
+      <div class="acts">
+        <a href="#"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 2v9M4 7l4 4 4-4M2 14h12"/></svg>og.png · 1200×630</a>
+      </div>
+    </header>
+
+    <div class="og-frame">
+      <div class="og-canvas">
+        <div class="top">
+          <span>govlink.gm</span>
+          <span>The Gambia · GM</span>
+        </div>
+        <div>
+          <div class="og-wordmark"><span class="stripe"></span>GovLink</div>
+          <p class="og-headline">The Gambia's open data, in one place.</p>
+        </div>
+        <div class="og-stats">
+          <div class="s"><span class="v">427</span><span class="l">Datasets</span></div>
+          <div class="s"><span class="v">38</span><span class="l">Publishers</span></div>
+          <div class="s"><span class="v">2014–25</span><span class="l">Coverage</span></div>
+          <span class="pr">Operated by GBoS</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="og-grid">
+      <div class="og-frame">
+        <div class="og-canvas" style="background:var(--ink);color:var(--canvas);padding:48px">
+          <div class="top" style="color:rgba(250,248,244,0.55)"><span>govlink.gm</span><span>Twitter card</span></div>
+          <div>
+            <div class="og-wordmark" style="color:var(--canvas);font-size:64px;margin-bottom:4px"><span class="stripe" style="background:#5FB8CC;width:13px;height:46px;transform:translateY(8px)"></span>GovLink</div>
+            <p class="og-headline" style="color:rgba(250,248,244,0.78);font-size:24px;margin-bottom:18px">Where The Gambia's healthcare access actually breaks down.</p>
+          </div>
+          <div class="og-stats" style="border-color:rgba(250,248,244,0.12);padding-top:14px"><div class="s"><span class="v" style="color:var(--canvas);font-size:22px">14-min read</span><span class="l" style="color:rgba(250,248,244,0.5)">Aminata Touray · Health Policy Desk</span></div></div>
+        </div>
+      </div>
+      <div class="og-frame">
+        <div class="og-canvas" style="padding:48px">
+          <div class="top"><span>govlink.gm/dataset/hfc-2024</span><span>Dataset</span></div>
+          <div>
+            <span style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:14px"><span style="width:18px;height:1.5px;background:var(--accent)"></span>Ministry of Health · verified</span>
+            <h3 style="font-family:'Fraunces',serif;font-weight:400;font-size:46px;line-height:1.1;letter-spacing:-0.015em;margin:0 0 14px;max-width:18ch">Health Facility Census 2024</h3>
+            <p style="font-size:15px;color:var(--ink-2);margin:0;max-width:46ch;line-height:1.5">Comprehensive register of all 728 healthcare facilities, with ownership, services, staffing, and geocoded location.</p>
+          </div>
+          <div class="og-stats"><div class="s"><span class="v">728</span><span class="l">facilities</span></div><div class="s"><span class="v">27</span><span class="l">columns</span></div><div class="s"><span class="v">CSV · GeoJSON · API</span><span class="l">formats</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <pre class="code-block"><span class="lang">HTML · &lt;head&gt;</span><span class="copy">Copy</span><span class="c-key">&lt;meta</span> <span class="c-method">property</span>=<span class="c-string">"og:title"</span> <span class="c-method">content</span>=<span class="c-string">"GovLink · The Gambia's national open-data platform"</span> <span class="c-key">/&gt;</span>
+<span class="c-key">&lt;meta</span> <span class="c-method">property</span>=<span class="c-string">"og:description"</span> <span class="c-method">content</span>=<span class="c-string">"427 datasets from 38 publishing organizations, in one citable, machine-readable platform."</span> <span class="c-key">/&gt;</span>
+<span class="c-key">&lt;meta</span> <span class="c-method">property</span>=<span class="c-string">"og:image"</span> <span class="c-method">content</span>=<span class="c-string">"https://govlink.gm/og.png"</span> <span class="c-key">/&gt;</span>
+<span class="c-key">&lt;meta</span> <span class="c-method">property</span>=<span class="c-string">"og:image:width"</span> <span class="c-method">content</span>=<span class="c-string">"1200"</span> <span class="c-key">/&gt;</span>
+<span class="c-key">&lt;meta</span> <span class="c-method">property</span>=<span class="c-string">"og:image:height"</span> <span class="c-method">content</span>=<span class="c-string">"630"</span> <span class="c-key">/&gt;</span>
+<span class="c-key">&lt;meta</span> <span class="c-method">name</span>=<span class="c-string">"twitter:card"</span> <span class="c-method">content</span>=<span class="c-string">"summary_large_image"</span> <span class="c-key">/&gt;</span></pre>
+  </div>
+</section>
+
+<!-- DOS AND DON'TS -->
+<section class="bay">
+  <div class="wrap">
+    <header class="bay-head">
+      <div>
+        <span class="bay-num">05</span>
+        <h2>Do's and don'ts</h2>
+        <p>The wordmark is more restrained than most national-platform brands by design. Don't compensate by stretching, recolouring, or "fixing" it.</p>
+      </div>
+    </header>
+
+    <div class="dont-grid">
+      <div class="dont-card do">
+        <div class="dont-stage">
+          <span style="font-family:'Fraunces',serif;font-weight:600;font-size:30px;letter-spacing:-0.02em;display:inline-flex;align-items:baseline;gap:8px"><span style="width:8px;height:24px;background:var(--accent);transform:translateY(4px)"></span>GovLink</span>
+        </div>
+        <div class="dont-meta"><strong>Do · keep proportions</strong>Stripe is roughly 1/8 the cap height of the wordmark.</div>
+      </div>
+      <div class="dont-card dont">
+        <div class="dont-stage">
+          <span style="font-family:Geist,sans-serif;font-weight:700;font-size:30px;letter-spacing:0;display:inline-flex;align-items:baseline;gap:8px"><span style="width:8px;height:24px;background:var(--accent);transform:translateY(4px)"></span>GovLink</span>
+        </div>
+        <div class="dont-meta"><strong>Don't · sans-serif the wordmark</strong>The wordmark is set in Fraunces. Always.</div>
+      </div>
+      <div class="dont-card dont">
+        <div class="dont-stage">
+          <span style="font-family:'Fraunces',serif;font-weight:600;font-size:30px;background:linear-gradient(135deg,#a855f7,#ec4899,#f59e0b);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-flex;align-items:baseline;gap:8px"><span style="width:8px;height:24px;background:linear-gradient(135deg,#a855f7,#ec4899);transform:translateY(4px)"></span>GovLink</span>
+        </div>
+        <div class="dont-meta"><strong>Don't · gradient anything</strong>Gradients break the editorial register. The single accent stays solid.</div>
+      </div>
+      <div class="dont-card dont">
+        <div class="dont-stage">
+          <span style="font-family:'Fraunces',serif;font-weight:600;font-size:30px;letter-spacing:-0.02em;display:inline-flex;align-items:baseline;gap:8px"><span style="width:24px;height:24px;background:var(--accent);transform:translateY(4px);border-radius:50%"></span>GovLink</span>
+        </div>
+        <div class="dont-meta"><strong>Don't · swap the stripe for a circle / icon</strong>The stripe is the mark. Don't replace it with a dot, an arrow, or an emoji.</div>
+      </div>
+      <div class="dont-card dont">
+        <div class="dont-stage">
+          <span style="font-family:'Fraunces',serif;font-weight:600;font-size:30px;letter-spacing:-0.02em;color:#CE1126;display:inline-flex;align-items:baseline;gap:8px"><span style="width:8px;height:24px;background:#0C1C8C;transform:translateY(4px)"></span><span style="background:linear-gradient(to right,#CE1126 33%,#0C1C8C 33% 66%,#3A7728 66%);-webkit-background-clip:text;background-clip:text;color:transparent">GovLink</span></span>
+        </div>
+        <div class="dont-meta"><strong>Don't · flag-as-wordmark</strong>One 8 px stripe across the OG card. The wordmark stays neutral.</div>
+      </div>
+      <div class="dont-card dont">
+        <div class="dont-stage">
+          <span style="font-family:'Fraunces',serif;font-weight:600;font-size:30px;letter-spacing:-0.02em;font-style:italic;display:inline-flex;align-items:baseline;gap:8px"><span style="width:8px;height:24px;background:var(--accent);transform:translateY(4px) skewX(-18deg)"></span><span style="transform:skewX(-12deg);display:inline-block">GovLink</span></span>
+        </div>
+        <div class="dont-meta"><strong>Don't · slant or italicise</strong>Italic Fraunces is reserved for editorial decks; the wordmark is upright.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUNDLE / FILES -->
+<section class="bay">
+  <div class="wrap">
+    <header class="bay-head">
+      <div>
+        <span class="bay-num">06</span>
+        <h2>Files in the bundle</h2>
+        <p>Everything above as a single zip — vector primitives, raster fallbacks, OG masters, manifest snippets.</p>
+      </div>
+      <div class="acts">
+        <a href="#" style="background:var(--ink);color:var(--canvas);border-color:var(--ink)"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 2v9M4 7l4 4 4-4M2 14h12"/></svg>Download brand-assets.zip</a>
+      </div>
+    </header>
+
+    <table class="spec-table">
+      <thead><tr><th>File</th><th>Format</th><th>Size</th><th>Use</th><th></th></tr></thead>
+      <tbody>
+        <tr><td class="file">wordmark.svg</td><td class="v">SVG</td><td class="v">2.1 kB</td><td>Headers, footers, all sizes ≥ 32 px</td><td><a href="#">Download →</a></td></tr>
+        <tr><td class="file">wordmark-reverse.svg</td><td class="v">SVG</td><td class="v">2.1 kB</td><td>Dark surfaces · accent fill</td><td><a href="#">Download →</a></td></tr>
+        <tr><td class="file">wordmark-mono.svg</td><td class="v">SVG</td><td class="v">1.6 kB</td><td>Letterhead, embossing, fax</td><td><a href="#">Download →</a></td></tr>
+        <tr><td class="file">icon.svg</td><td class="v">SVG</td><td class="v">1.4 kB</td><td>Favicon &gt; 64 px, app icons</td><td><a href="#">Download →</a></td></tr>
+        <tr><td class="file">icon-16.png · icon-32.png · icon-48.png</td><td class="v">PNG</td><td class="v">1.2 kB total</td><td>Browser tab favicon · taskbar</td><td><a href="#">Download →</a></td></tr>
+        <tr><td class="file">apple-touch-icon.png</td><td class="v">PNG · 180 px</td><td class="v">3.4 kB</td><td>iOS Add-to-Home-Screen</td><td><a href="#">Download →</a></td></tr>
+        <tr><td class="file">favicon.ico</td><td class="v">ICO</td><td class="v">4.8 kB</td><td>Legacy IE / fallback for /favicon.ico requests</td><td><a href="#">Download →</a></td></tr>
+        <tr><td class="file">og-default.png</td><td class="v">PNG · 1200×630</td><td class="v">38 kB</td><td>Default Open Graph card</td><td><a href="#">Download →</a></td></tr>
+        <tr><td class="file">og-template.figma</td><td class="v">FIG</td><td class="v">110 kB</td><td>Per-page OG generator template</td><td><a href="#">Download →</a></td></tr>
+        <tr><td class="file">manifest.webmanifest</td><td class="v">JSON</td><td class="v">0.8 kB</td><td>PWA manifest — icons, name, theme_color</td><td><a href="#">Download →</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+  const root = document.documentElement;
+  const stored = localStorage.getItem('govlink-theme');
+  if (stored) root.dataset.theme = stored;
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    localStorage.setItem('govlink-theme', next);
+  });
+</script>
+</body>
+</html>

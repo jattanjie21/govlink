@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>People · GovLink Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root[data-theme="light"]{--canvas:#FAF8F4;--surface:#FFFFFF;--surface-2:#F2EFE8;--ink:#1A1A1A;--ink-2:#3D3D3D;--ink-3:#6B6B6B;--rule:#E5E2DA;--rule-2:#D5D0C4;--accent:#0F4C5C;--accent-hover:#0A3A47;--accent-tint:#E5EFF1;--success:#2F6B3D;--warning:#B27800;--danger:#A03B2C}
+  :root[data-theme="dark"]{--canvas:#141312;--surface:#1C1B19;--surface-2:#222020;--ink:#F0EDE6;--ink-2:#C0BBB0;--ink-3:#8A867D;--rule:#2A2826;--rule-2:#3A3835;--accent:#5FB8CC;--accent-hover:#7CCCDF;--accent-tint:#1F3A40;--success:#5CA374;--warning:#D8A33A;--danger:#D17265}
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;padding:0;background:var(--canvas);color:var(--ink);font-family:'Geist','Inter Tight',ui-sans-serif,system-ui,sans-serif;font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;font-feature-settings:"ss01","cv11";transition:background 180ms ease,color 180ms ease}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
+  .num{font-variant-numeric:tabular-nums}
+  .mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+  .shell{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+  .sidebar{border-right:1px solid var(--rule);background:var(--surface-2);display:flex;flex-direction:column}
+  .sidebar-brand{height:56px;padding:0 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--rule);font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:18px;letter-spacing:-0.01em}
+  .brand-mark{display:inline-block;width:6px;height:18px;background:var(--accent)}
+  .brand-divider{font-family:'Geist',sans-serif;font-weight:400;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-3);margin-left:6px;padding-left:10px;border-left:1px solid var(--rule-2)}
+  .nav-section{padding:18px 12px 8px}
+  .nav-section h5{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:0 0 8px;padding:0 8px}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:3px;color:var(--ink-2);font-size:13px;cursor:pointer}
+  .nav-item:hover{background:var(--canvas);color:var(--ink)}
+  .nav-item.active{background:var(--accent-tint);color:var(--accent);font-weight:500}
+  .nav-item svg{flex-shrink:0;opacity:.85}
+  .nav-item .badge{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .nav-item.active .badge{color:var(--accent)}
+  .sidebar-foot{margin-top:auto;padding:12px;border-top:1px solid var(--rule);display:flex;align-items:center;gap:10px}
+  .av{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;font-family:'Fraunces',serif;font-size:13px;display:inline-flex;align-items:center;justify-content:center;font-weight:600;flex-shrink:0}
+  [data-theme="dark"] .av{color:#0A1B1F}
+  .sidebar-foot .who{font-size:12px;line-height:1.3;flex:1;min-width:0}
+  .sidebar-foot .who strong{display:block;color:var(--ink);font-weight:500;font-size:12.5px}
+  .sidebar-foot .who span{color:var(--ink-3);font-size:11px}
+  .main{display:flex;flex-direction:column;min-width:0}
+  .topbar{height:56px;border-bottom:1px solid var(--rule);background:var(--canvas);display:flex;align-items:center;gap:24px;padding:0 32px;position:sticky;top:0;z-index:30;backdrop-filter:saturate(120%) blur(8px)}
+  .crumbs{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-3)}
+  .crumbs .strong{color:var(--ink);font-weight:500}
+  .topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .icon-btn{width:30px;height:30px;border:1px solid var(--rule);border-radius:3px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink-2);cursor:pointer}
+  .icon-btn:hover{border-color:var(--rule-2);color:var(--ink)}
+  .btn{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:3px;font-size:13px;font-weight:500;border:1px solid transparent;white-space:nowrap;cursor:pointer}
+  .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  [data-theme="dark"] .btn-primary{color:#0A1B1F}
+  .btn-primary:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+  .btn-secondary{background:var(--surface);color:var(--ink);border-color:var(--rule-2)}
+  .btn-secondary:hover{border-color:var(--ink-3)}
+
+  .page{padding:28px 32px 64px;display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
+  .page.no-detail{grid-template-columns:1fr}
+  .page-head{grid-column:1 / -1;display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:8px;gap:24px;flex-wrap:wrap}
+  .page-head h1{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:32px;line-height:1.15;letter-spacing:-0.02em;margin:0 0 6px}
+  .page-head .sub{font-size:13.5px;color:var(--ink-3);font-variant-numeric:tabular-nums;margin:0}
+  .page-head .right{display:flex;gap:8px;align-items:center}
+
+  .tabs{grid-column:1 / -1;display:flex;align-items:center;gap:0;border-bottom:1px solid var(--rule);margin:8px 0 0}
+  .tabs button{padding:10px 18px;font-size:13px;color:var(--ink-3);font-weight:500;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums}
+  .tabs button:hover{color:var(--ink-2)}
+  .tabs button.on{color:var(--ink);border-bottom-color:var(--accent)}
+  .tabs button .count{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--ink-3);background:var(--surface-2);padding:1px 6px;border-radius:2px;border:1px solid var(--rule)}
+  .tabs button.on .count{color:var(--accent);background:var(--accent-tint);border-color:color-mix(in oklch,var(--accent) 30%,var(--rule))}
+  .tabs .actions{margin-left:auto;display:flex;gap:8px;padding-bottom:8px}
+
+  .filter-bar{display:flex;align-items:center;gap:10px;margin:18px 0 14px;flex-wrap:wrap}
+  .search{display:flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid var(--rule-2);border-radius:3px;background:var(--surface);min-width:280px;flex:1;max-width:420px}
+  .search:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-tint)}
+  .search input{font:inherit;border:none;outline:none;background:transparent;color:var(--ink);flex:1;font-size:13.5px}
+  .search input::placeholder{color:var(--ink-3)}
+  .search svg{color:var(--ink-3);flex-shrink:0}
+  .filter-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--rule);border-radius:3px;font-size:12.5px;color:var(--ink-2);background:var(--surface);cursor:pointer;font-variant-numeric:tabular-nums;font-weight:500}
+  .filter-pill svg{color:var(--ink-3)}
+  .filter-pill:hover{border-color:var(--rule-2)}
+  .filter-pill .v{color:var(--ink);font-weight:500}
+
+  .pending-banner{background:color-mix(in oklch,var(--warning) 6%,var(--surface));border:1px solid color-mix(in oklch,var(--warning) 28%,var(--rule));border-radius:6px;padding:14px 18px;display:flex;align-items:center;gap:14px;margin-bottom:14px;font-size:13px;color:var(--ink-2)}
+  .pending-banner svg{color:var(--warning);flex-shrink:0}
+  .pending-banner strong{color:var(--ink);font-weight:500}
+  .pending-banner a{color:var(--accent);font-weight:500;border-bottom:1px solid var(--accent);padding-bottom:1px;margin-left:auto;flex-shrink:0}
+
+  .table-wrap{background:var(--surface);border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+  table.t{width:100%;border-collapse:collapse;font-size:13px}
+  table.t thead th{text-align:left;padding:11px 16px;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600;border-bottom:1px solid var(--rule);background:var(--surface-2);white-space:nowrap;font-variant-numeric:tabular-nums}
+  table.t thead th.r{text-align:right}
+  table.t thead th .sort{margin-left:4px;color:var(--ink-3);font-size:9px}
+  table.t tbody td{padding:14px 16px;border-top:1px solid var(--rule);color:var(--ink-2);vertical-align:middle}
+  table.t tbody tr:first-child td{border-top:none}
+  table.t tbody tr{cursor:pointer;transition:background 120ms ease}
+  table.t tbody tr:hover td{background:var(--surface-2)}
+  table.t tbody tr.selected td{background:var(--accent-tint)}
+  table.t .who{display:flex;align-items:center;gap:10px;color:var(--ink);font-weight:500;min-width:0}
+  table.t .who .av{width:28px;height:28px;font-size:11px}
+  table.t .who .who-info{display:flex;flex-direction:column;min-width:0;line-height:1.35}
+  table.t .who .who-info span{font-size:12px;color:var(--ink-3);font-weight:400;font-variant-numeric:tabular-nums}
+  table.t .who strong{font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13.5px}
+  table.t .org-cell{display:flex;align-items:center;gap:8px;font-size:12.5px}
+  table.t .org-cell .om{width:20px;height:20px;border-radius:3px;background:var(--surface-2);border:1px solid var(--rule);font-family:'Fraunces',serif;font-size:11px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink-2);font-weight:500}
+  table.t .ago{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+  table.t .calls{font-family:'JetBrains Mono',monospace;font-size:12px;text-align:right;color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+  .pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:2px 8px;border-radius:2px;letter-spacing:0.02em;border:1px solid;background:transparent;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .pill .pulse{width:5px;height:5px;border-radius:50%}
+  .pill.ok{color:var(--success);border-color:color-mix(in oklch,var(--success) 30%,var(--rule))}
+  .pill.ok .pulse{background:var(--success)}
+  .pill.warn{color:var(--warning);border-color:color-mix(in oklch,var(--warning) 30%,var(--rule))}
+  .pill.warn .pulse{background:var(--warning)}
+  .pill.err{color:var(--danger);border-color:color-mix(in oklch,var(--danger) 30%,var(--rule))}
+  .pill.err .pulse{background:var(--danger)}
+  .pill.muted{color:var(--ink-3);border-color:var(--rule-2)}
+  .pill.muted .pulse{background:var(--ink-3)}
+  .pill.role-admin{color:var(--accent);border-color:color-mix(in oklch,var(--accent) 30%,var(--rule));background:var(--accent-tint)}
+  .pill.role{color:var(--ink-2);border-color:var(--rule-2);background:var(--surface-2)}
+
+  .row-actions{display:flex;gap:4px;justify-content:flex-end;align-items:center}
+  .row-actions button{padding:5px;color:var(--ink-3);border-radius:2px}
+  .row-actions button:hover{color:var(--ink);background:var(--surface-2)}
+
+  .pager{padding:14px 16px;border-top:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums;background:var(--canvas)}
+  .pager .controls{display:flex;gap:6px}
+  .pager .controls button{padding:4px 10px;border:1px solid var(--rule);border-radius:2px;background:var(--surface);color:var(--ink-2);cursor:pointer;font-variant-numeric:tabular-nums;font-size:11.5px}
+  .pager .controls button:hover{border-color:var(--rule-2);color:var(--ink)}
+  .pager .controls button.on{background:var(--ink);color:var(--canvas);border-color:var(--ink)}
+  [data-theme="dark"] .pager .controls button.on{color:var(--canvas)}
+
+  .pane{display:none}
+  .pane.on{display:block}
+
+  /* Detail drawer */
+  .detail{background:var(--surface);border:1px solid var(--rule);border-radius:6px;display:flex;flex-direction:column;position:sticky;top:80px;max-height:calc(100vh - 100px);overflow-y:auto}
+  .detail-head{padding:20px;border-bottom:1px solid var(--rule)}
+  .detail-head .top{display:flex;align-items:flex-start;gap:14px;margin-bottom:12px}
+  .detail-head .top .av{width:44px;height:44px;font-size:16px}
+  .detail-head h2{font-family:'Fraunces',serif;font-weight:400;font-size:20px;letter-spacing:-0.005em;margin:0 0 4px}
+  .detail-head .role-line{font-size:12.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .detail-head .acts{margin-left:auto;display:flex;gap:6px;flex-shrink:0}
+  .detail-head .acts button{padding:5px 8px;border:1px solid var(--rule-2);border-radius:2px;background:var(--surface);color:var(--ink-3);font-size:11.5px;cursor:pointer}
+  .detail-head .acts button:hover{border-color:var(--ink-3);color:var(--ink)}
+  .detail-head .pills{display:flex;gap:6px;flex-wrap:wrap}
+  .detail-section{padding:16px 20px;border-bottom:1px solid var(--rule)}
+  .detail-section:last-child{border-bottom:none}
+  .detail-section h4{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:0 0 12px;display:flex;align-items:center;justify-content:space-between}
+  .detail-section h4 .meta{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--ink-3)}
+  .meta-grid{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;font-size:12.5px}
+  .meta-grid dt{color:var(--ink-3);font-weight:500;font-size:11.5px;letter-spacing:0.02em}
+  .meta-grid dd{margin:0;color:var(--ink);font-variant-numeric:tabular-nums}
+  .meta-grid dd code{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--surface-2);padding:1px 5px;border-radius:2px;border:1px solid var(--rule);color:var(--ink)}
+
+  .key-rev{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+  .key-rev .k{padding:10px 12px;background:var(--canvas);border:1px solid var(--rule);border-radius:4px;display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;font-size:12px}
+  .key-rev .k.revoked{opacity:0.5}
+  .key-rev .k.revoked .name{text-decoration:line-through}
+  .key-rev .k .name{color:var(--ink);font-weight:500;font-size:12.5px}
+  .key-rev .k .ck{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums;display:block;margin-top:2px}
+  .key-rev .k .acts{display:flex;gap:6px}
+  .key-rev .k .acts button{padding:3px 8px;font-size:11px;border-radius:2px;color:var(--ink-3);font-weight:500}
+  .key-rev .k .acts .revoke{color:var(--danger);border:1px solid color-mix(in oklch,var(--danger) 30%,var(--rule));background:transparent;cursor:pointer}
+  .key-rev .k .acts .revoke:hover{background:var(--danger);color:#fff}
+
+  .session-list{display:flex;flex-direction:column;font-size:12.5px}
+  .session-list .s{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid var(--rule);gap:10px}
+  .session-list .s:first-child{border-top:none;padding-top:0}
+  .session-list .s strong{font-weight:500;color:var(--ink);font-size:12.5px}
+  .session-list .s .mt{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums;margin-top:2px;display:block}
+  .session-list .s button{font-size:11px;color:var(--accent);font-weight:500;border-bottom:1px solid var(--accent);padding-bottom:1px;flex-shrink:0;cursor:pointer}
+
+  @media (max-width:1280px){.page{grid-template-columns:1fr}.detail{position:static;max-height:none}}
+  @media (max-width:880px){.shell{grid-template-columns:1fr}.sidebar{display:none}.topbar{padding:0 20px}.page{padding:24px 20px 56px}.page-head h1{font-size:24px}.tabs{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tabs .actions{margin-left:0;padding-bottom:0;flex-shrink:0}table.t thead th:nth-child(4),table.t tbody td:nth-child(4){display:none}}
+  *:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+  @keyframes fade-up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .fade-in{animation:fade-up 320ms cubic-bezier(0.2,0,0,1) both}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><span class="brand-mark"></span>GovLink<span class="brand-divider">Admin</span></div>
+    <div class="nav-section"><h5>Overview</h5>
+      <div class="nav-item"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="5" height="5"/><rect x="9" y="2" width="5" height="5"/><rect x="2" y="9" width="5" height="5"/><rect x="9" y="9" width="5" height="5"/></svg>Dashboard</div>
+    </div>
+    <div class="nav-section"><h5>Content</h5>
+      <div class="nav-item"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4h12M2 8h12M2 12h12"/></svg>Datasets<span class="badge">427</span></div>
+      <div class="nav-item"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1v9M4 6l4 4 4-4M2 13h12"/></svg>Ingestions<span class="badge">3</span></div>
+      <div class="nav-item"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 2h7l3 3v9H3z"/><path d="M10 2v3h3"/></svg>Reports</div>
+    </div>
+    <div class="nav-section"><h5>People</h5>
+      <div class="nav-item active"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 13c0-2.5 2.2-4 5-4s5 1.5 5 4M8 8a3 3 0 100-6 3 3 0 000 6Z"/></svg>People<span class="badge">450</span></div>
+    </div>
+    <div class="nav-section"><h5>Settings</h5>
+      <div class="nav-item"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="2"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.5 3.5l1.4 1.4M11.1 11.1l1.4 1.4M3.5 12.5l1.4-1.4M11.1 4.9l1.4-1.4"/></svg>Configuration</div>
+    </div>
+    <div class="sidebar-foot"><div class="av">FB</div><div class="who"><strong>Fatou Bah</strong><span>Platform admin · GBoS</span></div></div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumbs"><span>Admin</span><span style="color:var(--rule-2)">/</span><span class="strong">People</span></div>
+      <div class="topbar-right">
+        <button class="icon-btn" id="theme-toggle" aria-label="Toggle theme"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.5 3.5l1.4 1.4M11.1 11.1l1.4 1.4M3.5 12.5l1.4-1.4M11.1 4.9l1.4-1.4"/></svg></button>
+      </div>
+    </header>
+
+    <div class="page fade-in">
+      <header class="page-head">
+        <div>
+          <h1>People &amp; access</h1>
+          <p class="sub">412 users · 38 organizations · 87 active API keys · 2 organizations awaiting verification</p>
+        </div>
+      </header>
+
+      <nav class="tabs" role="tablist" aria-label="People sections">
+        <button class="on" data-tab="users">Users <span class="count">412</span></button>
+        <button data-tab="orgs">Organizations <span class="count">38</span></button>
+        <button data-tab="keys">API keys <span class="count">87</span></button>
+        <div class="actions">
+          <button class="btn btn-secondary"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 2v9M4 7l4 4 4-4M2 14h12"/></svg>Export</button>
+          <button class="btn btn-primary"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 3v10M3 8h10"/></svg>Invite user</button>
+        </div>
+      </nav>
+
+      <!-- USERS PANE -->
+      <div class="pane on" data-tab="users" style="display:contents">
+        <main style="display:flex;flex-direction:column;gap:0;min-width:0">
+          <div class="filter-bar">
+            <div class="search">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="m13 13-2.5-2.5"/></svg>
+              <input placeholder="Search by name, email, or organization…" />
+            </div>
+            <button class="filter-pill">Role: <span class="v">All</span> <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m4 6 4 4 4-4"/></svg></button>
+            <button class="filter-pill">Organization: <span class="v">Any</span> <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m4 6 4 4 4-4"/></svg></button>
+            <button class="filter-pill">Status: <span class="v">Active</span> <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m4 6 4 4 4-4"/></svg></button>
+          </div>
+
+          <div class="table-wrap">
+            <table class="t">
+              <thead>
+                <tr><th>User</th><th>Organization</th><th>Role</th><th>Status</th><th>Last active</th><th class="r">API calls (30d)</th><th></th></tr>
+              </thead>
+              <tbody>
+                <tr class="selected">
+                  <td><div class="who"><span class="av">AT</span><div class="who-info"><strong>Aminata Touray</strong><span>atouray@moh.gov.gm</span></div></div></td>
+                  <td><div class="org-cell"><span class="om">M</span>Ministry of Health</div></td>
+                  <td><span class="pill role">Author</span></td>
+                  <td><span class="pill ok"><span class="pulse"></span>Active</span></td>
+                  <td class="ago">2 min ago</td>
+                  <td class="calls">142,807</td>
+                  <td><div class="row-actions"><button title="More"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td>
+                </tr>
+                <tr>
+                  <td><div class="who"><span class="av">FB</span><div class="who-info"><strong>Fatou Bah</strong><span>fatou.bah@gbos.gm</span></div></div></td>
+                  <td><div class="org-cell"><span class="om">G</span>Gambia Bureau of Statistics</div></td>
+                  <td><span class="pill role-admin">Platform admin</span></td>
+                  <td><span class="pill ok"><span class="pulse"></span>Active</span></td>
+                  <td class="ago">just now</td>
+                  <td class="calls">—</td>
+                  <td><div class="row-actions"><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td>
+                </tr>
+                <tr>
+                  <td><div class="who"><span class="av">OJ</span><div class="who-info"><strong>Ousman Jallow</strong><span>ojallow@undp.org</span></div></div></td>
+                  <td><div class="org-cell"><span class="om">U</span>UNDP Gambia</div></td>
+                  <td><span class="pill role">Author</span></td>
+                  <td><span class="pill ok"><span class="pulse"></span>Active</span></td>
+                  <td class="ago">14 min ago</td>
+                  <td class="calls">38,440</td>
+                  <td><div class="row-actions"><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td>
+                </tr>
+                <tr>
+                  <td><div class="who"><span class="av">FC</span><div class="who-info"><strong>Fatou Ceesay</strong><span>fceesay@mobse.gov.gm</span></div></div></td>
+                  <td><div class="org-cell"><span class="om">M</span>MoBSE</div></td>
+                  <td><span class="pill role">Author</span></td>
+                  <td><span class="pill ok"><span class="pulse"></span>Active</span></td>
+                  <td class="ago">1 h ago</td>
+                  <td class="calls">12,891</td>
+                  <td><div class="row-actions"><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td>
+                </tr>
+                <tr>
+                  <td><div class="who"><span class="av">MD</span><div class="who-info"><strong>Modou Drammeh</strong><span>m.drammeh@moa.gov.gm</span></div></div></td>
+                  <td><div class="org-cell"><span class="om">M</span>Ministry of Agriculture</div></td>
+                  <td><span class="pill role">Researcher</span></td>
+                  <td><span class="pill ok"><span class="pulse"></span>Active</span></td>
+                  <td class="ago">3 h ago</td>
+                  <td class="calls">8,334</td>
+                  <td><div class="row-actions"><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td>
+                </tr>
+                <tr>
+                  <td><div class="who"><span class="av">SC</span><div class="who-info"><strong>Sainey Camara</strong><span>scamara@energy.gov.gm</span></div></div></td>
+                  <td><div class="org-cell"><span class="om">M</span>Min. Petroleum &amp; Energy</div></td>
+                  <td><span class="pill role">Author</span></td>
+                  <td><span class="pill warn"><span class="pulse"></span>Pending email</span></td>
+                  <td class="ago">2 d ago</td>
+                  <td class="calls">412</td>
+                  <td><div class="row-actions"><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td>
+                </tr>
+                <tr>
+                  <td><div class="who"><span class="av">IB</span><div class="who-info"><strong>Isatou Bah</strong><span>i.bah@gbos.gm</span></div></div></td>
+                  <td><div class="org-cell"><span class="om">G</span>Gambia Bureau of Statistics</div></td>
+                  <td><span class="pill role">Author</span></td>
+                  <td><span class="pill ok"><span class="pulse"></span>Active</span></td>
+                  <td class="ago">3 d ago</td>
+                  <td class="calls">2,890</td>
+                  <td><div class="row-actions"><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td>
+                </tr>
+                <tr>
+                  <td><div class="who"><span class="av">MJ</span><div class="who-info"><strong>Mariama Jobe</strong><span>mariama@actionaid.org.gm</span></div></div></td>
+                  <td><div class="org-cell"><span class="om">A</span>Action Aid The Gambia</div></td>
+                  <td><span class="pill role">Researcher</span></td>
+                  <td><span class="pill ok"><span class="pulse"></span>Active</span></td>
+                  <td class="ago">5 d ago</td>
+                  <td class="calls">6,742</td>
+                  <td><div class="row-actions"><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td>
+                </tr>
+                <tr>
+                  <td><div class="who"><span class="av" style="background:var(--surface-2);color:var(--ink-3);border:1px solid var(--rule)">DM</span><div class="who-info"><strong style="color:var(--ink-3);text-decoration:line-through">David Mendy</strong><span>d.mendy@—</span></div></div></td>
+                  <td><div class="org-cell"><span class="om">U</span>University of The Gambia</div></td>
+                  <td><span class="pill role">Researcher</span></td>
+                  <td><span class="pill muted"><span class="pulse"></span>Suspended</span></td>
+                  <td class="ago">112 d ago</td>
+                  <td class="calls">—</td>
+                  <td><div class="row-actions"><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="pager">
+              <span>Showing 1–9 of 412</span>
+              <div class="controls">
+                <button>← Prev</button><button class="on">1</button><button>2</button><button>3</button><span style="color:var(--ink-3);padding:0 6px">…</span><button>46</button><button>Next →</button>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <aside class="detail">
+          <div class="detail-head">
+            <div class="top">
+              <span class="av" style="width:44px;height:44px;font-size:16px">AT</span>
+              <div style="flex:1;min-width:0">
+                <h2>Aminata Touray</h2>
+                <div class="role-line">atouray@moh.gov.gm · joined 14 Jan 2025</div>
+              </div>
+              <div class="acts">
+                <button title="Edit"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 1a3 3 0 113 3l-1 1-2-2 1-1Z"/><path d="m3 13 1-3 6-6 2 2-6 6-3 1Z"/></svg></button>
+                <button title="More"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button>
+              </div>
+            </div>
+            <div class="pills">
+              <span class="pill ok"><span class="pulse"></span>Active</span>
+              <span class="pill role">Author</span>
+              <span class="pill muted">2FA · TOTP</span>
+              <span class="pill ok">SSO · gov.gm</span>
+            </div>
+          </div>
+          <div class="detail-section">
+            <h4>Overview</h4>
+            <dl class="meta-grid">
+              <dt>Organization</dt><dd>Ministry of Health</dd>
+              <dt>Role</dt><dd>Health Policy Analyst</dd>
+              <dt>Last active</dt><dd>2 min ago · this browser</dd>
+              <dt>Member since</dt><dd>14 Jan 2025</dd>
+              <dt>Reports authored</dt><dd>4 · 1 in draft</dd>
+              <dt>Datasets uploaded</dt><dd>2</dd>
+            </dl>
+          </div>
+          <div class="detail-section">
+            <h4>API keys <span class="meta">2 of 5</span></h4>
+            <div class="key-rev">
+              <div class="k">
+                <div class="name">Dashboard production <span class="ck">gl_live_••••6f4a · 142,807 calls (30d)</span></div>
+                <div class="acts"><button class="revoke">Revoke</button></div>
+              </div>
+              <div class="k">
+                <div class="name">Local dev <span class="ck">gl_test_••••a1b2 · 8,442 calls (30d)</span></div>
+                <div class="acts"><button class="revoke">Revoke</button></div>
+              </div>
+              <div class="k revoked">
+                <div class="name">Old laptop <span class="ck">gl_live_••••3e7c · revoked 24 Mar 2025 by user</span></div>
+                <div class="acts"><span style="color:var(--ink-3);font-size:11px;font-style:italic">revoked</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="detail-section">
+            <h4>Active sessions <span class="meta">3</span></h4>
+            <div class="session-list">
+              <div class="s"><div><strong>Chrome · macOS</strong><span class="mt">102.130.41.18 · Banjul · this device</span></div><span class="mt">just now</span></div>
+              <div class="s"><div><strong>iOS · Safari</strong><span class="mt">102.130.41.91 · Banjul</span></div><button>Revoke</button></div>
+              <div class="s"><div><strong>Chrome · Windows</strong><span class="mt">102.130.55.217 · Brikama</span></div><button>Revoke</button></div>
+            </div>
+          </div>
+          <div class="detail-section">
+            <h4>Audit · last 7 days</h4>
+            <div class="session-list">
+              <div class="s"><div><strong>Published report</strong><span class="mt">gambia-healthcare-access-2025</span></div><span class="mt">28 Apr</span></div>
+              <div class="s"><div><strong>Created API key</strong><span class="mt">Dashboard production · gl_live_••••6f4a</span></div><span class="mt">26 Apr</span></div>
+              <div class="s"><div><strong>Updated profile</strong><span class="mt">role · bio</span></div><span class="mt">21 Apr</span></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- ORGS PANE -->
+      <div class="pane" data-tab="orgs" style="grid-column:1 / -1">
+        <div class="pending-banner">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1.5 14.5 13.5h-13zM8 6.5v3.5M8 12.2v0.1"/></svg>
+          <span><strong>2 organizations</strong> awaiting verification — submitted documentation, ready for review.</span>
+          <a>Review pending →</a>
+        </div>
+
+        <div class="filter-bar">
+          <div class="search">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="m13 13-2.5-2.5"/></svg>
+            <input placeholder="Search organizations…" />
+          </div>
+          <button class="filter-pill">Type: <span class="v">All</span> <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m4 6 4 4 4-4"/></svg></button>
+          <button class="filter-pill">Verification: <span class="v">All</span> <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m4 6 4 4 4-4"/></svg></button>
+        </div>
+
+        <div class="table-wrap">
+          <table class="t">
+            <thead>
+              <tr><th>Organization</th><th>Type</th><th>Verification</th><th>Members</th><th>Datasets</th><th class="r">Calls (30d)</th><th></th></tr>
+            </thead>
+            <tbody>
+              <tr><td><div class="who"><span class="av" style="background:var(--surface-2);color:var(--ink);border:1px solid var(--rule);font-family:Fraunces;font-size:13px">G</span><div class="who-info"><strong>Gambia Bureau of Statistics</strong><span>gbos.gm · operator</span></div></div></td><td>Government</td><td><span class="pill ok"><span class="pulse"></span>Verified · platform operator</span></td><td>32</td><td>78</td><td class="calls">2.41M</td><td><div class="row-actions"><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td></tr>
+              <tr><td><div class="who"><span class="av" style="background:var(--surface-2);color:var(--ink);border:1px solid var(--rule);font-family:Fraunces;font-size:13px">M</span><div class="who-info"><strong>Ministry of Health</strong><span>moh.gov.gm</span></div></div></td><td>Government</td><td><span class="pill ok"><span class="pulse"></span>Verified · 14 Jan 2025</span></td><td>48</td><td>34</td><td class="calls">1.27M</td><td><div class="row-actions"><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td></tr>
+              <tr><td><div class="who"><span class="av" style="background:var(--surface-2);color:var(--ink);border:1px solid var(--rule);font-family:Fraunces;font-size:13px">U</span><div class="who-info"><strong>UNDP Gambia</strong><span>undp.org/gambia</span></div></div></td><td>Development partner</td><td><span class="pill ok"><span class="pulse"></span>Verified · today</span></td><td>16</td><td>12</td><td class="calls">412k</td><td><div class="row-actions"><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td></tr>
+              <tr><td><div class="who"><span class="av" style="background:var(--surface-2);color:var(--ink);border:1px solid var(--rule);font-family:Fraunces;font-size:13px">M</span><div class="who-info"><strong>MoBSE</strong><span>mobse.gov.gm</span></div></div></td><td>Government</td><td><span class="pill ok"><span class="pulse"></span>Verified · 02 Feb 2025</span></td><td>21</td><td>18</td><td class="calls">189k</td><td><div class="row-actions"><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td></tr>
+              <tr><td><div class="who"><span class="av" style="background:var(--surface-2);color:var(--ink);border:1px solid var(--rule);font-family:Fraunces;font-size:13px">W</span><div class="who-info"><strong>World Bank Gambia</strong><span>worldbank.org/country/gambia</span></div></div></td><td>Development partner</td><td><span class="pill ok"><span class="pulse"></span>Verified · 04 Feb 2025</span></td><td>8</td><td>6</td><td class="calls">152k</td><td><div class="row-actions"><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td></tr>
+              <tr><td><div class="who"><span class="av" style="background:var(--surface-2);color:var(--ink);border:1px solid var(--rule);font-family:Fraunces;font-size:13px">G</span><div class="who-info"><strong>Gam-Civic Tech</strong><span>gamcivictech.gm</span></div></div></td><td>NGO · civic-tech</td><td><span class="pill warn"><span class="pulse"></span>Pending review · docs received 28 Apr</span></td><td>3</td><td>0</td><td class="calls">—</td><td><div class="row-actions"><button title="Approve" style="color:var(--success)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m3 8 3.5 3.5L13 5"/></svg></button><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td></tr>
+              <tr><td><div class="who"><span class="av" style="background:var(--surface-2);color:var(--ink);border:1px solid var(--rule);font-family:Fraunces;font-size:13px">D</span><div class="who-info"><strong>DataHive Banjul</strong><span>datahive.gm</span></div></div></td><td>Commercial</td><td><span class="pill warn"><span class="pulse"></span>Pending review · awaiting registration cert.</span></td><td>2</td><td>0</td><td class="calls">—</td><td><div class="row-actions"><button title="Approve" style="color:var(--success)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m3 8 3.5 3.5L13 5"/></svg></button><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td></tr>
+              <tr><td><div class="who"><span class="av" style="background:var(--surface-2);color:var(--ink);border:1px solid var(--rule);font-family:Fraunces;font-size:13px">U</span><div class="who-info"><strong>University of The Gambia</strong><span>utg.edu.gm</span></div></div></td><td>Academic</td><td><span class="pill ok"><span class="pulse"></span>Verified · 09 Feb 2025</span></td><td>34</td><td>4</td><td class="calls">42k</td><td><div class="row-actions"><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td></tr>
+            </tbody>
+          </table>
+          <div class="pager"><span>Showing 1–8 of 38</span><div class="controls"><button>← Prev</button><button class="on">1</button><button>2</button><button>3</button><button>Next →</button></div></div>
+        </div>
+      </div>
+
+      <!-- KEYS PANE -->
+      <div class="pane" data-tab="keys" style="grid-column:1 / -1">
+        <div class="filter-bar">
+          <div class="search">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="m13 13-2.5-2.5"/></svg>
+            <input placeholder="Search by key prefix, owner, or organization…" />
+          </div>
+          <button class="filter-pill">Type: <span class="v">All</span> <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m4 6 4 4 4-4"/></svg></button>
+          <button class="filter-pill">Status: <span class="v">Active</span> <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m4 6 4 4 4-4"/></svg></button>
+          <button class="filter-pill">Plan: <span class="v">All</span> <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m4 6 4 4 4-4"/></svg></button>
+        </div>
+        <div class="table-wrap">
+          <table class="t">
+            <thead>
+              <tr><th>Key</th><th>Owner</th><th>Plan</th><th>Status</th><th>Last used</th><th class="r">30-day calls</th><th></th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="who"><span class="av" style="background:var(--accent-tint);color:var(--accent);font-family:JetBrains Mono;font-size:10px;border-radius:3px">LV</span><div class="who-info"><strong style="font-family:'JetBrains Mono';font-size:12.5px;letter-spacing:-0.01em">gl_live_••••6f4a</strong><span>Dashboard production</span></div></div></td>
+                <td><div class="who" style="gap:8px"><span class="av">AT</span><span style="color:var(--ink);font-weight:500">Aminata Touray</span></div></td>
+                <td><span class="pill role">Civic / Research</span></td>
+                <td><span class="pill ok"><span class="pulse"></span>Active</span></td>
+                <td class="ago">just now</td>
+                <td class="calls">142,807</td>
+                <td><div class="row-actions"><button title="Revoke" style="color:var(--danger)"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 4h12M5 4V2a1 1 0 011-1h4a1 1 0 011 1v2M4 4l1 10h6l1-10"/></svg></button><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td>
+              </tr>
+              <tr>
+                <td><div class="who"><span class="av" style="background:color-mix(in oklch,var(--warning) 12%,var(--surface));color:var(--warning);font-family:JetBrains Mono;font-size:10px;border-radius:3px;border:1px solid color-mix(in oklch,var(--warning) 30%,var(--rule))">TS</span><div class="who-info"><strong style="font-family:'JetBrains Mono';font-size:12.5px">gl_test_••••a1b2</strong><span>Local development</span></div></div></td>
+                <td><div class="who" style="gap:8px"><span class="av">AT</span><span style="color:var(--ink);font-weight:500">Aminata Touray</span></div></td>
+                <td><span class="pill role">Free</span></td>
+                <td><span class="pill ok"><span class="pulse"></span>Active</span></td>
+                <td class="ago">14 min ago</td>
+                <td class="calls">8,442</td>
+                <td><div class="row-actions"><button title="Revoke" style="color:var(--danger)"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 4h12M5 4V2a1 1 0 011-1h4a1 1 0 011 1v2M4 4l1 10h6l1-10"/></svg></button><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td>
+              </tr>
+              <tr>
+                <td><div class="who"><span class="av" style="background:var(--accent-tint);color:var(--accent);font-family:JetBrains Mono;font-size:10px;border-radius:3px">LV</span><div class="who-info"><strong style="font-family:'JetBrains Mono';font-size:12.5px">gl_live_••••92e1</strong><span>UNDP analytics pipeline</span></div></div></td>
+                <td><div class="who" style="gap:8px"><span class="av">OJ</span><span style="color:var(--ink);font-weight:500">Ousman Jallow</span></div></td>
+                <td><span class="pill role">Civic / Research</span></td>
+                <td><span class="pill ok"><span class="pulse"></span>Active</span></td>
+                <td class="ago">42 min ago</td>
+                <td class="calls">218,440</td>
+                <td><div class="row-actions"><button title="Revoke" style="color:var(--danger)"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 4h12M5 4V2a1 1 0 011-1h4a1 1 0 011 1v2M4 4l1 10h6l1-10"/></svg></button><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td>
+              </tr>
+              <tr>
+                <td><div class="who"><span class="av" style="background:var(--accent-tint);color:var(--accent);font-family:JetBrains Mono;font-size:10px;border-radius:3px">LV</span><div class="who-info"><strong style="font-family:'JetBrains Mono';font-size:12.5px">gl_live_••••7d31</strong><span>WHO data warehouse</span></div></div></td>
+                <td><div class="who" style="gap:8px"><span class="av" style="background:#666;color:#fff">JT</span><span style="color:var(--ink);font-weight:500">Jainaba Tunkara</span></div></td>
+                <td><span class="pill role">Civic / Research</span></td>
+                <td><span class="pill warn"><span class="pulse"></span>Rate-limited (last 24h)</span></td>
+                <td class="ago">2 h ago</td>
+                <td class="calls">98,334</td>
+                <td><div class="row-actions"><button title="Revoke" style="color:var(--danger)"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 4h12M5 4V2a1 1 0 011-1h4a1 1 0 011 1v2M4 4l1 10h6l1-10"/></svg></button><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td>
+              </tr>
+              <tr>
+                <td><div class="who"><span class="av" style="background:var(--surface-2);color:var(--ink-3);font-family:JetBrains Mono;font-size:10px;border-radius:3px;border:1px solid var(--rule)">XX</span><div class="who-info"><strong style="font-family:'JetBrains Mono';font-size:12.5px;color:var(--ink-3);text-decoration:line-through">gl_live_••••3f8a</strong><span>UTG academic-research-2024 · auto-revoked</span></div></div></td>
+                <td><div class="who" style="gap:8px"><span class="av" style="background:#666;color:#fff">DM</span><span style="color:var(--ink-2)">David Mendy</span></div></td>
+                <td><span class="pill role">Free</span></td>
+                <td><span class="pill err"><span class="pulse"></span>Revoked · 8 h ago</span></td>
+                <td class="ago">89 d ago</td>
+                <td class="calls">—</td>
+                <td><div class="row-actions"><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td>
+              </tr>
+              <tr>
+                <td><div class="who"><span class="av" style="background:color-mix(in oklch,var(--warning) 12%,var(--surface));color:var(--warning);font-family:JetBrains Mono;font-size:10px;border-radius:3px;border:1px solid color-mix(in oklch,var(--warning) 30%,var(--rule))">TS</span><div class="who-info"><strong style="font-family:'JetBrains Mono';font-size:12.5px">gl_test_••••0c44</strong><span>WB civic dashboard</span></div></div></td>
+                <td><div class="who" style="gap:8px"><span class="av" style="background:#666;color:#fff">PB</span><span style="color:var(--ink);font-weight:500">Pa Babu Sanyang</span></div></td>
+                <td><span class="pill role">Civic / Research</span></td>
+                <td><span class="pill ok"><span class="pulse"></span>Active</span></td>
+                <td class="ago">5 d ago</td>
+                <td class="calls">12,891</td>
+                <td><div class="row-actions"><button title="Revoke" style="color:var(--danger)"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 4h12M5 4V2a1 1 0 011-1h4a1 1 0 011 1v2M4 4l1 10h6l1-10"/></svg></button><button><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="13" cy="8" r="1.2"/></svg></button></div></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="pager"><span>Showing 1–6 of 87 · 84 active, 3 revoked</span><div class="controls"><button>← Prev</button><button class="on">1</button><button>2</button><button>3</button><span style="color:var(--ink-3);padding:0 6px">…</span><button>15</button><button>Next →</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const root = document.documentElement;
+  const stored = localStorage.getItem('govlink-theme');
+  if (stored) root.dataset.theme = stored;
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    localStorage.setItem('govlink-theme', next);
+  });
+  document.querySelectorAll('.tabs button[data-tab]').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.tabs button[data-tab]').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    document.querySelectorAll('.pane').forEach(p => p.classList.toggle('on', p.dataset.tab === b.dataset.tab));
+  }));
+  document.querySelectorAll('table.t tbody tr').forEach(r => r.addEventListener('click', () => {
+    r.closest('tbody').querySelectorAll('tr').forEach(x => x.classList.remove('selected'));
+    r.classList.add('selected');
+  }));
+</script>
+</body>
+</html>

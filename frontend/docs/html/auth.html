@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sign in · GovLink</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,1,400;9..144,0,600&family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root[data-theme="light"]{--canvas:#FAF8F4;--surface:#FFFFFF;--surface-2:#F2EFE8;--ink:#1A1A1A;--ink-2:#3D3D3D;--ink-3:#6B6B6B;--rule:#E5E2DA;--rule-2:#D5D0C4;--accent:#0F4C5C;--accent-hover:#0A3A47;--accent-tint:#E5EFF1;--success:#2F6B3D;--warning:#B27800;--danger:#A03B2C}
+  :root[data-theme="dark"]{--canvas:#141312;--surface:#1C1B19;--surface-2:#222020;--ink:#F0EDE6;--ink-2:#C0BBB0;--ink-3:#8A867D;--rule:#2A2826;--rule-2:#3A3835;--accent:#5FB8CC;--accent-hover:#7CCCDF;--accent-tint:#1F3A40;--success:#5CA374;--warning:#D8A33A;--danger:#D17265}
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;padding:0;background:var(--canvas);color:var(--ink);font-family:'Geist','Inter Tight',ui-sans-serif,system-ui,sans-serif;font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;font-feature-settings:"ss01","cv11";min-height:100vh;display:flex;flex-direction:column;transition:background 180ms ease,color 180ms ease}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
+  .num,.tab{font-variant-numeric:tabular-nums}
+  .mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+  .nav{border-bottom:1px solid var(--rule);background:var(--canvas);position:sticky;top:0;z-index:50}
+  .nav-inner{max-width:1280px;margin:0 auto;padding:0 32px;display:flex;align-items:center;gap:32px;height:64px}
+  .brand{display:flex;align-items:baseline;gap:8px;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:21px;letter-spacing:-0.01em}
+  .brand-mark{display:inline-block;width:8px;height:24px;background:var(--accent);transform:translateY(4px)}
+  .nav-right{margin-left:auto;display:flex;align-items:center;gap:14px;font-size:13px;color:var(--ink-3)}
+  .theme-toggle{width:32px;height:32px;border:1px solid var(--rule);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink-2);cursor:pointer}
+  .state-tabs{display:inline-flex;border:1px solid var(--rule);border-radius:3px;background:var(--surface);overflow:hidden}
+  .state-tabs button{padding:5px 12px;font-size:12px;color:var(--ink-3);border-right:1px solid var(--rule);font-variant-numeric:tabular-nums;cursor:pointer}
+  .state-tabs button:last-child{border-right:none}
+  .state-tabs button.on{background:var(--ink);color:var(--canvas)}
+  [data-theme="dark"] .state-tabs button.on{color:var(--canvas)}
+
+  .page{flex:1;display:grid;grid-template-columns:1fr 1fr;min-height:0}
+  .editorial{padding:64px 56px 48px;background:var(--surface-2);border-right:1px solid var(--rule);display:flex;flex-direction:column;justify-content:space-between;min-height:calc(100vh - 64px)}
+  .editorial .top{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);font-weight:500;display:flex;align-items:center;gap:10px}
+  .editorial .top::before{content:"";width:24px;height:1px;background:var(--accent)}
+  .editorial-mid{margin-top:auto;margin-bottom:auto;max-width:42ch}
+  .quote-mark{font-family:'Fraunces',serif;font-size:96px;line-height:0.6;color:var(--accent);font-weight:400;display:block;margin-bottom:8px;font-style:italic}
+  .editorial blockquote{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:400;font-size:30px;line-height:1.25;color:var(--ink);margin:0 0 28px;letter-spacing:-0.005em;text-wrap:pretty}
+  .editorial cite{font-style:normal;font-size:13px;color:var(--ink-3);font-variant-numeric:tabular-nums;display:flex;flex-direction:column;gap:2px}
+  .editorial cite strong{color:var(--ink-2);font-weight:500;font-size:13.5px}
+  .editorial-foot{display:grid;grid-template-columns:repeat(3,1fr);gap:0;padding-top:32px;border-top:1px solid var(--rule);font-variant-numeric:tabular-nums}
+  .editorial-foot .it{padding-right:16px;border-right:1px solid var(--rule)}
+  .editorial-foot .it:last-child{border-right:none}
+  .editorial-foot .v{font-family:'Fraunces',serif;font-size:22px;line-height:1;letter-spacing:-0.005em;display:block;margin-bottom:4px}
+  .editorial-foot .l{font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-3)}
+
+  .form-side{padding:64px 56px 48px;display:flex;flex-direction:column;justify-content:center;min-height:calc(100vh - 64px)}
+  .form-wrap{max-width:380px;width:100%;margin:0 auto}
+  .form-wrap.profile{max-width:560px}
+  .form-eyebrow{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px}
+  .form-wrap h1{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:34px;line-height:1.1;letter-spacing:-0.015em;margin:0 0 12px}
+  .form-wrap .sub{font-size:14px;color:var(--ink-2);margin:0 0 32px;line-height:1.55}
+  .form-wrap .sub a{color:var(--accent);border-bottom:1px solid var(--accent);padding-bottom:1px;font-weight:500}
+
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+  .field label{font-size:12px;font-weight:500;color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .field label .hint{color:var(--ink-3);font-weight:400;font-size:11.5px}
+  .field input,.field select,.field textarea{font:inherit;font-size:14px;padding:9px 12px;border:1px solid var(--rule-2);border-radius:3px;background:var(--surface);color:var(--ink);transition:border-color 180ms ease,box-shadow 180ms ease;font-family:inherit;width:100%}
+  .field input::placeholder,.field textarea::placeholder{color:var(--ink-3)}
+  .field input:hover,.field select:hover,.field textarea:hover{border-color:var(--ink-3)}
+  .field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-tint);outline:none}
+  .field .err-msg{color:var(--danger);font-size:11.5px;display:flex;align-items:center;gap:5px;font-weight:500}
+  .field.error input{border-color:var(--danger)}
+  .field.error input:focus-visible{box-shadow:0 0 0 3px color-mix(in oklch,var(--danger) 18%,transparent)}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .check{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink-2);line-height:1.5;cursor:pointer;user-select:none}
+  .check input{width:14px;height:14px;margin-top:2px;flex-shrink:0;accent-color:var(--accent)}
+  .check a{color:var(--accent);border-bottom:1px solid var(--accent);padding-bottom:1px}
+
+  .submit{width:100%;padding:10px 14px;background:var(--ink);color:var(--canvas);border-radius:3px;font-size:14px;font-weight:500;border:1px solid var(--ink);margin-top:8px;cursor:pointer;transition:background 180ms ease}
+  [data-theme="dark"] .submit{color:var(--canvas)}
+  .submit:hover{background:var(--accent);border-color:var(--accent)}
+
+  .or{display:flex;align-items:center;gap:14px;margin:24px 0;font-size:11px;color:var(--ink-3);letter-spacing:0.16em;text-transform:uppercase;font-weight:500}
+  .or::before,.or::after{content:"";flex:1;height:1px;background:var(--rule)}
+  .sso{display:flex;flex-direction:column;gap:8px}
+  .sso button{width:100%;padding:10px 14px;border:1px solid var(--rule-2);border-radius:3px;background:var(--surface);color:var(--ink);font-size:13.5px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color 180ms ease}
+  .sso button:hover{border-color:var(--ink-3)}
+  .sso .ssomark{width:18px;height:18px;border-radius:3px;background:var(--surface-2);font-family:'Fraunces',serif;font-size:11px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink-2);border:1px solid var(--rule);font-weight:500;flex-shrink:0}
+  .footnote{margin-top:28px;padding-top:18px;border-top:1px solid var(--rule);font-size:12px;color:var(--ink-3);line-height:1.5}
+
+  .strength{display:flex;gap:4px;margin-top:8px}
+  .strength span{flex:1;height:3px;background:var(--rule);border-radius:2px}
+  .strength span.s1{background:var(--danger)}
+  .strength span.s2{background:var(--warning)}
+  .strength span.s3{background:var(--success)}
+  .strength + .strength-label{font-size:11.5px;color:var(--ink-3);margin-top:6px;font-variant-numeric:tabular-nums}
+
+  .profile-head{display:flex;align-items:center;gap:18px;padding-bottom:24px;border-bottom:1px solid var(--rule);margin-bottom:28px}
+  .profile-head .av{width:56px;height:56px;border-radius:50%;background:var(--accent);color:#fff;font-family:'Fraunces',serif;font-size:22px;display:inline-flex;align-items:center;justify-content:center;font-weight:600}
+  [data-theme="dark"] .profile-head .av{color:#0A1B1F}
+  .profile-head .who h2{font-family:'Fraunces',serif;font-weight:400;font-size:24px;letter-spacing:-0.01em;margin:0 0 4px}
+  .profile-head .who .who-meta{font-size:12.5px;color:var(--ink-3);font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:8px}
+  .profile-head .who .badge{display:inline-flex;align-items:center;gap:4px;padding:1px 7px;font-size:10.5px;font-weight:500;border:1px solid color-mix(in oklch,var(--success) 30%,var(--rule));color:var(--success);border-radius:2px;letter-spacing:0.04em;text-transform:uppercase}
+  .profile-head .acts{margin-left:auto;display:flex;gap:8px;flex-shrink:0}
+  .profile-head .acts button{padding:7px 12px;border:1px solid var(--rule-2);border-radius:3px;font-size:12.5px;color:var(--ink-2);background:var(--surface);cursor:pointer}
+  .profile-head .acts button:hover{border-color:var(--ink-3);color:var(--ink)}
+
+  .profile-section{margin-bottom:28px}
+  .profile-section h3{font-family:'Fraunces',serif;font-weight:400;font-size:17px;letter-spacing:-0.005em;margin:0 0 4px}
+  .profile-section p.section-sub{font-size:13px;color:var(--ink-3);margin:0 0 16px;line-height:1.55}
+
+  .danger-zone{padding:18px;background:color-mix(in oklch,var(--danger) 4%,var(--surface));border:1px solid color-mix(in oklch,var(--danger) 25%,var(--rule));border-radius:6px}
+  .danger-zone h3{font-family:'Fraunces',serif;font-size:16px;color:var(--danger);margin:0 0 4px;font-weight:400;letter-spacing:-0.005em}
+  .danger-zone p{font-size:12.5px;color:var(--ink-2);margin:0 0 12px;line-height:1.5}
+  .danger-zone button{padding:7px 12px;border:1px solid var(--danger);border-radius:3px;background:transparent;color:var(--danger);font-size:12.5px;font-weight:500;cursor:pointer}
+  .danger-zone button:hover{background:var(--danger);color:#fff}
+
+  .pane{display:none}
+  .pane.on{display:contents}
+
+  @media (max-width:1024px){.page{grid-template-columns:1fr}.editorial{display:none}.form-side{padding:48px 32px}}
+  @media (max-width:640px){.nav-inner{padding:0 20px;height:56px;flex-wrap:wrap;gap:14px}.form-side{padding:32px 20px;min-height:auto}.form-wrap h1{font-size:26px}.row{grid-template-columns:1fr;gap:0}.profile-head{flex-wrap:wrap;gap:12px}.profile-head .acts{width:100%;margin-left:0}}
+  *:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+  @keyframes fade-up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .fade-in{animation:fade-up 280ms cubic-bezier(0.2,0,0,1) both}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><span class="brand-mark"></span>GovLink</a>
+    <div class="nav-right">
+      <span style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3);margin-right:6px">Preview state</span>
+      <div class="state-tabs" role="tablist" aria-label="Auth state">
+        <button data-pane="login" class="on">Login</button>
+        <button data-pane="register">Register</button>
+        <button data-pane="profile">Profile</button>
+      </div>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.5 3.5l1.4 1.4M11.1 11.1l1.4 1.4M3.5 12.5l1.4-1.4M11.1 4.9l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+  <aside class="editorial">
+    <span class="top">Welcome back</span>
+    <div class="editorial-mid fade-in">
+      <span class="quote-mark">&ldquo;</span>
+      <blockquote>The frustrating thing has always been knowing the average. With ward-level data in hand, the conversation about where the next two billion dalasis goes is, for the first time, a conversation about specific places.</blockquote>
+      <cite><strong>Adama Sallah</strong>Public Finance Adviser, Ministry of Finance · 14 Apr 2025</cite>
+    </div>
+    <div class="editorial-foot">
+      <div class="it"><span class="v">427</span><span class="l">Datasets</span></div>
+      <div class="it"><span class="v">38</span><span class="l">Publishers</span></div>
+      <div class="it"><span class="v">99.94%</span><span class="l">30-day uptime</span></div>
+    </div>
+  </aside>
+
+  <section class="form-side">
+    <!-- LOGIN -->
+    <div class="pane on" data-pane="login">
+      <div class="form-wrap">
+        <span class="form-eyebrow">Sign in</span>
+        <h1>Welcome back to GovLink.</h1>
+        <p class="sub">New here? <a href="#" data-go="register">Create an account</a> — government and academic emails are auto-verified.</p>
+
+        <form onsubmit="event.preventDefault()">
+          <div class="field">
+            <label for="lo-email">Email <span class="hint">required</span></label>
+            <input id="lo-email" type="email" placeholder="you@gbos.gm" autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for="lo-pw">Password <a href="#" style="color:var(--accent);font-size:11.5px;font-weight:500;border-bottom:1px solid var(--accent);padding-bottom:1px">Forgot?</a></label>
+            <input id="lo-pw" type="password" placeholder="••••••••" autocomplete="current-password" />
+          </div>
+          <label class="check"><input type="checkbox" /> Keep me signed in for 30 days on this device</label>
+          <button class="submit" type="submit">Sign in →</button>
+
+          <div class="or">or continue with</div>
+          <div class="sso">
+            <button type="button"><span class="ssomark">G</span>Government of The Gambia SSO <span style="margin-left:auto;font-size:11px;color:var(--ink-3)">·gov.gm</span></button>
+            <button type="button"><span class="ssomark" style="background:#fff;border-color:#dadce0">G</span>Google <span style="margin-left:auto;font-size:11px;color:var(--ink-3)">academic + workspace</span></button>
+            <button type="button"><span class="ssomark" style="background:#fff;border-color:#dadce0">⚡</span>One-time email link</button>
+          </div>
+
+          <p class="footnote">By signing in you agree to the <a href="#" style="color:var(--ink-2)">Terms</a> and <a href="#" style="color:var(--ink-2)">Privacy notice</a>. GovLink complies with the Data Protection &amp; Privacy Act 2023.</p>
+        </form>
+      </div>
+    </div>
+
+    <!-- REGISTER -->
+    <div class="pane" data-pane="register">
+      <div class="form-wrap">
+        <span class="form-eyebrow">Create account</span>
+        <h1>Open data, open access.</h1>
+        <p class="sub">Already have an account? <a href="#" data-go="login">Sign in</a> instead. Free tier covers 100,000 API calls per month — public-sector and academic accounts get 10× automatically.</p>
+
+        <form onsubmit="event.preventDefault()">
+          <div class="row">
+            <div class="field">
+              <label for="re-fn">First name</label>
+              <input id="re-fn" type="text" placeholder="Aminata" autocomplete="given-name" />
+            </div>
+            <div class="field">
+              <label for="re-ln">Last name</label>
+              <input id="re-ln" type="text" placeholder="Touray" autocomplete="family-name" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="re-email">Work email <span class="hint">.gov.gm or .edu auto-verified</span></label>
+            <input id="re-email" type="email" placeholder="atouray@moh.gov.gm" autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for="re-org">Organization</label>
+            <input id="re-org" type="text" placeholder="e.g. Ministry of Health, UNDP Gambia, University of The Gambia" />
+          </div>
+          <div class="field">
+            <label for="re-purpose">Primary use case</label>
+            <select id="re-purpose">
+              <option>Reading reports and analysis</option>
+              <option selected>Researcher · downloading datasets</option>
+              <option>Developer · using the API</option>
+              <option>Data publisher · uploading on behalf of an organization</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="re-pw">Password</label>
+            <input id="re-pw" type="password" value="r3searcher-2025" autocomplete="new-password" />
+            <div class="strength" aria-label="Password strength: strong">
+              <span class="s1"></span><span class="s2"></span><span class="s3"></span><span></span>
+            </div>
+            <div class="strength-label">Strong · 14 characters · would take ~3 years to crack</div>
+          </div>
+          <label class="check"><input type="checkbox" checked /> I agree to the <a href="#">Terms</a>, the <a href="#">Privacy notice</a>, and the <a href="#">Acceptable Use Policy</a>.</label>
+          <button class="submit" type="submit">Create account →</button>
+          <p class="footnote">Commercial accounts (non-government, non-academic email domains) go through a 24-hour manual review before live API keys are issued. Test keys work immediately.</p>
+        </form>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="pane" data-pane="profile">
+      <div class="form-wrap profile">
+        <span class="form-eyebrow">Account · profile</span>
+        <h1>Your GovLink account</h1>
+        <p class="sub">Manage your profile, organization, sign-in methods, and account preferences. Changes here also apply to the developer dashboard.</p>
+
+        <div class="profile-head">
+          <span class="av">AT</span>
+          <div class="who">
+            <h2>Aminata Touray</h2>
+            <div class="who-meta"><span class="badge">✓ Verified · gov.gm</span><span style="color:var(--rule-2)">·</span><span>Member since 14 Jan 2025</span></div>
+          </div>
+          <div class="acts">
+            <button>Change avatar</button>
+            <button>Sign out</button>
+          </div>
+        </div>
+
+        <div class="profile-section">
+          <h3>Personal</h3>
+          <p class="section-sub">Used on bylines for reports you author and on your public profile.</p>
+          <div class="row">
+            <div class="field">
+              <label>First name</label>
+              <input type="text" value="Aminata" />
+            </div>
+            <div class="field">
+              <label>Last name</label>
+              <input type="text" value="Touray" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Display name <span class="hint">on bylines</span></label>
+            <input type="text" value="Aminata Touray" />
+          </div>
+          <div class="field">
+            <label>Bio <span class="hint">120 chars max · public</span></label>
+            <textarea rows="2">Health systems analyst on GovLink's editorial desk. Previously at the GBoS Demography Unit.</textarea>
+          </div>
+        </div>
+
+        <div class="profile-section">
+          <h3>Organization &amp; role</h3>
+          <p class="section-sub">Your organization controls which datasets you can publish to and which API quotas apply.</p>
+          <div class="row">
+            <div class="field">
+              <label>Organization</label>
+              <select><option selected>Ministry of Health · MoH</option><option>Gambia Bureau of Statistics</option><option>UNDP Gambia</option><option>WHO Gambia</option><option>Other / change request</option></select>
+            </div>
+            <div class="field">
+              <label>Role at organization</label>
+              <input type="text" value="Health Policy Analyst" />
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-section">
+          <h3>Sign-in &amp; security</h3>
+          <p class="section-sub">Authentication methods linked to this account.</p>
+          <div style="display:flex;flex-direction:column;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--rule);font-size:13px;gap:12px">
+              <div><strong style="display:block;color:var(--ink);font-weight:500;font-size:13.5px">Password</strong><span style="color:var(--ink-3);font-size:12px;font-variant-numeric:tabular-nums">Last changed 21 Mar 2025</span></div>
+              <button style="font-size:12.5px;color:var(--accent);font-weight:500;border-bottom:1px solid var(--accent);padding-bottom:1px;flex-shrink:0">Change</button>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--rule);font-size:13px;gap:12px">
+              <div><strong style="display:block;color:var(--ink);font-weight:500;font-size:13.5px">Two-factor authentication</strong><span style="color:var(--success);font-size:12px;font-variant-numeric:tabular-nums">Enabled · authenticator app</span></div>
+              <button style="font-size:12.5px;color:var(--accent);font-weight:500;border-bottom:1px solid var(--accent);padding-bottom:1px;flex-shrink:0">Manage</button>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--rule);font-size:13px;gap:12px">
+              <div><strong style="display:block;color:var(--ink);font-weight:500;font-size:13.5px">Government of The Gambia SSO</strong><span style="color:var(--ink-3);font-size:12px;font-variant-numeric:tabular-nums">Linked · atouray@moh.gov.gm</span></div>
+              <button style="font-size:12.5px;color:var(--accent);font-weight:500;border-bottom:1px solid var(--accent);padding-bottom:1px;flex-shrink:0">Unlink</button>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--rule);font-size:13px;gap:12px">
+              <div><strong style="display:block;color:var(--ink);font-weight:500;font-size:13.5px">Active sessions</strong><span style="color:var(--ink-3);font-size:12px;font-variant-numeric:tabular-nums">3 · last activity 14:36 UTC, this browser</span></div>
+              <button style="font-size:12.5px;color:var(--accent);font-weight:500;border-bottom:1px solid var(--accent);padding-bottom:1px;flex-shrink:0">Review</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-section">
+          <h3>Email preferences</h3>
+          <p class="section-sub">Decide what GovLink emails you about. Critical security and ingestion-failure alerts cannot be disabled.</p>
+          <label class="check" style="margin-bottom:10px"><input type="checkbox" checked /> Weekly digest of new datasets and reports relevant to my desk</label>
+          <label class="check" style="margin-bottom:10px"><input type="checkbox" checked /> When a dataset I subscribe to is updated</label>
+          <label class="check" style="margin-bottom:10px"><input type="checkbox" /> Marketing — quarterly product updates and event invitations</label>
+          <label class="check"><input type="checkbox" disabled /> Security and ingestion-failure alerts <span style="color:var(--ink-3);margin-left:6px">(always on)</span></label>
+        </div>
+
+        <div style="display:flex;gap:10px;padding-top:8px">
+          <button class="submit" type="button" style="width:auto;flex:0 0 auto;padding:10px 20px">Save changes</button>
+          <button type="button" style="padding:10px 16px;border:1px solid var(--rule-2);border-radius:3px;background:var(--surface);color:var(--ink-2);font-size:14px;cursor:pointer">Discard</button>
+        </div>
+
+        <div class="profile-section" style="margin-top:36px">
+          <div class="danger-zone">
+            <h3>Danger zone</h3>
+            <p>Deleting your account anonymises your bylines on published reports and revokes all your API keys. Datasets you've published remain owned by your organization.</p>
+            <button type="button">Delete account</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  const root = document.documentElement;
+  const stored = localStorage.getItem('govlink-theme');
+  if (stored) root.dataset.theme = stored;
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    localStorage.setItem('govlink-theme', next);
+  });
+  const setPane = (name) => {
+    document.querySelectorAll('.state-tabs button').forEach(b => b.classList.toggle('on', b.dataset.pane === name));
+    document.querySelectorAll('.pane').forEach(p => p.classList.toggle('on', p.dataset.pane === name));
+    window.scrollTo({ top: 0 });
+  };
+  document.querySelectorAll('.state-tabs button').forEach(b => b.addEventListener('click', () => setPane(b.dataset.pane)));
+  document.querySelectorAll('[data-go]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); setPane(a.dataset.go); }));
+</script>
+</body>
+</html>

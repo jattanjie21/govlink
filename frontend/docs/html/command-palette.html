@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Command palette · GovLink</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,1,400;9..144,0,600&family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root[data-theme="light"]{--canvas:#FAF8F4;--surface:#FFFFFF;--surface-2:#F2EFE8;--ink:#1A1A1A;--ink-2:#3D3D3D;--ink-3:#6B6B6B;--rule:#E5E2DA;--rule-2:#D5D0C4;--accent:#0F4C5C;--accent-hover:#0A3A47;--accent-tint:#E5EFF1;--success:#2F6B3D;--warning:#B27800;--danger:#A03B2C;--scrim:rgba(20,19,18,0.42)}
+  :root[data-theme="dark"]{--canvas:#141312;--surface:#1C1B19;--surface-2:#222020;--ink:#F0EDE6;--ink-2:#C0BBB0;--ink-3:#8A867D;--rule:#2A2826;--rule-2:#3A3835;--accent:#5FB8CC;--accent-hover:#7CCCDF;--accent-tint:#1F3A40;--success:#5CA374;--warning:#D8A33A;--danger:#D17265;--scrim:rgba(0,0,0,0.6)}
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;padding:0;background:var(--canvas);color:var(--ink);font-family:'Geist','Inter Tight',ui-sans-serif,system-ui,sans-serif;font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;font-feature-settings:"ss01","cv11";min-height:100vh;transition:background 180ms ease,color 180ms ease}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
+  .num{font-variant-numeric:tabular-nums}
+  .mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+
+  /* Background page (greyed out home) */
+  .page{filter:blur(2px) saturate(80%);transition:filter 180ms ease;pointer-events:none;user-select:none}
+  .page.unblur{filter:none;pointer-events:auto;user-select:auto}
+  .nav{border-bottom:1px solid var(--rule);background:var(--canvas);height:64px;display:flex;align-items:center;padding:0 32px;gap:32px}
+  .brand{display:flex;align-items:baseline;gap:8px;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:21px;letter-spacing:-0.01em}
+  .brand-mark{display:inline-block;width:8px;height:24px;background:var(--accent);transform:translateY(4px)}
+  .nav-links{display:flex;gap:28px;font-size:14px;color:var(--ink-2);margin-left:24px}
+  .nav-right{margin-left:auto;display:flex;align-items:center;gap:14px}
+  .ts{display:flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid var(--rule);border-radius:4px;background:var(--surface);font-size:13px;color:var(--ink-3);min-width:280px}
+  .kbd{font-family:'JetBrains Mono',monospace;font-size:11px;padding:1px 5px;border:1px solid var(--rule-2);border-radius:3px;color:var(--ink-3);background:var(--canvas)}
+  .hero-area{padding:80px 32px 64px}
+  .hero-area h1{font-family:'Fraunces',serif;font-size:48px;line-height:1.05;letter-spacing:-0.02em;font-weight:400;margin:0 0 16px;max-width:18ch}
+  .hero-area p{font-size:17px;color:var(--ink-2);max-width:60ch;margin:0}
+
+  /* Scrim + palette */
+  .scrim{position:fixed;inset:0;background:var(--scrim);backdrop-filter:blur(2px);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding-top:11vh;animation:scrim-in 220ms cubic-bezier(0.2,0,0,1) both}
+  .scrim.closing{animation:scrim-out 180ms cubic-bezier(0.2,0,0,1) both}
+  @keyframes scrim-in{from{opacity:0}to{opacity:1}}
+  @keyframes scrim-out{from{opacity:1}to{opacity:0}}
+
+  .palette{width:min(640px,calc(100vw - 40px));background:var(--surface);border:1px solid var(--rule-2);border-radius:8px;box-shadow:0 32px 80px -16px rgba(20,19,18,0.34),0 4px 12px rgba(20,19,18,0.08);overflow:hidden;display:flex;flex-direction:column;max-height:70vh;animation:palette-in 280ms cubic-bezier(0.2,0,0,1) both}
+  [data-theme="dark"] .palette{box-shadow:0 32px 80px -16px rgba(0,0,0,0.7),0 4px 12px rgba(0,0,0,0.4);border-color:var(--rule-2)}
+  @keyframes palette-in{from{opacity:0;transform:translateY(-12px) scale(0.98)}to{opacity:1;transform:none}}
+
+  .pal-input{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--rule);background:var(--canvas)}
+  .pal-input svg{color:var(--ink-3);flex-shrink:0}
+  .pal-input input{font:inherit;font-size:15.5px;border:none;outline:none;background:transparent;color:var(--ink);flex:1;font-family:inherit;padding:0;letter-spacing:-0.005em}
+  .pal-input input::placeholder{color:var(--ink-3)}
+  .pal-input .esc{font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 7px;border:1px solid var(--rule-2);border-radius:3px;color:var(--ink-3);background:var(--surface);font-weight:500;flex-shrink:0;letter-spacing:0.04em}
+
+  .pal-body{flex:1;overflow-y:auto;padding:8px 0}
+  .pal-body::-webkit-scrollbar{width:8px}
+  .pal-body::-webkit-scrollbar-track{background:transparent}
+  .pal-body::-webkit-scrollbar-thumb{background:var(--rule-2);border-radius:4px;border:2px solid var(--surface)}
+
+  .group{padding:0}
+  .group + .group{margin-top:4px}
+  .group-head{display:flex;align-items:center;justify-content:space-between;padding:8px 18px 4px;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600;font-variant-numeric:tabular-nums}
+  .group-head .meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-3);font-weight:500;letter-spacing:0;text-transform:none}
+
+  .it{display:grid;grid-template-columns:24px 1fr auto;gap:14px;align-items:center;padding:8px 18px;cursor:pointer;color:var(--ink-2);font-size:13.5px;border-left:2px solid transparent;transition:background 100ms ease,border-color 100ms ease;min-height:44px}
+  .it:hover{background:var(--surface-2)}
+  .it.active{background:var(--accent-tint);border-left-color:var(--accent);color:var(--ink)}
+  [data-theme="dark"] .it.active{background:var(--accent-tint);color:var(--ink)}
+  .it .ico{width:24px;height:24px;border-radius:3px;background:var(--surface-2);border:1px solid var(--rule);font-family:'Fraunces',serif;font-size:11px;color:var(--ink-2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:500}
+  .it.active .ico{background:var(--surface);border-color:color-mix(in oklch,var(--accent) 25%,var(--rule));color:var(--accent)}
+  .it.kind-page .ico{background:var(--surface-2);font-family:Geist;font-size:13px;color:var(--ink-3)}
+  .it.kind-page.active .ico{color:var(--accent);background:var(--surface)}
+  .it.kind-action .ico{font-family:'JetBrains Mono';font-size:14px;font-weight:500;color:var(--accent);background:var(--accent-tint);border-color:color-mix(in oklch,var(--accent) 25%,var(--rule))}
+  .it .body{min-width:0;display:flex;flex-direction:column;gap:1px;line-height:1.4}
+  .it .body strong{color:var(--ink);font-weight:500;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .it .body strong em{font-style:normal;color:var(--accent);background:color-mix(in oklch,var(--accent) 12%,transparent);padding:0 1px;border-radius:1px}
+  .it .body span{color:var(--ink-3);font-size:11.5px;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .it .body .verified{color:var(--success);display:inline-flex;align-items:center}
+  .it .right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+  .it .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .it .keys{display:flex;align-items:center;gap:3px;opacity:0;transition:opacity 120ms ease}
+  .it.active .keys,.it:hover .keys{opacity:1}
+  .it .keys .k{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:1px 5px;border:1px solid var(--rule-2);border-radius:2px;color:var(--ink-3);background:var(--canvas);font-weight:500;letter-spacing:0.04em}
+
+  .pal-foot{display:flex;align-items:center;justify-content:space-between;padding:9px 18px;border-top:1px solid var(--rule);background:var(--canvas);font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .pal-foot .left{display:flex;align-items:center;gap:14px}
+  .pal-foot .left .h{display:inline-flex;align-items:center;gap:5px}
+  .pal-foot .left .h .k{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:1px 5px;border:1px solid var(--rule-2);border-radius:2px;color:var(--ink-3);background:var(--surface);font-weight:500}
+  .pal-foot .right{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:10.5px}
+  .pal-foot .pulse{width:6px;height:6px;border-radius:50%;background:var(--success)}
+
+  .empty{padding:36px 24px;text-align:center;color:var(--ink-3);font-size:13px}
+  .empty strong{color:var(--ink);display:block;font-size:14px;margin-bottom:6px;font-family:'Fraunces',serif;font-weight:400;letter-spacing:-0.005em}
+  .empty .key-hint{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-2);background:var(--surface-2);padding:2px 6px;border:1px solid var(--rule);border-radius:2px;font-weight:500}
+
+  .panel-info{position:fixed;bottom:24px;left:24px;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px 18px;font-size:12.5px;color:var(--ink-2);max-width:300px;line-height:1.55;box-shadow:0 4px 16px rgba(20,19,18,0.06);z-index:90}
+  .panel-info strong{color:var(--ink);font-weight:500;display:block;margin-bottom:4px;font-family:'Fraunces',serif;font-size:14px;font-weight:400;letter-spacing:-0.005em}
+  .panel-info code{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--surface-2);padding:1px 5px;border:1px solid var(--rule);border-radius:2px;color:var(--ink)}
+
+  .reopen-hint{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--surface);border:1px solid var(--rule-2);padding:18px 28px;border-radius:6px;font-size:14px;color:var(--ink-2);box-shadow:0 4px 16px rgba(20,19,18,0.08);text-align:center;display:none}
+  .reopen-hint.show{display:block}
+  .reopen-hint .k{font-family:'JetBrains Mono',monospace;font-size:13px;padding:3px 9px;border:1px solid var(--rule-2);border-radius:3px;color:var(--ink);background:var(--surface-2);font-weight:500;margin:0 3px}
+  .reopen-hint button{margin-top:14px;padding:7px 14px;background:var(--ink);color:var(--canvas);border-radius:3px;font-size:13px;font-weight:500;cursor:pointer}
+  [data-theme="dark"] .reopen-hint button{color:var(--canvas)}
+
+  @media (max-width:640px){.nav{padding:0 16px}.nav-links{display:none}.ts{min-width:auto}.hero-area{padding:48px 16px 32px}.hero-area h1{font-size:32px}.hero-area p{font-size:15px}.scrim{padding-top:8vh}.palette{max-height:80vh}.it{padding:8px 14px}.panel-info{display:none}}
+  *:focus-visible{outline:none}
+</style>
+</head>
+<body>
+
+<!-- Background page (slightly blurred for context) -->
+<div class="page" id="bg">
+  <header class="nav">
+    <span class="brand"><span class="brand-mark"></span>GovLink</span>
+    <nav class="nav-links">
+      <span style="color:var(--ink)">Datasets</span>
+      <span>Reports</span>
+      <span>Developers</span>
+      <span>About</span>
+    </nav>
+    <div class="nav-right">
+      <span class="ts">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="m13 13-2.5-2.5"/></svg>
+        <span style="flex:1;text-align:left">Search datasets, reports…</span>
+        <span class="kbd">⌘K</span>
+      </span>
+    </div>
+  </header>
+  <section class="hero-area">
+    <h1>The Gambia's open data, in one place.</h1>
+    <p>GovLink aggregates statistics from the Gambia Bureau of Statistics, line ministries, and development partners — UNDP, UNICEF, the World Bank, AfDB, ECOWAS — into a single, citable, machine-readable platform.</p>
+  </section>
+</div>
+
+<!-- Reopen hint when palette closed -->
+<div class="reopen-hint" id="reopen-hint">
+  Press <span class="k">⌘</span><span class="k">K</span> to open the command palette<br/>
+  <button id="reopen-btn">Open palette</button>
+</div>
+
+<!-- Scrim + palette -->
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-label="Command palette">
+  <div class="palette" role="combobox" aria-expanded="true" aria-haspopup="listbox">
+    <div class="pal-input">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="7" cy="7" r="4.5"/><path d="m13 13-2.5-2.5"/></svg>
+      <input id="pal-q" placeholder="Type to search datasets, reports, organizations, or jump to a page…" autofocus autocomplete="off" spellcheck="false" />
+      <span class="esc">esc</span>
+    </div>
+    <div class="pal-body" id="pal-body" role="listbox">
+
+      <div class="group" data-group="recent">
+        <div class="group-head"><span>Recent</span><span class="meta">last 7 days</span></div>
+
+        <div class="it active" role="option" data-kind="dataset" data-href="dataset-detail.html">
+          <span class="ico">M</span>
+          <div class="body">
+            <strong>Health Facility Census 2024</strong>
+            <span>Ministry of Health <span class="verified" aria-label="Verified publisher"><svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5 9.6 3l2.2-.3.4 2.2 2 .9-.9 2 .9 2-2 .9-.4 2.2-2.2-.3L8 14.5 6.4 13l-2.2.3-.4-2.2-2-.9.9-2-.9-2 2-.9.4-2.2 2.2.3L8 1.5Z"/><path d="m5.5 8 1.8 1.8L10.8 6.3" stroke="var(--surface)" stroke-width="1.4" fill="none"/></svg></span> · 728 rows · 27 cols</span>
+          </div>
+          <div class="right">
+            <span class="meta">2 min ago</span>
+            <span class="keys"><span class="k">↵</span></span>
+          </div>
+        </div>
+
+        <div class="it" role="option" data-kind="report">
+          <span class="ico">R</span>
+          <div class="body">
+            <strong>Where The Gambia's healthcare access actually breaks down</strong>
+            <span>Aminata Touray · Health Policy Desk · 14-min read</span>
+          </div>
+          <div class="right">
+            <span class="meta">8 h ago</span>
+            <span class="keys"><span class="k">↵</span></span>
+          </div>
+        </div>
+
+        <div class="it" role="option" data-kind="dataset">
+          <span class="ico">G</span>
+          <div class="body">
+            <strong>Integrated Household Survey 2023/24</strong>
+            <span>GBoS <span class="verified"><svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5 9.6 3l2.2-.3.4 2.2 2 .9-.9 2 .9 2-2 .9-.4 2.2-2.2-.3L8 14.5 6.4 13l-2.2.3-.4-2.2-2-.9.9-2-.9-2 2-.9.4-2.2 2.2.3L8 1.5Z"/><path d="m5.5 8 1.8 1.8L10.8 6.3" stroke="var(--surface)" stroke-width="1.4" fill="none"/></svg></span> · 13,400 rows</span>
+          </div>
+          <div class="right">
+            <span class="meta">yesterday</span>
+            <span class="keys"><span class="k">↵</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="group" data-group="datasets">
+        <div class="group-head"><span>Datasets · 427</span><span class="meta">⌘D to scope</span></div>
+
+        <div class="it" role="option" data-kind="dataset">
+          <span class="ico">M</span>
+          <div class="body">
+            <strong>School Enrolment by Region, 2014–2024</strong>
+            <span>MoBSE · CSV · XLSX · API · updated 04 Apr 2025</span>
+          </div>
+          <div class="right"><span class="keys"><span class="k">↵</span></span></div>
+        </div>
+
+        <div class="it" role="option" data-kind="dataset">
+          <span class="ico">U</span>
+          <div class="body">
+            <strong>Multidimensional Poverty Index 2024</strong>
+            <span>UNDP Gambia · CSV · API · updated 18 Mar 2025</span>
+          </div>
+          <div class="right"><span class="keys"><span class="k">↵</span></span></div>
+        </div>
+
+        <div class="it" role="option" data-kind="dataset">
+          <span class="ico">G</span>
+          <div class="body">
+            <strong>CPI April 2025</strong>
+            <span>GBoS · CSV · updated 02 May 2025</span>
+          </div>
+          <div class="right"><span class="keys"><span class="k">↵</span></span></div>
+        </div>
+
+        <div class="it" role="option" data-kind="dataset">
+          <span class="ico">M</span>
+          <div class="body">
+            <strong>Annual Energy Balance 2024</strong>
+            <span>Min. of Petroleum &amp; Energy · PDF · CSV · updated 27 Apr 2025</span>
+          </div>
+          <div class="right"><span class="keys"><span class="k">↵</span></span></div>
+        </div>
+      </div>
+
+      <div class="group" data-group="orgs">
+        <div class="group-head"><span>Organizations · 38</span><span class="meta">⌘O to scope</span></div>
+
+        <div class="it" role="option" data-kind="org">
+          <span class="ico">G</span>
+          <div class="body">
+            <strong>Gambia Bureau of Statistics</strong>
+            <span>78 datasets · 32 members · platform operator</span>
+          </div>
+          <div class="right"><span class="keys"><span class="k">↵</span></span></div>
+        </div>
+
+        <div class="it" role="option" data-kind="org">
+          <span class="ico">U</span>
+          <div class="body">
+            <strong>UNDP Gambia</strong>
+            <span>12 datasets · 16 members · verified development partner</span>
+          </div>
+          <div class="right"><span class="keys"><span class="k">↵</span></span></div>
+        </div>
+
+        <div class="it" role="option" data-kind="org">
+          <span class="ico">U</span>
+          <div class="body">
+            <strong>UNICEF Gambia</strong>
+            <span>9 datasets · 14 members</span>
+          </div>
+          <div class="right"><span class="keys"><span class="k">↵</span></span></div>
+        </div>
+      </div>
+
+      <div class="group" data-group="pages">
+        <div class="group-head"><span>Jump to</span><span class="meta">⌘P</span></div>
+
+        <div class="it kind-page" role="option" data-kind="page" data-href="browse.html">
+          <span class="ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 4h12M2 8h12M2 12h12"/></svg></span>
+          <div class="body"><strong>Browse all datasets</strong><span>/datasets</span></div>
+          <div class="right"><span class="keys"><span class="k">⌘</span><span class="k">B</span></span></div>
+        </div>
+
+        <div class="it kind-page" role="option" data-kind="page" data-href="reports.html">
+          <span class="ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 2h7l3 3v9H3z"/><path d="M10 2v3h3"/></svg></span>
+          <div class="body"><strong>All reports</strong><span>/reports</span></div>
+          <div class="right"><span class="keys"><span class="k">⌘</span><span class="k">R</span></span></div>
+        </div>
+
+        <div class="it kind-page" role="option" data-kind="page" data-href="developer.html">
+          <span class="ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m4 4 4 4-4 4M9 12h3"/></svg></span>
+          <div class="body"><strong>Developer dashboard</strong><span>/developer</span></div>
+          <div class="right"><span class="keys"><span class="k">⌘</span><span class="k">D</span></span></div>
+        </div>
+
+        <div class="it kind-page" role="option" data-kind="page" data-href="auth.html">
+          <span class="ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3 2.7-5 6-5s6 2 6 5"/></svg></span>
+          <div class="body"><strong>Account</strong><span>/account/profile</span></div>
+          <div class="right"><span class="keys"><span class="k">⌘</span><span class="k">,</span></span></div>
+        </div>
+      </div>
+
+      <div class="group" data-group="actions">
+        <div class="group-head"><span>Actions</span><span class="meta">⌘.</span></div>
+
+        <div class="it kind-action" role="option" data-kind="action">
+          <span class="ico">+</span>
+          <div class="body"><strong>New API key</strong><span>Generate a key for the active organization</span></div>
+          <div class="right"><span class="keys"><span class="k">⌘</span><span class="k">⇧</span><span class="k">K</span></span></div>
+        </div>
+
+        <div class="it kind-action" role="option" data-kind="action">
+          <span class="ico">+</span>
+          <div class="body"><strong>Upload dataset</strong><span>Open the ingestion wizard</span></div>
+          <div class="right"><span class="keys"><span class="k">⌘</span><span class="k">U</span></span></div>
+        </div>
+
+        <div class="it kind-action" role="option" data-kind="action">
+          <span class="ico">☼</span>
+          <div class="body"><strong>Toggle theme</strong><span>Switch between light and dark</span></div>
+          <div class="right"><span class="keys"><span class="k">⌘</span><span class="k">⇧</span><span class="k">L</span></span></div>
+        </div>
+
+        <div class="it kind-action" role="option" data-kind="action">
+          <span class="ico">↗</span>
+          <div class="body"><strong>Read API docs</strong><span>docs.govlink.gm/v1</span></div>
+          <div class="right"><span class="keys"><span class="k">⌘</span><span class="k">⇧</span><span class="k">D</span></span></div>
+        </div>
+
+        <div class="it kind-action" role="option" data-kind="action">
+          <span class="ico">⏎</span>
+          <div class="body"><strong>Sign out</strong><span>End the current session</span></div>
+          <div class="right"><span class="keys"><span class="k">⌘</span><span class="k">⇧</span><span class="k">Q</span></span></div>
+        </div>
+      </div>
+
+      <div class="empty" id="empty-state" style="display:none">
+        <strong>No matches</strong>
+        Try a different query, or press <span class="key-hint">esc</span> to close.
+      </div>
+    </div>
+
+    <div class="pal-foot">
+      <div class="left">
+        <span class="h"><span class="k">↑↓</span> Navigate</span>
+        <span class="h"><span class="k">↵</span> Open</span>
+        <span class="h"><span class="k">esc</span> Close</span>
+      </div>
+      <div class="right">
+        <span class="pulse"></span>
+        <span>govlink.gm · v1.4.2</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<aside class="panel-info" aria-label="About this page">
+  <strong>Command palette demo</strong>
+  Type to filter (matches highlight live). Use <code>↑</code> / <code>↓</code> to move, <code>↵</code> to open, <code>esc</code> to close. Reopens with <code>⌘K</code> or <code>Ctrl K</code>.
+</aside>
+
+<script>
+  const root = document.documentElement;
+  const stored = localStorage.getItem('govlink-theme');
+  if (stored) root.dataset.theme = stored;
+  const scrim = document.getElementById('scrim');
+  const bg = document.getElementById('bg');
+  const reopen = document.getElementById('reopen-hint');
+  const reopenBtn = document.getElementById('reopen-btn');
+  const input = document.getElementById('pal-q');
+  const body = document.getElementById('pal-body');
+  const emptyState = document.getElementById('empty-state');
+
+  let allItems = Array.from(body.querySelectorAll('.it'));
+  let visible = allItems.slice();
+  let activeIdx = 0;
+
+  const setActive = (idx, scroll = true) => {
+    if (visible.length === 0) return;
+    activeIdx = (idx + visible.length) % visible.length;
+    visible.forEach(it => it.classList.remove('active'));
+    visible[activeIdx].classList.add('active');
+    if (scroll) visible[activeIdx].scrollIntoView({ block: 'nearest' });
+  };
+
+  const escapeHtml = (s) => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const highlight = (text, q) => {
+    if (!q) return escapeHtml(text);
+    const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+    return escapeHtml(text).replace(re, '<em>$1</em>');
+  };
+
+  const filter = (q) => {
+    q = q.trim().toLowerCase();
+    visible = [];
+    allItems.forEach(it => {
+      const titleEl = it.querySelector('.body strong');
+      const subEl = it.querySelector('.body span');
+      const title = titleEl.dataset.original || titleEl.textContent;
+      titleEl.dataset.original = title;
+      const sub = subEl ? (subEl.dataset.original || subEl.textContent) : '';
+      if (subEl) subEl.dataset.original = sub;
+      const match = !q || title.toLowerCase().includes(q) || sub.toLowerCase().includes(q);
+      it.style.display = match ? '' : 'none';
+      if (match) {
+        visible.push(it);
+        titleEl.innerHTML = highlight(title, q);
+      }
+    });
+    body.querySelectorAll('.group').forEach(g => {
+      const groupItems = Array.from(g.querySelectorAll('.it'));
+      const anyVisible = groupItems.some(it => it.style.display !== 'none');
+      g.style.display = anyVisible ? '' : 'none';
+    });
+    emptyState.style.display = visible.length === 0 ? '' : 'none';
+    activeIdx = 0;
+    if (visible.length > 0) setActive(0);
+  };
+
+  const close = () => {
+    scrim.classList.add('closing');
+    setTimeout(() => { scrim.style.display = 'none'; reopen.classList.add('show'); bg.classList.add('unblur'); }, 180);
+  };
+  const open = () => {
+    scrim.classList.remove('closing');
+    scrim.style.display = 'flex';
+    reopen.classList.remove('show');
+    bg.classList.remove('unblur');
+    setTimeout(() => input.focus(), 60);
+  };
+
+  input.addEventListener('input', e => filter(e.target.value));
+  input.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); setActive(activeIdx + 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(activeIdx - 1); }
+    else if (e.key === 'Enter') {
+      e.preventDefault();
+      const sel = visible[activeIdx];
+      if (!sel) return;
+      const href = sel.dataset.href;
+      if (href) window.location.href = href;
+      else close();
+    } else if (e.key === 'Escape') { e.preventDefault(); close(); }
+  });
+
+  scrim.addEventListener('click', e => { if (e.target === scrim) close(); });
+  reopenBtn.addEventListener('click', open);
+  body.querySelectorAll('.it').forEach((it, idx) => {
+    it.addEventListener('mouseenter', () => { setActive(visible.indexOf(it), false); });
+    it.addEventListener('click', () => { const href = it.dataset.href; if (href) window.location.href = href; else close(); });
+  });
+
+  document.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (scrim.style.display === 'none') open(); else close();
+    }
+  });
+</script>
+</body>
+</html>

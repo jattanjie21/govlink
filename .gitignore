@@ -12,8 +12,8 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+/lib/
+/lib64/
 parts/
 sdist/
 var/
@@ -74,6 +74,16 @@ node_modules
 dist
 dist-ssr
 *.local
+*.tsbuildinfo
+.env.local
+.env.*.local
+!.env.example
+
+# Vercel
+.vercel
+
+# Claude Code per-user permissions (project-shared config goes in settings.json)
+.claude/settings.local.json
 
 # Editor directories and files
 .vscode/*
