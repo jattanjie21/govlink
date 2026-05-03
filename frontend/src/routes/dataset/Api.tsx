@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Copy, Send } from "lucide-react";
 import { useDatasetContext } from "./context";
 import { api, ApiError } from "@/lib/api";
+import { API_PUBLIC_URL } from "@/lib/env";
 import { cn } from "@/lib/utils";
 
 type EndpointKey = "metadata" | "latest" | "historical" | "csv";
@@ -98,7 +99,7 @@ export default function Api() {
   const path = endpoint.pathTemplate.replace(":slug", slug);
   const queryString = buildQueryString(visibleParams, paramValues);
   const fullPath = path + (queryString ? `?${queryString}` : "");
-  const fullUrl = `http://localhost:8000${fullPath}`;
+  const fullUrl = `${API_PUBLIC_URL}${fullPath}`;
 
   function setParam(name: string, value: string) {
     setParamValues((prev) => ({ ...prev, [name]: value }));
@@ -192,11 +193,11 @@ export default function Api() {
                 </h2>
                 <p className="mt-1 text-sm text-ink-2">{endpoint.description}</p>
               </div>
-              <div className="inline-flex items-center gap-2 rounded border border-rule bg-canvas px-3 py-1.5 font-mono text-xs">
-                <span className="rounded bg-accent-tint px-1.5 py-0.5 text-[10px] font-semibold text-accent">
+              <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2 rounded border border-rule bg-canvas px-3 py-1.5 font-mono text-xs">
+                <span className="shrink-0 rounded bg-accent-tint px-1.5 py-0.5 text-[10px] font-semibold text-accent">
                   GET
                 </span>
-                <span className="text-ink">{fullUrl}</span>
+                <span className="min-w-0 break-all text-ink">{fullUrl}</span>
               </div>
             </div>
           </header>

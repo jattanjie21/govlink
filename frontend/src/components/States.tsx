@@ -61,8 +61,7 @@ export function ErrorState({
       <p className="font-display text-md text-danger">Something went wrong</p>
       <p className="mt-2 text-sm text-ink-3">{msg}</p>
       <p className="mt-1 text-xs text-ink-3">
-        Check that the backend is running on{" "}
-        <code className="font-mono">localhost:8000</code>.
+        Check that the backend is reachable.
       </p>
     </div>
   );

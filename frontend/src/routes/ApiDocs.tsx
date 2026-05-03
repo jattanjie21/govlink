@@ -5,6 +5,7 @@ import { Eyebrow } from "@/components/Eyebrow";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { useDatasets } from "@/lib/queries";
 import { ErrorState, LoadingCardGrid } from "@/components/States";
+import { API_PUBLIC_URL } from "@/lib/env";
 
 interface EndpointRow {
   method: "GET";
@@ -47,7 +48,7 @@ export default function ApiDocs() {
 
           <div className="mt-6 flex flex-wrap gap-3">
             <a
-              href="http://localhost:8000/docs"
+              href={`${API_PUBLIC_URL}/docs`}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 rounded bg-accent px-4 py-2 text-sm font-medium text-white transition-colors duration-2 ease hover:bg-accent-hover"
@@ -56,7 +57,7 @@ export default function ApiDocs() {
               <ExternalLink className="h-3.5 w-3.5" />
             </a>
             <a
-              href="http://localhost:8000/openapi.json"
+              href={`${API_PUBLIC_URL}/openapi.json`}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 rounded border border-rule px-4 py-2 text-sm transition-colors duration-2 ease hover:border-rule-2 hover:bg-accent-tint"

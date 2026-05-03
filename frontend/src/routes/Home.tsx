@@ -5,6 +5,7 @@ import { Eyebrow } from "@/components/Eyebrow";
 import { DatasetCard } from "@/components/DatasetCard";
 import { EmptyState, ErrorState, LoadingCardGrid } from "@/components/States";
 import { useDatasets } from "@/lib/queries";
+import { API_PUBLIC_URL } from "@/lib/env";
 
 export default function Home() {
   const { data, isLoading, isError, error } = useDatasets();
@@ -109,7 +110,7 @@ export default function Home() {
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <a
-                  href="http://localhost:8000/docs"
+                  href={`${API_PUBLIC_URL}/docs`}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-1.5 rounded border border-rule px-4 py-2 text-sm transition-colors duration-2 ease hover:border-rule-2 hover:bg-accent-tint"
@@ -121,10 +122,10 @@ export default function Home() {
 
             <pre className="overflow-x-auto rounded-lg border border-rule bg-[var(--code-bg)] p-5 font-mono text-xs leading-relaxed text-[var(--code-fg)]">
 {`# Latest exchange-rate snapshot
-curl https://api.govlink.gm/datasets/exchange-rates/latest
+curl ${API_PUBLIC_URL}/datasets/exchange-rates/latest
 
 # Filter by date and currency
-curl 'https://api.govlink.gm/datasets/exchange-rates/historical \\
+curl '${API_PUBLIC_URL}/datasets/exchange-rates/historical \\
   ?from=2026-01-01&to=2026-04-30&currency=USD'`}
             </pre>
           </div>
