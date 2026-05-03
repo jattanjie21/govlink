@@ -1,13 +1,13 @@
-# Contributing to govlink
+# Contributing to govlink (backend)
 
-Thank you for your interest in contributing. This project makes Gambian government data accessible to researchers, journalists, and developers, and contributions of any size — bug reports, new datasets, documentation fixes — are genuinely valued.
+Thank you for your interest in contributing. This project makes Gambian government data accessible to researchers, journalists, and developers, and contributions of any size — bug reports, new datasets, documentation fixes — are genuinely valued. This guide covers the Python backend; for the React web client, see [`../frontend/README.md`](../frontend/README.md).
 
 ## Getting started
 
 ```bash
 # 1. Fork the repo on GitHub, then clone your fork
 git clone https://github.com/YOUR_USERNAME/govlink.git
-cd govlink
+cd govlink/backend
 
 # 2. Install dependencies
 uv sync
@@ -87,7 +87,7 @@ For security issues, please do not open a public issue. Contact the maintainers 
 ## Project layout (orientation)
 
 ```
-govlink/
+backend/
 ├── govlink/
 │   ├── api/              FastAPI routes, dependencies, exporters
 │   ├── core/             Registry, base classes, ORM models, shared schemas
@@ -106,4 +106,4 @@ govlink/
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the [MIT License](LICENSE).
+By contributing, you agree that your contributions will be licensed under the [MIT License](../LICENSE).
