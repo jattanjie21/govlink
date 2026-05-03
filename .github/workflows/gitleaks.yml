@@ -1,0 +1,25 @@
+name: gitleaks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  scan:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so the scan can compare against the base ref on PRs.
+          fetch-depth: 0
+
+      - name: Run gitleaks
+        # Pinned to the commit SHA of the v2 tag (resolved 2026-05-03).
+        # Update by re-resolving the tag and bumping both lines together.
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

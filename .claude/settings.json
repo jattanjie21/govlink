@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "p=$(printf '%s' \"$CLAUDE_TOOL_USE_INPUT\" | jq -r '.tool_input.file_path // \"\"' 2>/dev/null); case \"$p\" in *backend/alembic/versions/*.py) echo 'Edit blocked: alembic/versions/*.py is regenerated via `uv run alembic revision --autogenerate` \u2014 never hand-edited (and ruff is excluded from this directory). Run a fresh autogen instead.' >&2; exit 2 ;; *.env|*.env.local|*.env.*.local) echo 'Edit blocked: secrets file. Edit it manually outside Claude, or update .env.example for documentation.' >&2; exit 2 ;; esac"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "p=$(printf '%s' \"$CLAUDE_TOOL_USE_INPUT\" | jq -r '.tool_input.file_path // \"\"' 2>/dev/null); case \"$p\" in *backend/*.py) [ -f \"$p\" ] && (cd backend && uv run --quiet ruff format \"${p#*backend/}\" >/dev/null 2>&1 && uv run --quiet ruff check --fix --quiet \"${p#*backend/}\" >/dev/null 2>&1) ;; esac"
+          }
+        ]
+      }
+    ]
+  }
+}
