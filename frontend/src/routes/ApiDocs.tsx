@@ -50,7 +50,7 @@ export default function ApiDocs() {
             <a
               href={`${API_PUBLIC_URL}/docs`}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 rounded bg-accent px-4 py-2 text-sm font-medium text-white transition-colors duration-2 ease hover:bg-accent-hover"
             >
               Swagger UI
@@ -59,7 +59,7 @@ export default function ApiDocs() {
             <a
               href={`${API_PUBLIC_URL}/openapi.json`}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 rounded border border-rule px-4 py-2 text-sm transition-colors duration-2 ease hover:border-rule-2 hover:bg-accent-tint"
             >
               OpenAPI JSON

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Container } from "./Container";
 
 /**
@@ -9,7 +10,7 @@ export function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-rule bg-surface-2 py-8 text-xs text-ink-3">
       <Container>
-        <div className="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
+        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <div className="flex items-center gap-3.5">
             <span
               aria-hidden
@@ -23,11 +24,25 @@ export function SiteFooter() {
               GovLink · Banjul · Open data for The Gambia
             </span>
           </div>
-          <div className="flex items-center gap-3 num">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 num">
+            <Link
+              to="/about"
+              className="text-ink-3 transition-colors duration-2 ease hover:text-ink"
+            >
+              About
+            </Link>
+            <span aria-hidden>·</span>
+            <Link
+              to="/operator"
+              className="text-ink-3 transition-colors duration-2 ease hover:text-ink"
+            >
+              Status
+            </Link>
+            <span aria-hidden>·</span>
             <a
               href="https://github.com/jattanjie21/govlink"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="text-ink-3 transition-colors duration-2 ease hover:text-ink"
             >
               GitHub

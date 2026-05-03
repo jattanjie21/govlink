@@ -60,7 +60,7 @@ export default function Overview() {
           <a
             href={dataset.source_url}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-accent hover:text-accent-hover"
           >
             Visit publisher

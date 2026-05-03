@@ -112,7 +112,7 @@ export default function Home() {
                 <a
                   href={`${API_PUBLIC_URL}/docs`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 rounded border border-rule px-4 py-2 text-sm transition-colors duration-2 ease hover:border-rule-2 hover:bg-accent-tint"
                 >
                   Swagger UI

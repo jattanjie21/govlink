@@ -8,6 +8,7 @@ import DatasetPreview from "@/routes/dataset/Preview";
 import DatasetApi from "@/routes/dataset/Api";
 import Operator from "@/routes/Operator";
 import ApiDocs from "@/routes/ApiDocs";
+import About from "@/routes/About";
 import NotFound from "@/routes/NotFound";
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
 
         <Route path="/operator" element={<Operator />} />
         <Route path="/api-docs" element={<ApiDocs />} />
+        <Route path="/about" element={<About />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

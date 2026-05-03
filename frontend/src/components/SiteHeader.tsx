@@ -10,9 +10,10 @@ interface NavItem {
 }
 
 const NAV: NavItem[] = [
+  { to: "/", label: "Home", end: true },
   { to: "/datasets", label: "Datasets" },
-  { to: "/operator", label: "Operator" },
   { to: "/api-docs", label: "Developers" },
+  { to: "/about", label: "About" },
 ];
 
 export function SiteHeader() {

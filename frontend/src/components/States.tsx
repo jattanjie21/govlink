@@ -49,21 +49,15 @@ export function ErrorState({
     );
   }
 
-  const msg =
-    error instanceof ApiError
-      ? `${error.code}: ${error.message}`
-      : error instanceof Error
-        ? error.message
-        : String(error);
-
   return (
-    <div className="rounded-lg border border-rule bg-surface px-6 py-10 text-center">
-      <p className="font-display text-md text-danger">Something went wrong</p>
-      <p className="mt-2 text-sm text-ink-3">{msg}</p>
-      <p className="mt-1 text-xs text-ink-3">
-        Check that the backend is reachable.
-      </p>
-    </div>
+    <EmptyState
+      title="No data available"
+      description={
+        context
+          ? `Nothing to show for ${context} yet.`
+          : "Nothing to show here yet."
+      }
+    />
   );
 }
 
