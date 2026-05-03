@@ -6,6 +6,7 @@ import DatasetLayout from "@/routes/dataset/DatasetLayout";
 import DatasetOverview from "@/routes/dataset/Overview";
 import DatasetPreview from "@/routes/dataset/Preview";
 import DatasetApi from "@/routes/dataset/Api";
+import Operator from "@/routes/Operator";
 import Placeholder from "@/routes/Placeholder";
 
 export default function App() {
@@ -21,10 +22,7 @@ export default function App() {
           <Route path="api" element={<DatasetApi />} />
         </Route>
 
-        <Route
-          path="/operator"
-          element={<Placeholder title="Operator health" step="Step 8" />}
-        />
+        <Route path="/operator" element={<Operator />} />
         <Route
           path="/api-docs"
           element={<Placeholder title="API documentation" step="Step 7" />}
