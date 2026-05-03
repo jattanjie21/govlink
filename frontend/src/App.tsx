@@ -1,7 +1,7 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import SiteLayout from "@/layouts/SiteLayout";
 import Home from "@/routes/Home";
-import Browse from "@/routes/Browse";
+import Institution from "@/routes/Institution";
 import DatasetLayout from "@/routes/dataset/DatasetLayout";
 import DatasetOverview from "@/routes/dataset/Overview";
 import DatasetPreview from "@/routes/dataset/Preview";
@@ -16,11 +16,15 @@ export default function App() {
     <Routes>
       <Route element={<SiteLayout />}>
         <Route index element={<Home />} />
-        <Route path="/datasets" element={<Browse />} />
+        <Route path="/datasets" element={<Navigate to="/" replace />} />
+        <Route
+          path="/institutions/:institutionSlug"
+          element={<Institution />}
+        />
 
         <Route path="/datasets/:slug" element={<DatasetLayout />}>
-          <Route index element={<DatasetOverview />} />
-          <Route path="preview" element={<DatasetPreview />} />
+          <Route index element={<DatasetPreview />} />
+          <Route path="overview" element={<DatasetOverview />} />
           <Route path="api" element={<DatasetApi />} />
         </Route>
 

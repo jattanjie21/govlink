@@ -11,8 +11,7 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   { to: "/", label: "Home", end: true },
-  { to: "/datasets", label: "Datasets" },
-  { to: "/api-docs", label: "Developers" },
+  { to: "/api-docs", label: "API" },
   { to: "/about", label: "About" },
 ];
 
@@ -20,10 +19,10 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-rule bg-canvas/85 backdrop-blur-sm supports-[backdrop-filter]:bg-canvas/70">
       <Container>
-        <div className="flex h-16 items-center gap-8">
+        <div className="flex h-16 items-center gap-6">
           <Link
             to="/"
-            className="flex items-baseline gap-2 font-display text-lg font-semibold tracking-tight"
+            className="flex shrink-0 items-baseline gap-2 font-display text-lg font-semibold tracking-tight"
           >
             <span
               aria-hidden
@@ -34,7 +33,7 @@ export function SiteHeader() {
 
           <nav
             aria-label="Primary"
-            className="-mx-2 flex items-center gap-3 overflow-x-auto px-2 sm:mx-0 sm:gap-6 sm:overflow-visible sm:px-0"
+            className="flex flex-1 items-center justify-center gap-3 overflow-x-auto sm:gap-8 sm:overflow-visible"
           >
             {NAV.map((item) => (
               <NavLink
@@ -53,7 +52,7 @@ export function SiteHeader() {
             ))}
           </nav>
 
-          <div className="ml-auto flex items-center gap-3">
+          <div className="flex shrink-0 items-center gap-3">
             <ThemeToggle />
           </div>
         </div>
