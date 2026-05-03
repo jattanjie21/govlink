@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -16,7 +16,7 @@
       (function () {
         try {
           var saved = localStorage.getItem("govlink-theme");
-          var theme = saved === "dark" || saved === "light" ? saved : "light";
+          var theme = saved === "dark" || saved === "light" ? saved : "dark";
           document.documentElement.setAttribute("data-theme", theme);
         } catch (e) {
           /* localStorage not available — fall through to default light */

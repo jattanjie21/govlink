@@ -5,9 +5,9 @@ export type Theme = "light" | "dark";
 const STORAGE_KEY = "govlink-theme";
 
 function readTheme(): Theme {
-  if (typeof document === "undefined") return "light";
+  if (typeof document === "undefined") return "dark";
   const attr = document.documentElement.getAttribute("data-theme");
-  return attr === "dark" ? "dark" : "light";
+  return attr === "light" ? "light" : "dark";
 }
 
 export function useTheme() {
@@ -31,7 +31,7 @@ export function useTheme() {
   useEffect(() => {
     function onStorage(e: StorageEvent) {
       if (e.key !== STORAGE_KEY) return;
-      const next = e.newValue === "dark" ? "dark" : "light";
+      const next = e.newValue === "light" ? "light" : "dark";
       document.documentElement.setAttribute("data-theme", next);
       setThemeState(next);
     }
