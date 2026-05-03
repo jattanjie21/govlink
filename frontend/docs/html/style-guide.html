@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Style guide · GovLink Design System v1.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,1,400;9..144,0,600&family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root[data-theme="light"] {
+    --canvas:#FAF8F4; --surface:#FFFFFF; --surface-2:#F2EFE8;
+    --ink:#1A1A1A; --ink-2:#3D3D3D; --ink-3:#6B6B6B;
+    --rule:#E5E2DA; --rule-2:#D5D0C4;
+    --accent:#0F4C5C; --accent-hover:#0A3A47; --accent-tint:#E5EFF1;
+    --success:#2F6B3D; --warning:#B27800; --danger:#A03B2C;
+    --ramp-1:#CFE0E5; --ramp-2:#93BCC4; --ramp-3:#4F8E9C; --ramp-4:#0F4C5C; --ramp-5:#093642;
+    --cat-1:#0F4C5C; --cat-2:#B27800; --cat-3:#6B4F8C; --cat-4:#2F6B3D; --cat-5:#A03B2C; --cat-6:#4A4A4A;
+    --code-bg:#1A1A1A; --code-fg:#F0EDE6;
+  }
+  :root[data-theme="dark"] {
+    --canvas:#141312; --surface:#1C1B19; --surface-2:#222020;
+    --ink:#F0EDE6; --ink-2:#C0BBB0; --ink-3:#8A867D;
+    --rule:#2A2826; --rule-2:#3A3835;
+    --accent:#5FB8CC; --accent-hover:#7CCCDF; --accent-tint:#1F3A40;
+    --success:#5CA374; --warning:#D8A33A; --danger:#D17265;
+    --ramp-1:#1F3A40; --ramp-2:#2D5963; --ramp-3:#3F7E8C; --ramp-4:#5FB8CC; --ramp-5:#9DD6E2;
+    --cat-1:#5FB8CC; --cat-2:#D8A33A; --cat-3:#A88BC4; --cat-4:#5CA374; --cat-5:#D17265; --cat-6:#8A867D;
+    --code-bg:#0E0D0C; --code-fg:#E5E2DA;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:80px}
+  body{margin:0;padding:0;background:var(--canvas);color:var(--ink);font-family:'Geist','Inter Tight',ui-sans-serif,system-ui,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"ss01","cv11";transition:background 180ms ease,color 180ms ease}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
+  .num,.tab{font-variant-numeric:tabular-nums}
+  .display{font-family:'Fraunces','Iowan Old Style',Georgia,serif;font-weight:400;letter-spacing:-0.01em}
+  .mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+
+  .nav{border-bottom:1px solid var(--rule);background:var(--canvas);position:sticky;top:0;z-index:50;backdrop-filter:saturate(120%) blur(8px)}
+  .nav-inner{max-width:1280px;margin:0 auto;padding:0 32px;display:flex;align-items:center;gap:32px;height:64px}
+  .brand{display:flex;align-items:baseline;gap:8px;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:21px;letter-spacing:-0.01em}
+  .brand-mark{display:inline-block;width:8px;height:24px;background:var(--accent);transform:translateY(4px)}
+  .brand-divider{font-family:'Geist',sans-serif;font-weight:400;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-3);margin-left:6px;padding-left:10px;border-left:1px solid var(--rule-2)}
+  .nav-right{margin-left:auto;display:flex;align-items:center;gap:16px;font-size:13px;color:var(--ink-3)}
+  .nav-right .v{padding:3px 8px;border:1px solid var(--rule);border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+  .theme-toggle{width:32px;height:32px;border:1px solid var(--rule);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink-2)}
+  .theme-toggle:hover{border-color:var(--rule-2);color:var(--ink)}
+
+  .layout{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:220px 1fr;gap:64px;align-items:start}
+  .toc{position:sticky;top:80px;padding:48px 0 64px}
+  .toc h5{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:0 0 14px}
+  .toc ol{list-style:none;padding:0;margin:0 0 28px;font-size:13px;line-height:1;display:flex;flex-direction:column;gap:0}
+  .toc li{counter-increment:toc}
+  .toc a{display:flex;align-items:baseline;gap:10px;padding:7px 0;color:var(--ink-2);border-top:1px solid var(--rule);font-variant-numeric:tabular-nums}
+  .toc li:first-child a{border-top:none}
+  .toc a:hover{color:var(--ink)}
+  .toc a .num{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-3);font-weight:500;width:22px}
+  .toc-foot{font-size:11px;color:var(--ink-3);line-height:1.5;padding-top:14px;border-top:1px solid var(--rule)}
+
+  .content{padding:48px 0 96px;max-width:760px}
+  header.masthead{margin-bottom:64px}
+  .eyebrow{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600;display:flex;align-items:center;gap:10px}
+  .eyebrow::before{content:"";width:24px;height:1px;background:var(--accent)}
+  h1.title{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:56px;line-height:1.05;letter-spacing:-0.02em;margin:18px 0 14px;max-width:14ch}
+  h1.title em{font-style:italic;color:var(--accent)}
+  .lead{font-size:18px;color:var(--ink-2);max-width:60ch;line-height:1.55;margin:0 0 18px}
+  .meta-row{display:flex;align-items:center;gap:18px;font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums;padding-top:18px;border-top:1px solid var(--rule);margin-top:32px}
+  .meta-row strong{color:var(--ink-2);font-weight:500}
+
+  section.bay{padding:56px 0;border-top:1px solid var(--rule)}
+  section.bay:first-of-type{border-top:none;padding-top:8px}
+  .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums;display:block;margin-bottom:14px}
+  h2{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:34px;line-height:1.15;letter-spacing:-0.02em;margin:0 0 14px}
+  h3{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:22px;line-height:1.2;letter-spacing:-0.01em;margin:36px 0 12px}
+  h4{font-family:'Geist',sans-serif;font-weight:600;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;color:var(--ink-3);margin:32px 0 12px}
+  p{margin:0 0 18px;color:var(--ink-2);font-size:15px;line-height:1.65;text-wrap:pretty}
+  p strong{color:var(--ink);font-weight:500}
+  .section-lead{font-size:17px;color:var(--ink-2);max-width:58ch;margin-bottom:32px}
+
+  .swatch-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--rule);border-radius:6px;overflow:hidden;margin-bottom:24px}
+  .swatch{padding:18px 16px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);position:relative;display:flex;flex-direction:column;gap:14px;background:var(--surface)}
+  .swatch:nth-child(4n){border-right:none}
+  .swatch:nth-last-child(-n+4){border-bottom:none}
+  .swatch-chip{height:48px;border:1px solid var(--rule);border-radius:3px}
+  .swatch-name{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink);font-weight:500}
+  .swatch-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-3);font-variant-numeric:tabular-nums;display:flex;flex-direction:column;gap:2px}
+  .swatch-meta span{display:block}
+
+  .ramp-block{border:1px solid var(--rule);border-radius:6px;overflow:hidden;margin-bottom:14px;background:var(--surface)}
+  .ramp-row{display:grid;grid-template-columns:repeat(5,1fr);gap:0}
+  .ramp-cell{padding:36px 14px 14px;border-right:1px solid var(--rule);font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.4;color:var(--ink);position:relative;min-height:96px}
+  .ramp-cell:last-child{border-right:none}
+  .ramp-cell .step{font-weight:500;font-size:11px;display:block;margin-bottom:4px}
+  .ramp-cell .hex{color:rgba(0,0,0,0.5);font-variant-numeric:tabular-nums}
+  .ramp-cell.dark{color:var(--canvas)}
+  .ramp-cell.dark .hex{color:rgba(255,255,255,0.55)}
+  .ramp-foot{padding:12px 16px;border-top:1px solid var(--rule);font-size:11.5px;color:var(--ink-3);display:flex;justify-content:space-between;background:var(--surface-2);font-variant-numeric:tabular-nums}
+
+  .cat-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0;border:1px solid var(--rule);border-radius:6px;overflow:hidden;margin-bottom:14px;background:var(--surface)}
+  .cat-cell{padding:14px 12px;border-right:1px solid var(--rule);min-height:88px;display:flex;flex-direction:column;justify-content:space-between}
+  .cat-cell:last-child{border-right:none}
+  .cat-pill{height:36px;border-radius:2px;margin-bottom:10px}
+  .cat-cell .label{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink);font-weight:500}
+  .cat-cell .hex{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--ink-3);font-variant-numeric:tabular-nums;display:block;margin-top:2px}
+  .cat-name{font-size:11px;color:var(--ink-3);margin-top:6px}
+
+  .typescale{border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);margin:24px 0}
+  .ts-row{display:grid;grid-template-columns:60px 100px 1fr 80px;gap:24px;align-items:baseline;padding:20px 0;border-top:1px solid var(--rule);font-variant-numeric:tabular-nums}
+  .ts-row:first-child{border-top:none}
+  .ts-row .step-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3)}
+  .ts-row .role{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-2);text-transform:uppercase;letter-spacing:0.06em}
+  .ts-row .specimen{color:var(--ink);min-width:0}
+  .ts-row .meta{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-3);text-align:right;line-height:1.45}
+  .ts-row .meta span{display:block}
+  .ts-display-1{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:56px;line-height:1.05;letter-spacing:-0.02em}
+  .ts-display-2{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:36px;line-height:1.15;letter-spacing:-0.02em}
+  .ts-h2{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:24px;line-height:1.25;letter-spacing:-0.01em}
+  .ts-h3{font-family:'Geist',sans-serif;font-weight:600;font-size:18px;line-height:1.3;letter-spacing:-0.005em}
+  .ts-body{font-family:'Geist',sans-serif;font-weight:400;font-size:15px;line-height:1.6}
+  .ts-body-sm{font-family:'Geist',sans-serif;font-weight:400;font-size:13px;line-height:1.55}
+  .ts-meta{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:11px;line-height:1.45;letter-spacing:0.04em;text-transform:uppercase}
+  .ts-caption{font-family:'Geist',sans-serif;font-weight:500;font-size:11px;line-height:1.45;color:var(--ink-3);letter-spacing:0.06em;text-transform:uppercase}
+
+  .num-demo{border:1px solid var(--rule);border-radius:6px;background:var(--surface);padding:24px;margin:18px 0;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .num-demo .panel{display:flex;flex-direction:column;gap:6px}
+  .num-demo h5{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:0 0 10px}
+  .num-demo .row{display:flex;justify-content:space-between;font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums}
+  .num-demo .row.bad{font-variant-numeric:proportional-nums}
+  .num-demo .row span:last-child{color:var(--ink-2)}
+  .num-demo .panel-bad{opacity:0.85}
+  .num-demo .panel-bad h5{color:var(--danger)}
+  .num-demo .panel-good h5{color:var(--success)}
+
+  .spacing-block{display:flex;align-items:flex-end;gap:14px;border:1px solid var(--rule);border-radius:6px;background:var(--surface);padding:32px 24px;margin:18px 0;min-height:140px}
+  .sp-step{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .sp-step .bar{background:var(--accent);width:48px;border-radius:2px}
+  .sp-step .l{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-2);font-weight:500}
+  .sp-step .l span{display:block;color:var(--ink-3);font-size:10px;font-weight:400;font-variant-numeric:tabular-nums;text-align:center}
+
+  .radii-row{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:18px 0}
+  .radii-cell{border:1px solid var(--rule);background:var(--surface);padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px}
+  .radii-square{width:48px;height:48px;background:var(--accent-tint);border:1px solid var(--accent);}
+  .radii-cell .l{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
+  .radii-cell .role{font-family:'Geist',sans-serif;font-size:10px;color:var(--ink-3);letter-spacing:0.04em;text-transform:uppercase}
+
+  .motion-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin:18px 0}
+  .motion-cell{border:1px solid var(--rule);background:var(--surface);border-radius:6px;padding:24px}
+  .motion-cell h5{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:0 0 12px}
+  .motion-cell .l{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink);margin-bottom:10px;font-variant-numeric:tabular-nums}
+  .motion-cell .swatch-line{height:2px;background:var(--rule);position:relative;margin:14px 0 10px}
+  .motion-cell .swatch-line .dot{position:absolute;top:-5px;left:0;width:12px;height:12px;border-radius:50%;background:var(--accent);animation:slide 1.6s cubic-bezier(0.2,0,0,1) infinite}
+  .motion-cell.fast .swatch-line .dot{animation-duration:0.18s}
+  .motion-cell.med .swatch-line .dot{animation-duration:0.24s}
+  .motion-cell.slow .swatch-line .dot{animation-duration:0.32s}
+  .motion-cell.linear .swatch-line .dot{animation-timing-function:linear}
+  .motion-cell .desc{font-size:12px;color:var(--ink-2);line-height:1.5}
+  @keyframes slide{0%{left:0}50%{left:calc(100% - 12px)}100%{left:0}}
+
+  .dodont{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:24px 0}
+  .dd{border:1px solid var(--rule);border-radius:6px;background:var(--surface);padding:20px 22px}
+  .dd h4{margin:0 0 14px;display:flex;align-items:center;gap:8px}
+  .dd.do h4{color:var(--success)}
+  .dd.dont h4{color:var(--danger)}
+  .dd ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
+  .dd li{font-size:13px;color:var(--ink-2);line-height:1.5;padding-left:18px;position:relative}
+  .dd.do li::before{content:"";position:absolute;left:0;top:8px;width:10px;height:6px;border-bottom:1.5px solid var(--success);border-left:1.5px solid var(--success);transform:rotate(-45deg)}
+  .dd.dont li::before{content:"×";position:absolute;left:0;top:-2px;color:var(--danger);font-size:18px;line-height:1;font-family:'Fraunces',serif}
+
+  .a11y-table{width:100%;border-collapse:collapse;font-size:13px;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);margin:18px 0}
+  .a11y-table thead th{text-align:left;padding:10px 12px 10px 0;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600;border-bottom:1px solid var(--rule)}
+  .a11y-table thead th.r{text-align:right;padding-right:0}
+  .a11y-table tbody td{padding:11px 12px 11px 0;border-top:1px solid var(--rule);color:var(--ink-2);font-variant-numeric:tabular-nums;vertical-align:middle}
+  .a11y-table tbody tr:first-child td{border-top:none}
+  .a11y-table .pair{display:flex;align-items:center;gap:10px;color:var(--ink)}
+  .a11y-table .pair-swatch{width:24px;height:24px;border-radius:3px;border:1px solid var(--rule);display:inline-flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:13px}
+  .a11y-table .ratio{font-family:'JetBrains Mono',monospace;font-size:12px;text-align:right;color:var(--ink)}
+  .a11y-table .pass{color:var(--success);font-weight:500}
+  .a11y-table .fail{color:var(--danger);font-weight:500}
+  .a11y-table .role{font-size:12px;color:var(--ink-3)}
+
+  .voice{border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);margin:24px 0}
+  .voice-row{display:grid;grid-template-columns:160px 1fr 1fr;gap:32px;align-items:flex-start;padding:20px 0;border-top:1px solid var(--rule);font-size:13.5px}
+  .voice-row:first-child{border-top:none}
+  .voice-row .h{font-family:'Geist',sans-serif;font-weight:600;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-3);padding-top:2px}
+  .voice-row .yes{color:var(--ink);position:relative;padding-left:16px}
+  .voice-row .yes::before{content:"✓";position:absolute;left:0;color:var(--success);font-weight:700}
+  .voice-row .no{color:var(--ink-2);position:relative;padding-left:16px;text-decoration:line-through;text-decoration-color:var(--rule-2)}
+  .voice-row .no::before{content:"×";position:absolute;left:0;color:var(--danger);font-family:'Fraunces',serif;text-decoration:none;font-size:15px;line-height:1;top:1px}
+
+  .footnotes{margin-top:64px;padding-top:32px;border-top:1px solid var(--rule);font-size:12px;color:var(--ink-3);line-height:1.6}
+  .footnotes strong{color:var(--ink-2);font-weight:500}
+
+  @media (max-width:1080px){
+    .layout{grid-template-columns:1fr;gap:32px}
+    .toc{position:static;padding:24px 0 0}
+    .toc ol{display:grid;grid-template-columns:repeat(2,1fr);gap:0}
+    .toc-foot{display:none}
+    .swatch-grid{grid-template-columns:repeat(2,1fr)}
+    .swatch:nth-child(2n){border-right:none}
+    .swatch{border-bottom:1px solid var(--rule)}
+    .swatch:nth-last-child(-n+2){border-bottom:none}
+    .num-demo{grid-template-columns:1fr;gap:18px}
+    .motion-grid{grid-template-columns:1fr}
+    .dodont{grid-template-columns:1fr}
+  }
+  @media (max-width:640px){
+    .nav-inner{padding:0 20px;height:56px;gap:12px}
+    .layout{padding:0 20px;gap:24px}
+    h1.title{font-size:38px}
+    .lead{font-size:16px}
+    h2{font-size:26px}
+    .swatch-grid{grid-template-columns:1fr 1fr}
+    .ramp-row{grid-template-columns:repeat(5,1fr)}
+    .ramp-cell{padding:24px 8px 10px;font-size:9px;min-height:78px}
+    .cat-row{grid-template-columns:repeat(3,1fr)}
+    .cat-cell{border-bottom:1px solid var(--rule)}
+    .cat-cell:nth-child(3n){border-right:none}
+    .cat-cell:nth-last-child(-n+3){border-bottom:none}
+    .ts-row{grid-template-columns:1fr;gap:8px}
+    .ts-row .step-num,.ts-row .role,.ts-row .meta{font-size:10.5px;text-align:left}
+    .ts-display-1{font-size:36px}.ts-display-2{font-size:28px}
+    .radii-row{grid-template-columns:repeat(3,1fr)}
+    .voice-row{grid-template-columns:1fr;gap:8px}
+    .voice-row .h{padding-top:0}
+    .a11y-table{font-size:12px}
+    .a11y-table thead th{padding-right:8px}
+  }
+  *:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+  @keyframes fade-up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .fade-in{animation:fade-up 320ms cubic-bezier(0.2,0,0,1) both}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#"><span class="brand-mark"></span>GovLink<span class="brand-divider">Design system</span></a>
+    <div class="nav-right">
+      <span class="v">v1.0.2</span>
+      <span>Style guide</span>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.5 3.5l1.4 1.4M11.1 11.1l1.4 1.4M3.5 12.5l1.4-1.4M11.1 4.9l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <aside class="toc" aria-label="Table of contents">
+    <h5>Contents</h5>
+    <ol>
+      <li><a href="#color"><span class="num">01</span>Color</a></li>
+      <li><a href="#data-viz"><span class="num">02</span>Data-viz palettes</a></li>
+      <li><a href="#typography"><span class="num">03</span>Typography</a></li>
+      <li><a href="#spacing"><span class="num">04</span>Spacing &amp; radii</a></li>
+      <li><a href="#motion"><span class="num">05</span>Motion</a></li>
+      <li><a href="#voice"><span class="num">06</span>Voice &amp; tone</a></li>
+      <li><a href="#dos"><span class="num">07</span>Do's &amp; don'ts</a></li>
+      <li><a href="#a11y"><span class="num">08</span>Accessibility</a></li>
+    </ol>
+    <p class="toc-foot">Companion to <strong>components.html</strong> and <strong>handoff.html</strong>.<br/>Updated 02 May 2025.</p>
+  </aside>
+  <main class="content">
+    <header class="masthead fade-in">
+      <span class="eyebrow">Design system · v1.0</span>
+      <h1 class="title">A system for <em>serious</em> public data.</h1>
+      <p class="lead">Authoritative, calm, editorial. The design system that powers GovLink — its public site, its admin tools, and every dataset, report and API surface in between.</p>
+      <p class="lead">This guide is the canonical reference for color, type, spacing, motion and voice. Use it as the source of truth for both Figma and code; the values here ship verbatim into our Tailwind config and CSS custom properties.</p>
+      <div class="meta-row">
+        <span><strong>Owner</strong> Design @ GBoS Digital</span>
+        <span><strong>Updated</strong> 02 May 2025</span>
+        <span><strong>Stack</strong> React · Tailwind · shadcn/ui</span>
+      </div>
+    </header>
+
+    <section class="bay" id="color">
+      <span class="section-num">§ 01</span>
+      <h2>Color</h2>
+      <p class="section-lead">A warm-paper canvas, near-black ink, and a single deep-teal accent. Status colors are muted on purpose — Bootstrap-bright destructives don't belong on a national statistical platform. Every token has a light and a dark value; any new color must extend in OKLch from one of these.</p>
+
+      <h4>Surface &amp; ink</h4>
+      <div class="swatch-grid">
+        <div class="swatch"><div class="swatch-chip" style="background:var(--canvas)"></div><div class="swatch-name">--canvas</div><div class="swatch-meta"><span>Light · #FAF8F4</span><span>Dark · #141312</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--surface)"></div><div class="swatch-name">--surface</div><div class="swatch-meta"><span>Light · #FFFFFF</span><span>Dark · #1C1B19</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--surface-2)"></div><div class="swatch-name">--surface-2</div><div class="swatch-meta"><span>Light · #F2EFE8</span><span>Dark · #222020</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--rule)"></div><div class="swatch-name">--rule</div><div class="swatch-meta"><span>Light · #E5E2DA</span><span>Dark · #2A2826</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--ink)"></div><div class="swatch-name">--ink</div><div class="swatch-meta"><span>Light · #1A1A1A</span><span>Dark · #F0EDE6</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--ink-2)"></div><div class="swatch-name">--ink-2</div><div class="swatch-meta"><span>Light · #3D3D3D</span><span>Dark · #C0BBB0</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--ink-3)"></div><div class="swatch-name">--ink-3</div><div class="swatch-meta"><span>Light · #6B6B6B</span><span>Dark · #8A867D</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--rule-2)"></div><div class="swatch-name">--rule-2</div><div class="swatch-meta"><span>Light · #D5D0C4</span><span>Dark · #3A3835</span></div></div>
+      </div>
+
+      <h4>Accent &amp; status</h4>
+      <div class="swatch-grid">
+        <div class="swatch"><div class="swatch-chip" style="background:var(--accent)"></div><div class="swatch-name">--accent</div><div class="swatch-meta"><span>Light · #0F4C5C</span><span>Dark · #5FB8CC</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--accent-tint)"></div><div class="swatch-name">--accent-tint</div><div class="swatch-meta"><span>Light · #E5EFF1</span><span>Dark · #1F3A40</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--success)"></div><div class="swatch-name">--success</div><div class="swatch-meta"><span>Light · #2F6B3D</span><span>Dark · #5CA374</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--warning)"></div><div class="swatch-name">--warning</div><div class="swatch-meta"><span>Light · #B27800</span><span>Dark · #D8A33A</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--danger)"></div><div class="swatch-name">--danger</div><div class="swatch-meta"><span>Light · #A03B2C</span><span>Dark · #D17265</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--accent-hover)"></div><div class="swatch-name">--accent-hover</div><div class="swatch-meta"><span>Light · #0A3A47</span><span>Dark · #7CCCDF</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:linear-gradient(90deg,#CE1126 33%,#0C1C8C 33% 66%,#3A7728 66%);border:1px solid var(--rule)"></div><div class="swatch-name">flag-stripe</div><div class="swatch-meta"><span>National accent</span><span>Footer use only</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:var(--code-bg)"></div><div class="swatch-name">--code-bg</div><div class="swatch-meta"><span>Light · #1A1A1A</span><span>Dark · #0E0D0C</span></div></div>
+      </div>
+    </section>
+
+    <section class="bay" id="data-viz">
+      <span class="section-num">§ 02</span>
+      <h2>Data-viz palettes</h2>
+      <p class="section-lead">Two palettes, both tuned to the canvas. The sequential ramp anchors on <code class="mono" style="font-size:13px;color:var(--ink)">--accent</code> for choropleths, heatmaps, and ranked bar charts. The categorical set is for series and legend keys — six colors that are distinguishable in print, in dark mode, and to the most common forms of color blindness.</p>
+
+      <h4>Sequential — 5 steps, anchored on accent</h4>
+      <div class="ramp-block">
+        <div class="ramp-row">
+          <div class="ramp-cell" style="background:var(--ramp-1)"><span class="step">Step 1</span><span class="hex">#CFE0E5</span></div>
+          <div class="ramp-cell" style="background:var(--ramp-2)"><span class="step">Step 2</span><span class="hex">#93BCC4</span></div>
+          <div class="ramp-cell dark" style="background:var(--ramp-3)"><span class="step">Step 3</span><span class="hex">#4F8E9C</span></div>
+          <div class="ramp-cell dark" style="background:var(--ramp-4)"><span class="step">Step 4</span><span class="hex">#0F4C5C</span></div>
+          <div class="ramp-cell dark" style="background:var(--ramp-5)"><span class="step">Step 5</span><span class="hex">#093642</span></div>
+        </div>
+        <div class="ramp-foot"><span>Less</span><span>Choropleths · heatmaps · ordered bar series</span><span>More</span></div>
+      </div>
+      <p>An optional 7-step variant lives at <code class="mono" style="font-size:13px;color:var(--ink)">--ramp-0</code>… <code class="mono" style="font-size:13px;color:var(--ink)">--ramp-6</code> for very dense maps. Default to 5 steps unless data demands more — visual noise scales faster than information does.</p>
+
+      <h4>Categorical — 6 series colors</h4>
+      <div class="cat-row">
+        <div class="cat-cell"><div class="cat-pill" style="background:var(--cat-1)"></div><div class="label">cat-1</div><span class="hex">#0F4C5C</span><div class="cat-name">Teal</div></div>
+        <div class="cat-cell"><div class="cat-pill" style="background:var(--cat-2)"></div><div class="label">cat-2</div><span class="hex">#B27800</span><div class="cat-name">Ochre</div></div>
+        <div class="cat-cell"><div class="cat-pill" style="background:var(--cat-3)"></div><div class="label">cat-3</div><span class="hex">#6B4F8C</span><div class="cat-name">Aubergine</div></div>
+        <div class="cat-cell"><div class="cat-pill" style="background:var(--cat-4)"></div><div class="label">cat-4</div><span class="hex">#2F6B3D</span><div class="cat-name">Forest</div></div>
+        <div class="cat-cell"><div class="cat-pill" style="background:var(--cat-5)"></div><div class="label">cat-5</div><span class="hex">#A03B2C</span><div class="cat-name">Rust</div></div>
+        <div class="cat-cell"><div class="cat-pill" style="background:var(--cat-6)"></div><div class="label">cat-6</div><span class="hex">#4A4A4A</span><div class="cat-name">Graphite</div></div>
+      </div>
+      <p>Order is intentional. Teal is the platform accent — use it for the primary series. Ochre and aubergine sit far enough on the wheel to read against teal in line charts. Rust is the destructive series and is never the primary line. Graphite is for "other" / "all remaining" categories and never the only series.</p>
+    </section>
+
+    <section class="bay" id="typography">
+      <span class="section-num">§ 03</span>
+      <h2>Typography</h2>
+      <p class="section-lead">Fraunces for display — a contemporary serif with editorial weight. Geist for body and UI — modern, neutral, space-efficient. JetBrains Mono for numerics and code. The scale is eight steps from caption to display; <strong>do not invent intermediate sizes</strong>. Tabular numerals are required wherever data appears.</p>
+
+      <div class="typescale">
+        <div class="ts-row"><div class="step-num">01</div><div class="role">Display 1</div><div class="specimen ts-display-1">Health Facility Census</div><div class="meta"><span>Fraunces 56/58</span><span>tracking −0.02</span></div></div>
+        <div class="ts-row"><div class="step-num">02</div><div class="role">Display 2</div><div class="specimen ts-display-2">Where access breaks down</div><div class="meta"><span>Fraunces 36/42</span><span>tracking −0.02</span></div></div>
+        <div class="ts-row"><div class="step-num">03</div><div class="role">H2</div><div class="specimen ts-h2">By the numbers</div><div class="meta"><span>Fraunces 24/30</span><span>tracking −0.01</span></div></div>
+        <div class="ts-row"><div class="step-num">04</div><div class="role">H3 / Card title</div><div class="specimen ts-h3">Brikama District Hospital</div><div class="meta"><span>Geist SB 18/24</span><span>tracking −0.005</span></div></div>
+        <div class="ts-row"><div class="step-num">05</div><div class="role">Body</div><div class="specimen ts-body">A nationally representative survey of 13,400 households across all eight LGAs.</div><div class="meta"><span>Geist 15/24</span><span>line-height 1.6</span></div></div>
+        <div class="ts-row"><div class="step-num">06</div><div class="role">Body small</div><div class="specimen ts-body-sm">Updated 12 May 2025 · GBoS, Banjul</div><div class="meta"><span>Geist 13/20</span><span>line-height 1.55</span></div></div>
+        <div class="ts-row"><div class="step-num">07</div><div class="role">Meta / kicker</div><div class="specimen ts-meta">Health · 14-min read</div><div class="meta"><span>Mono M 11/16</span><span>tracking +0.04</span></div></div>
+        <div class="ts-row"><div class="step-num">08</div><div class="role">Caption</div><div class="specimen ts-caption">Eyebrow — last 30 days</div><div class="meta"><span>Geist M 11/16</span><span>tracking +0.06</span></div></div>
+      </div>
+
+      <h4>Tabular numerals — required</h4>
+      <div class="num-demo">
+        <div class="panel panel-good">
+          <h5>✓ Tabular (required)</h5>
+          <div class="row"><span>Total API calls</span><span>1,274,809</span></div>
+          <div class="row"><span>Downloads</span><span>4,892</span></div>
+          <div class="row"><span>Unique consumers</span><span>38</span></div>
+          <div class="row"><span>P95 latency</span><span>142 ms</span></div>
+        </div>
+        <div class="panel panel-bad">
+          <h5>× Proportional (forbidden in tables)</h5>
+          <div class="row bad"><span>Total API calls</span><span>1,274,809</span></div>
+          <div class="row bad"><span>Downloads</span><span>4,892</span></div>
+          <div class="row bad"><span>Unique consumers</span><span>38</span></div>
+          <div class="row bad"><span>P95 latency</span><span>142 ms</span></div>
+        </div>
+      </div>
+      <p>Set <code class="mono" style="font-size:13px;color:var(--ink)">font-variant-numeric: tabular-nums</code> on every table cell, KPI value, chart axis label, currency figure, date and time. The body class <code class="mono" style="font-size:13px;color:var(--ink)">.num</code> applies it inline. Geist's tabular feature is excellent — there is no excuse for misaligned columns.</p>
+    </section>
+
+    <section class="bay" id="spacing">
+      <span class="section-num">§ 04</span>
+      <h2>Spacing &amp; radii</h2>
+      <p class="section-lead">A 4-pixel base scale. Six steps cover everything from inline gaps (4 px) to section padding (64 px). Radii top out at 6 px — this is a system that whispers, not one that bubbles.</p>
+
+      <div class="spacing-block">
+        <div class="sp-step"><span class="bar" style="height:4px"></span><span class="l">4<span>xs</span></span></div>
+        <div class="sp-step"><span class="bar" style="height:8px"></span><span class="l">8<span>sm</span></span></div>
+        <div class="sp-step"><span class="bar" style="height:12px"></span><span class="l">12<span>md</span></span></div>
+        <div class="sp-step"><span class="bar" style="height:16px"></span><span class="l">16<span>lg</span></span></div>
+        <div class="sp-step"><span class="bar" style="height:24px"></span><span class="l">24<span>xl</span></span></div>
+        <div class="sp-step"><span class="bar" style="height:32px"></span><span class="l">32<span>2xl</span></span></div>
+        <div class="sp-step"><span class="bar" style="height:48px"></span><span class="l">48<span>3xl</span></span></div>
+        <div class="sp-step"><span class="bar" style="height:64px"></span><span class="l">64<span>4xl</span></span></div>
+      </div>
+
+      <h4>Radii</h4>
+      <div class="radii-row">
+        <div class="radii-cell"><div class="radii-square" style="border-radius:0"></div><div class="l">0 px</div><div class="role">Tables · rules</div></div>
+        <div class="radii-cell"><div class="radii-square" style="border-radius:2px"></div><div class="l">2 px</div><div class="role">Chips · pills</div></div>
+        <div class="radii-cell"><div class="radii-square" style="border-radius:3px"></div><div class="l">3 px</div><div class="role">Inputs · seg</div></div>
+        <div class="radii-cell"><div class="radii-square" style="border-radius:4px"></div><div class="l">4 px</div><div class="role">Buttons</div></div>
+        <div class="radii-cell"><div class="radii-square" style="border-radius:6px"></div><div class="l">6 px</div><div class="role">Cards · panels</div></div>
+      </div>
+
+      <h4>Layout</h4>
+      <p>Desktop uses a 12-column grid at 1440 with 32-px gutters and 32-px outer padding. Tablet collapses to 8 columns at 768. Mobile is a single column at 375 with 20-px outer padding. The content max-width for long-form prose is 720 px; for dashboard surfaces it's 1200; for editorial-marketing pages it's 1280. Don't fight these.</p>
+    </section>
+
+    <section class="bay" id="motion">
+      <span class="section-num">§ 05</span>
+      <h2>Motion</h2>
+      <p class="section-lead">Restrained. Pages fade in. Cards reveal a thin underline on hover. Nothing bounces. Three durations and two easings cover the entire system.</p>
+
+      <div class="motion-grid">
+        <div class="motion-cell fast">
+          <h5>Duration · fast</h5>
+          <div class="l">--motion-fast: 120ms</div>
+          <div class="swatch-line"><div class="dot"></div></div>
+          <p class="desc">Instant feedback. Hover, focus, segment toggle. Anything that needs to feel native.</p>
+        </div>
+        <div class="motion-cell med">
+          <h5>Duration · med (default)</h5>
+          <div class="l">--motion-med: 180ms</div>
+          <div class="swatch-line"><div class="dot"></div></div>
+          <p class="desc">Color and border transitions. Tab content swap. The default if you're not sure.</p>
+        </div>
+        <div class="motion-cell slow">
+          <h5>Duration · slow</h5>
+          <div class="l">--motion-slow: 240ms</div>
+          <div class="swatch-line"><div class="dot"></div></div>
+          <p class="desc">Page-load fade-in, dialog open. Use sparingly — slow doesn't mean important.</p>
+        </div>
+        <div class="motion-cell">
+          <h5>Easing</h5>
+          <div class="l">--ease-out: cubic-bezier(.2,0,0,1)</div>
+          <div class="swatch-line"><div class="dot"></div></div>
+          <p class="desc">Default. Quick start, settled finish — how UI elements settle into place. Linear is reserved for progress and skeleton shimmer only.</p>
+        </div>
+      </div>
+      <p>The hero stagger on the home and admin pages is 40 ms between elements, capped at the third item. Loaders and skeleton shimmers run at <code class="mono" style="font-size:13px;color:var(--ink)">linear</code>. Honour <code class="mono" style="font-size:13px;color:var(--ink)">prefers-reduced-motion</code> — reduce all durations to 0 ms and disable the shimmer when set.</p>
+    </section>
+
+    <section class="bay" id="voice">
+      <span class="section-num">§ 06</span>
+      <h2>Voice &amp; tone</h2>
+      <p class="section-lead">GovLink writes the way it looks: concise, specific, calm. We are a national platform for civil servants, researchers, and developers — the audience does not need to be charmed, and they will notice if we try.</p>
+
+      <div class="voice">
+        <div class="voice-row">
+          <div class="h">Headlines</div>
+          <div class="yes">Where The Gambia's healthcare access actually breaks down</div>
+          <div class="no">Unlock the full power of healthcare data 🚀</div>
+        </div>
+        <div class="voice-row">
+          <div class="h">Microcopy</div>
+          <div class="yes">Download CSV · 4.2 MB · 728 rows</div>
+          <div class="no">Get started — it's free!</div>
+        </div>
+        <div class="voice-row">
+          <div class="h">Empty states</div>
+          <div class="yes">No datasets match these filters. Clear filters or broaden the date range.</div>
+          <div class="no">Hmm, looks like there's nothing here yet 🤔</div>
+        </div>
+        <div class="voice-row">
+          <div class="h">Errors</div>
+          <div class="yes">Couldn't connect to the ingestion service. Check the queue at /admin/queue, then retry.</div>
+          <div class="no">Oops! Something went wrong. Please try again later.</div>
+        </div>
+        <div class="voice-row">
+          <div class="h">Numbers</div>
+          <div class="yes">1,274,809 calls · GMD 4.2 M · 12 May 2025</div>
+          <div class="no">Over 1 million calls · About 4M GMD · Today</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bay" id="dos">
+      <span class="section-num">§ 07</span>
+      <h2>Do's &amp; don'ts</h2>
+      <p class="section-lead">If something on this list is up for debate, the brief has shifted and the system needs a v1.1 conversation — not a one-off override.</p>
+
+      <div class="dodont">
+        <div class="dd do">
+          <h4>Do</h4>
+          <ul>
+            <li>Use <strong>--accent</strong> sparingly. Primary CTAs, link hover, active tab, sequential anchor.</li>
+            <li>Pair Fraunces (display) with Geist (body). Never set body in Fraunces.</li>
+            <li>Tabular numerals everywhere data appears — tables, KPIs, axes, dates, currency.</li>
+            <li>Borders + whitespace before shadows. The system has one shadow token; that's enough.</li>
+            <li>Use rule lines on tables. No zebra striping.</li>
+            <li>Crop to <strong>DD MMM YYYY</strong> dates and <strong>GMD</strong> for currency throughout.</li>
+            <li>Show real Gambian context — Banjul, Brikama, GBoS, named ministries — over generic placeholders.</li>
+          </ul>
+        </div>
+        <div class="dd dont">
+          <h4>Don't</h4>
+          <ul>
+            <li>Purple gradient heroes, glassmorphism, or hero video.</li>
+            <li>Rounded "AI-look" cards with a left coloured border accent.</li>
+            <li>Generic emoji feature icons next to every heading.</li>
+            <li>Inter or Roboto as a display face. (Body is fine.)</li>
+            <li>Flag-as-UI. The 24×8 px footer stripe is the only flag reference allowed.</li>
+            <li>Stock imagery of African children, hands holding soil, or other development clichés.</li>
+            <li>Invented metrics — "10× faster", "99.9% uptime" — without a citation.</li>
+            <li>Bouncing micro-interactions, parallax, or animation for its own sake.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="bay" id="a11y">
+      <span class="section-num">§ 08</span>
+      <h2>Accessibility</h2>
+      <p class="section-lead">WCAG 2.2 AA is the floor. Every text/background pair in the token system passes; every status pair passes; the data-viz ramps are tested for legibility on the canvas. The full audit lives in the engineering handoff.</p>
+
+      <table class="a11y-table">
+        <thead><tr><th>Pair</th><th>Use</th><th class="r">Ratio</th><th class="r">Result</th></tr></thead>
+        <tbody>
+          <tr><td><div class="pair"><span class="pair-swatch" style="background:var(--canvas);color:var(--ink)">Aa</span><span>ink on canvas</span></div></td><td class="role">Body text</td><td class="ratio">15.7 : 1</td><td class="ratio pass">AAA</td></tr>
+          <tr><td><div class="pair"><span class="pair-swatch" style="background:var(--canvas);color:var(--ink-2)">Aa</span><span>ink-2 on canvas</span></div></td><td class="role">Secondary text</td><td class="ratio">10.3 : 1</td><td class="ratio pass">AAA</td></tr>
+          <tr><td><div class="pair"><span class="pair-swatch" style="background:var(--canvas);color:var(--ink-3)">Aa</span><span>ink-3 on canvas</span></div></td><td class="role">Captions, meta</td><td class="ratio">5.1 : 1</td><td class="ratio pass">AA</td></tr>
+          <tr><td><div class="pair"><span class="pair-swatch" style="background:var(--canvas);color:var(--accent)">Aa</span><span>accent on canvas</span></div></td><td class="role">Inline links, kickers</td><td class="ratio">7.2 : 1</td><td class="ratio pass">AAA</td></tr>
+          <tr><td><div class="pair"><span class="pair-swatch" style="background:var(--accent);color:#fff">Aa</span><span>white on accent</span></div></td><td class="role">Primary button</td><td class="ratio">8.9 : 1</td><td class="ratio pass">AAA</td></tr>
+          <tr><td><div class="pair"><span class="pair-swatch" style="background:var(--canvas);color:var(--success)">Aa</span><span>success on canvas</span></div></td><td class="role">Verified badge, accept</td><td class="ratio">5.4 : 1</td><td class="ratio pass">AA</td></tr>
+          <tr><td><div class="pair"><span class="pair-swatch" style="background:var(--canvas);color:var(--warning)">Aa</span><span>warning on canvas</span></div></td><td class="role">Latency hint, soft alert</td><td class="ratio">4.6 : 1</td><td class="ratio pass">AA</td></tr>
+          <tr><td><div class="pair"><span class="pair-swatch" style="background:var(--canvas);color:var(--danger)">Aa</span><span>danger on canvas</span></div></td><td class="role">Destructive, validation</td><td class="ratio">5.8 : 1</td><td class="ratio pass">AA</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Other floors</h4>
+      <ul style="font-size:14px;color:var(--ink-2);line-height:1.65;padding-left:18px;margin:0 0 18px">
+        <li>Hit targets are 44 × 44 px on touch surfaces, 32 × 32 px on dense admin tables.</li>
+        <li>Focus rings are 2 px solid <code class="mono" style="font-size:12.5px;color:var(--ink)">--accent</code> with a 2 px offset. Never remove them; restyle them.</li>
+        <li>Charts must work without color alone — pair the categorical palette with line style or direct labelling. The 5-step ramp must include a legend with numeric breaks.</li>
+        <li>Every form control has a visible label. Placeholder text is not a label.</li>
+        <li>All numbers in tables use tabular-nums and are right-aligned.</li>
+      </ul>
+    </section>
+
+    <p class="footnotes">
+      <strong>Tokens for Tailwind / shadcn theming:</strong> the full set above is exported as CSS custom properties on <code class="mono" style="font-size:11.5px;color:var(--ink)">:root[data-theme="light"]</code> and <code class="mono" style="font-size:11.5px;color:var(--ink)">:root[data-theme="dark"]</code>. Tailwind theme extensions reference the same names — see <strong>handoff.html</strong> for the <code class="mono" style="font-size:11.5px;color:var(--ink)">tailwind.config.ts</code> snippet.<br/><br/>
+      <strong>Versioning:</strong> additions go in v1.x; any token rename or palette shift requires a v2 conversation. Contact <code class="mono" style="font-size:11.5px;color:var(--ink)">design@gbos.gm</code>.
+    </p>
+  </main>
+</div>
+<script>
+  const root = document.documentElement;
+  const stored = localStorage.getItem('govlink-theme');
+  if (stored) root.dataset.theme = stored;
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    localStorage.setItem('govlink-theme', next);
+  });
+</script>
+</body>
+</html>

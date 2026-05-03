@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Components · GovLink Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root[data-theme="light"] {
+    --canvas:#FAF8F4; --surface:#FFFFFF; --surface-2:#F2EFE8;
+    --ink:#1A1A1A; --ink-2:#3D3D3D; --ink-3:#6B6B6B;
+    --rule:#E5E2DA; --rule-2:#D5D0C4;
+    --accent:#0F4C5C; --accent-hover:#0A3A47; --accent-tint:#E5EFF1;
+    --success:#2F6B3D; --warning:#B27800; --danger:#A03B2C;
+    --success-tint:#E1ECE3; --warning-tint:#F2E7C9; --danger-tint:#F0DDD8;
+    --ramp-1:#CFE0E5; --ramp-2:#93BCC4; --ramp-3:#4F8E9C; --ramp-4:#0F4C5C; --ramp-5:#093642;
+    --code-bg:#1A1A1A; --code-fg:#F0EDE6;
+  }
+  :root[data-theme="dark"] {
+    --canvas:#141312; --surface:#1C1B19; --surface-2:#222020;
+    --ink:#F0EDE6; --ink-2:#C0BBB0; --ink-3:#8A867D;
+    --rule:#2A2826; --rule-2:#3A3835;
+    --accent:#5FB8CC; --accent-hover:#7CCCDF; --accent-tint:#1F3A40;
+    --success:#5CA374; --warning:#D8A33A; --danger:#D17265;
+    --success-tint:#1F2F22; --warning-tint:#3A2F18; --danger-tint:#3A1F1A;
+    --ramp-1:#1F3A40; --ramp-2:#2D5963; --ramp-3:#3F7E8C; --ramp-4:#5FB8CC; --ramp-5:#9DD6E2;
+    --code-bg:#0E0D0C; --code-fg:#E5E2DA;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:80px}
+  body{margin:0;padding:0;background:var(--canvas);color:var(--ink);font-family:'Geist','Inter Tight',ui-sans-serif,system-ui,sans-serif;font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;font-feature-settings:"ss01","cv11";transition:background 180ms ease,color 180ms ease}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
+  .num,.tab{font-variant-numeric:tabular-nums}
+  .mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+
+  .nav{border-bottom:1px solid var(--rule);background:var(--canvas);position:sticky;top:0;z-index:50;backdrop-filter:saturate(120%) blur(8px)}
+  .nav-inner{max-width:1280px;margin:0 auto;padding:0 32px;display:flex;align-items:center;gap:32px;height:64px}
+  .brand{display:flex;align-items:baseline;gap:8px;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:21px;letter-spacing:-0.01em}
+  .brand-mark{display:inline-block;width:8px;height:24px;background:var(--accent);transform:translateY(4px)}
+  .brand-divider{font-family:'Geist',sans-serif;font-weight:400;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-3);margin-left:6px;padding-left:10px;border-left:1px solid var(--rule-2)}
+  .nav-right{margin-left:auto;display:flex;align-items:center;gap:16px;font-size:13px;color:var(--ink-3)}
+  .nav-right .v{padding:3px 8px;border:1px solid var(--rule);border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+  .theme-toggle{width:32px;height:32px;border:1px solid var(--rule);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink-2)}
+  .theme-toggle:hover{border-color:var(--rule-2);color:var(--ink)}
+
+  .layout{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start}
+  .toc{position:sticky;top:80px;padding:48px 0 64px}
+  .toc h5{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:0 0 14px}
+  .toc ol{list-style:none;padding:0;margin:0 0 28px;font-size:13px}
+  .toc a{display:flex;align-items:baseline;gap:10px;padding:6px 0;color:var(--ink-2);border-top:1px solid var(--rule);font-variant-numeric:tabular-nums}
+  .toc li:first-child a{border-top:none}
+  .toc a:hover{color:var(--ink)}
+  .toc a .num{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-3);font-weight:500;width:22px}
+
+  .content{padding:48px 0 96px;min-width:0}
+  header.masthead{margin-bottom:56px}
+  .eyebrow{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600;display:flex;align-items:center;gap:10px}
+  .eyebrow::before{content:"";width:24px;height:1px;background:var(--accent)}
+  h1.title{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:48px;line-height:1.05;letter-spacing:-0.02em;margin:18px 0 14px;max-width:18ch}
+  .lead{font-size:17px;color:var(--ink-2);max-width:60ch;line-height:1.55;margin:0 0 18px}
+
+  section.bay{padding:56px 0;border-top:1px solid var(--rule)}
+  section.bay:first-of-type{border-top:none;padding-top:24px}
+  .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);margin-bottom:14px;display:block;font-variant-numeric:tabular-nums}
+  h2{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:30px;line-height:1.15;letter-spacing:-0.02em;margin:0 0 12px}
+  h3{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:18px;line-height:1.2;letter-spacing:-0.01em;margin:32px 0 14px;display:flex;align-items:baseline;gap:14px}
+  h3 .shadcn{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0;color:var(--ink-3);font-weight:400;padding:2px 7px;border:1px solid var(--rule);border-radius:2px;background:var(--surface);font-variant-numeric:tabular-nums}
+  h4{font-family:'Geist',sans-serif;font-weight:600;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-3);margin:24px 0 14px}
+  p{margin:0 0 18px;color:var(--ink-2);font-size:14px;line-height:1.65}
+  .section-lead{font-size:15px;color:var(--ink-2);max-width:62ch;margin-bottom:24px}
+
+  .demo{border:1px solid var(--rule);border-radius:6px;background:var(--surface);padding:0;overflow:hidden;margin-bottom:14px}
+  .demo-row{display:flex;align-items:center;gap:14px;padding:18px 22px;border-bottom:1px solid var(--rule);flex-wrap:wrap}
+  .demo-row:last-child{border-bottom:none}
+  .demo-row .lbl{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-3);font-weight:500;width:88px;letter-spacing:0.04em;text-transform:uppercase;flex-shrink:0}
+  .demo-meta{padding:11px 22px;background:var(--surface-2);border-top:1px solid var(--rule);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);display:flex;justify-content:space-between;align-items:center}
+  .demo-meta strong{color:var(--ink-2);font-weight:500}
+
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:4px;font-size:13.5px;font-weight:500;border:1px solid transparent;transition:background 180ms ease,border-color 180ms ease,color 180ms ease;white-space:nowrap;cursor:pointer}
+  .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn-primary:hover,.btn-primary.hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+  .btn-primary.focus{box-shadow:0 0 0 2px var(--canvas),0 0 0 4px var(--accent)}
+  .btn-primary:active,.btn-primary.active{background:var(--accent-hover);transform:translateY(0.5px)}
+  .btn-primary.disabled,.btn-primary:disabled{background:var(--rule-2);border-color:var(--rule-2);color:var(--ink-3);cursor:not-allowed}
+  .btn-primary.loading{background:var(--accent-hover);color:rgba(255,255,255,0.7);cursor:wait;pointer-events:none}
+  [data-theme="dark"] .btn-primary{color:#0A1B1F}
+  [data-theme="dark"] .btn-primary.disabled,[data-theme="dark"] .btn-primary:disabled{color:var(--ink-3)}
+  .btn-primary .spin{width:12px;height:12px;border:1.5px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin 0.7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .btn-secondary{background:var(--surface);color:var(--ink);border-color:var(--rule-2)}
+  .btn-secondary:hover,.btn-secondary.hover{border-color:var(--ink-3)}
+  .btn-secondary.focus{box-shadow:0 0 0 2px var(--canvas),0 0 0 4px var(--accent)}
+  .btn-secondary:active,.btn-secondary.active{background:var(--surface-2)}
+  .btn-secondary.disabled,.btn-secondary:disabled{color:var(--ink-3);border-color:var(--rule);cursor:not-allowed}
+
+  .btn-ghost{color:var(--ink-2);background:none;border-color:transparent}
+  .btn-ghost:hover,.btn-ghost.hover{color:var(--ink);background:var(--surface-2)}
+  .btn-ghost.focus{box-shadow:0 0 0 2px var(--canvas),0 0 0 4px var(--accent)}
+  .btn-ghost.disabled,.btn-ghost:disabled{color:var(--ink-3);cursor:not-allowed}
+
+  .btn-destructive{background:var(--danger);color:#fff;border-color:var(--danger)}
+  .btn-destructive:hover{background:#8C3024;border-color:#8C3024}
+
+  .icon-btn{width:32px;height:32px;border:1px solid var(--rule);border-radius:3px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink-2);transition:border-color 180ms ease,color 180ms ease}
+  .icon-btn:hover{border-color:var(--rule-2);color:var(--ink)}
+  .icon-btn.active{background:var(--accent-tint);color:var(--accent);border-color:var(--accent-tint)}
+
+  .input{height:36px;padding:0 12px;border:1px solid var(--rule-2);border-radius:3px;background:var(--surface);color:var(--ink);font-size:13.5px;width:240px;transition:border-color 180ms ease,box-shadow 180ms ease;outline:none}
+  .input::placeholder{color:var(--ink-3)}
+  .input:hover{border-color:var(--ink-3)}
+  .input.focus,.input:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-tint)}
+  .input.error{border-color:var(--danger);box-shadow:0 0 0 2px var(--danger-tint)}
+  .input.disabled,.input:disabled{background:var(--surface-2);color:var(--ink-3);cursor:not-allowed}
+  .input-group{display:flex;flex-direction:column;gap:5px}
+  .input-group label{font-size:11.5px;color:var(--ink-2);font-weight:500}
+  .input-group .help{font-size:11px;color:var(--ink-3);margin-top:2px}
+  .input-group .err{font-size:11px;color:var(--danger);margin-top:2px}
+
+  .search{display:flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid var(--rule);border-radius:4px;background:var(--surface);font-size:13px;color:var(--ink-3);min-width:280px;cursor:text;transition:border-color 180ms ease}
+  .search:hover{border-color:var(--rule-2)}
+  .search input{flex:1;border:none;outline:none;font:inherit;color:var(--ink);background:transparent}
+  .search input::placeholder{color:var(--ink-3)}
+  .kbd{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:1px 5px;border:1px solid var(--rule-2);border-radius:3px;color:var(--ink-3);background:var(--canvas);font-variant-numeric:tabular-nums}
+
+  .seg{display:inline-flex;border:1px solid var(--rule-2);border-radius:3px;background:var(--surface);overflow:hidden}
+  .seg button{padding:6px 14px;font-size:12.5px;color:var(--ink-3);border-right:1px solid var(--rule);font-variant-numeric:tabular-nums}
+  .seg button:last-child{border-right:none}
+  .seg button:hover{color:var(--ink-2)}
+  .seg button.on{background:var(--surface-2);color:var(--ink);font-weight:500}
+
+  .chip{display:inline-flex;align-items:center;padding:3px 8px;border:1px solid var(--rule);border-radius:2px;font-size:11px;color:var(--ink-2);font-weight:500;letter-spacing:0.02em;background:var(--surface)}
+  .chip.accent{background:var(--accent-tint);color:var(--accent);border-color:var(--accent-tint)}
+  .chip.success{background:var(--success-tint);color:var(--success);border-color:var(--success-tint)}
+  .chip.warning{background:var(--warning-tint);color:var(--warning);border-color:var(--warning-tint)}
+  .chip.danger{background:var(--danger-tint);color:var(--danger);border-color:var(--danger-tint)}
+  .chip.solid{background:var(--ink);color:var(--canvas);border-color:var(--ink)}
+  .chip.removable{padding-right:4px}
+  .chip.removable .x{margin-left:4px;color:var(--ink-3);width:14px;height:14px;display:inline-flex;align-items:center;justify-content:center;border-radius:2px}
+  .chip.removable .x:hover{background:var(--rule);color:var(--ink)}
+
+  .org-badge{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2)}
+  .org-mark{width:18px;height:18px;border-radius:3px;background:var(--surface-2);border:1px solid var(--rule);font-family:'Fraunces',serif;font-size:11px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink-2);flex-shrink:0;font-weight:500}
+  .org-mark.lg{width:28px;height:28px;font-size:14px;border-radius:4px}
+  .org-mark.solid{background:var(--accent);color:#fff;border-color:var(--accent)}
+  [data-theme="dark"] .org-mark.solid{color:#0A1B1F}
+  .verified{color:var(--success);font-size:13px;display:inline-flex;align-items:center;gap:2px;flex-shrink:0}
+
+  .ds-card{display:flex;flex-direction:column;padding:22px;background:var(--surface);border:1px solid var(--rule);border-radius:6px;transition:border-color 180ms ease;width:320px;cursor:pointer}
+  .ds-card:hover,.ds-card.hover{border-color:var(--ink-3)}
+  .ds-card.focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-tint)}
+  .ds-card .top{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;color:var(--ink-3);margin-bottom:14px;gap:8px}
+  .ds-card h5{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:18px;line-height:1.25;letter-spacing:-0.005em;margin:0 0 10px;color:var(--ink)}
+  .ds-card p{font-size:13px;color:var(--ink-2);margin:0 0 18px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .ds-card .meta{margin-top:auto;padding-top:14px;border-top:1px solid var(--rule);display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:11.5px;color:var(--ink-3)}
+  .meta-dot{width:3px;height:3px;border-radius:50%;background:var(--ink-3)}
+  .ds-card.skel .skel-title,.ds-card.skel .skel-line,.ds-card.skel .skel-org,.ds-card.skel .skel-meta{background:linear-gradient(90deg,var(--surface-2) 0%,var(--rule) 50%,var(--surface-2) 100%);background-size:200% 100%;animation:shimmer 1.4s linear infinite;border-radius:2px;height:10px}
+  .ds-card.skel .skel-org{height:14px;width:50%;margin-bottom:14px}
+  .ds-card.skel .skel-title{height:18px;width:80%;margin:0 0 14px}
+  .ds-card.skel .skel-line{margin-bottom:6px;width:100%}
+  .ds-card.skel .skel-line.b{width:60%}
+  .ds-card.skel .skel-meta{margin-top:18px;width:60%;height:14px}
+  @keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+
+  .kpi{padding:22px 24px;background:var(--surface);border:1px solid var(--rule);border-radius:6px;width:260px;position:relative}
+  .kpi .label{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .kpi .v{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:36px;line-height:1;letter-spacing:-0.02em;color:var(--ink);font-variant-numeric:tabular-nums;display:block;margin-bottom:6px}
+  .kpi .v .unit{font-size:18px;color:var(--ink-3);font-weight:400}
+  .kpi .trend{font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:6px}
+  .kpi .delta{display:inline-flex;align-items:center;gap:3px;color:var(--success);font-weight:500}
+  .kpi .delta.neg{color:var(--danger)}
+  .kpi .spark{position:absolute;right:16px;bottom:18px;width:64px;height:24px}
+  .kpi.skel .v,.kpi.skel .label,.kpi.skel .trend{background:linear-gradient(90deg,var(--surface-2) 0%,var(--rule) 50%,var(--surface-2) 100%);background-size:200% 100%;animation:shimmer 1.4s linear infinite;border-radius:2px;color:transparent}
+  .kpi.skel .v{height:36px;width:60%;color:transparent}
+  .kpi.skel .label{height:11px;width:50%}
+  .kpi.skel .trend{height:11px;width:70%}
+
+  .schema-table{width:100%;border-collapse:collapse;font-size:13px;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+  .schema-table thead th{text-align:left;padding:10px 14px;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600;background:var(--surface-2);border-bottom:1px solid var(--rule);font-variant-numeric:tabular-nums}
+  .schema-table thead th.r{text-align:right}
+  .schema-table tbody td{padding:11px 14px;border-top:1px solid var(--rule);color:var(--ink);font-variant-numeric:tabular-nums;background:var(--surface)}
+  .schema-table tbody tr:first-child td{border-top:none}
+  .schema-table tbody tr:hover td{background:var(--surface-2)}
+  .schema-table .col-name{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink);font-weight:500}
+  .schema-table .type-pill{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border:1px solid var(--rule);border-radius:2px;font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--ink-2);background:var(--canvas);cursor:pointer}
+  .schema-table .type-pill::after{content:"▾";font-size:8px;color:var(--ink-3);margin-left:2px}
+  .schema-table .type-pill:hover{border-color:var(--rule-2)}
+  .schema-table .null-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:2px;font-size:11px;font-weight:500;font-family:'JetBrains Mono',monospace;background:var(--success-tint);color:var(--success)}
+  .schema-table .null-badge.warn{background:var(--warning-tint);color:var(--warning)}
+  .schema-table .null-badge.danger{background:var(--danger-tint);color:var(--danger)}
+  .schema-table .r{text-align:right}
+
+  .filter-side{width:240px;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:18px 0;font-size:13px}
+  .filter-h{padding:0 18px 12px;border-bottom:1px solid var(--rule);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600;display:flex;justify-content:space-between;align-items:center}
+  .filter-h .clear{font-size:11px;color:var(--accent);font-weight:500;text-transform:none;letter-spacing:0;cursor:pointer}
+  .filter-grp{padding:14px 18px 16px;border-bottom:1px solid var(--rule)}
+  .filter-grp:last-child{border-bottom:none}
+  .filter-grp h6{font-size:11px;color:var(--ink);font-weight:600;margin:0 0 10px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+  .filter-grp h6 .arr{color:var(--ink-3);font-size:9px}
+  .filter-row{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12.5px;color:var(--ink-2);cursor:pointer}
+  .filter-row input{margin:0;flex-shrink:0;accent-color:var(--accent)}
+  .filter-row .count{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .filter-row:hover{color:var(--ink)}
+
+  .api-pad{background:var(--surface);border:1px solid var(--rule);border-radius:6px;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;min-height:280px}
+  .api-pad .left{padding:18px 22px;border-right:1px solid var(--rule);background:var(--surface)}
+  .api-pad .right{background:var(--code-bg);color:var(--code-fg);font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.65;padding:18px 22px;overflow-x:auto;font-variant-numeric:tabular-nums}
+  .api-pad .endpoint{font-family:'JetBrains Mono',monospace;font-size:12.5px;display:flex;align-items:center;gap:8px;margin-bottom:14px}
+  .api-pad .endpoint .verb{padding:1px 6px;background:var(--success-tint);color:var(--success);border-radius:2px;font-size:10.5px;font-weight:600;letter-spacing:0.04em}
+  .api-pad .endpoint .path{color:var(--ink)}
+  .api-pad .left h6{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:18px 0 10px;display:flex;justify-content:space-between;align-items:center}
+  .api-pad .param{display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:center;font-size:12px;padding:5px 0;border-top:1px solid var(--rule)}
+  .api-pad .param:first-of-type{border-top:none}
+  .api-pad .param .pn{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink)}
+  .api-pad .param .pi{height:26px;border:1px solid var(--rule);border-radius:3px;padding:0 8px;font-size:12px;background:var(--canvas);color:var(--ink);outline:none;font-family:'Geist',sans-serif;width:100%}
+  .api-pad .param .pi:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-tint)}
+  .api-pad .right .c-key{color:#C8A8DD}.api-pad .right .c-string{color:#D9B473}.api-pad .right .c-num{color:#9FCFA4;font-variant-numeric:tabular-nums}.api-pad .right .c-comment{color:#8A867D;font-style:italic}
+  .api-pad .pad-foot{padding:10px 22px;border-top:1px solid var(--rule);background:var(--surface-2);grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .api-pad .pad-foot .status{display:inline-flex;align-items:center;gap:6px}
+  .api-pad .pad-foot .dot{width:6px;height:6px;border-radius:50%;background:var(--success)}
+
+  .code-snip{border:1px solid var(--rule);border-radius:6px;background:var(--code-bg);overflow:hidden}
+  .code-snip-tabs{display:flex;border-bottom:1px solid #2A2826;background:#0E0D0C}
+  .code-snip-tabs button{padding:9px 14px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);border-right:1px solid #2A2826;letter-spacing:0.04em}
+  .code-snip-tabs button.on{background:var(--code-bg);color:var(--code-fg);font-weight:500;position:relative}
+  .code-snip-tabs button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--accent)}
+  .code-snip pre{margin:0;padding:18px 22px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;color:var(--code-fg);overflow-x:auto;font-variant-numeric:tabular-nums}
+  .code-snip .c-key{color:#C8A8DD}.code-snip .c-string{color:#D9B473}.code-snip .c-num{color:#9FCFA4}.code-snip .c-comment{color:#8A867D;font-style:italic}.code-snip .c-method{color:#7CCCDF}
+
+  .empty,.errs{border:1px dashed var(--rule-2);border-radius:6px;padding:40px 32px;background:var(--surface);text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px}
+  .errs{border:1px solid var(--danger-tint);background:var(--danger-tint)}
+  .empty .ic,.errs .ic{width:42px;height:42px;border-radius:50%;background:var(--surface-2);display:inline-flex;align-items:center;justify-content:center;color:var(--ink-3)}
+  .errs .ic{background:rgba(160,59,44,0.15);color:var(--danger)}
+  .empty h6,.errs h6{font-family:'Fraunces',serif;font-weight:400;font-size:18px;margin:0;color:var(--ink)}
+  .empty p,.errs p{font-size:13px;color:var(--ink-2);max-width:42ch;margin:0}
+  .empty .acts,.errs .acts{display:flex;gap:8px}
+
+  .toast-stack{display:flex;flex-direction:column;gap:8px}
+  .toast{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:var(--ink);color:var(--canvas);border-radius:4px;font-size:13px;line-height:1.5;max-width:420px;box-shadow:0 4px 16px rgba(0,0,0,0.12)}
+  [data-theme="dark"] .toast{background:var(--surface-2);color:var(--ink)}
+  .toast .ic{flex-shrink:0;color:var(--accent);margin-top:1px}
+  .toast.success .ic{color:#5CA374}
+  .toast.danger .ic{color:#D17265}
+  .toast strong{display:block;color:#fff;font-weight:500;margin-bottom:2px}
+  [data-theme="dark"] .toast strong{color:var(--ink)}
+  .toast span{color:rgba(250,248,244,0.7)}
+  [data-theme="dark"] .toast span{color:var(--ink-2)}
+  .toast .x{margin-left:auto;color:rgba(250,248,244,0.5);cursor:pointer;font-size:14px}
+
+  .dialog{width:420px;background:var(--surface);border:1px solid var(--rule);border-radius:6px;box-shadow:0 12px 48px rgba(0,0,0,0.18);overflow:hidden}
+  .dialog-h{padding:20px 24px 0}
+  .dialog-h h6{font-family:'Fraunces',serif;font-weight:400;font-size:20px;letter-spacing:-0.01em;margin:0 0 6px;color:var(--ink)}
+  .dialog-h p{font-size:13px;color:var(--ink-2);margin:0 0 18px;line-height:1.55}
+  .dialog-body{padding:0 24px 18px;border-bottom:1px solid var(--rule);font-size:13px;color:var(--ink-2)}
+  .dialog-body code{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surface-2);padding:1px 5px;border-radius:2px;color:var(--ink)}
+  .dialog-foot{padding:14px 22px;display:flex;gap:8px;justify-content:flex-end;background:var(--surface-2)}
+
+  .pagn{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-2)}
+  .pagn button{width:30px;height:30px;border:1px solid var(--rule);border-radius:3px;background:var(--surface);color:var(--ink-2);font-variant-numeric:tabular-nums;font-size:12.5px;display:inline-flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:500}
+  .pagn button:hover{border-color:var(--rule-2);color:var(--ink)}
+  .pagn button.on{background:var(--ink);color:var(--canvas);border-color:var(--ink)}
+  .pagn .gap{color:var(--ink-3);padding:0 4px}
+  .pagn .arrow{padding:0 12px;width:auto}
+
+  .skel-table{width:100%;border-collapse:collapse;font-size:13px;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+  .skel-table thead th{text-align:left;padding:10px 14px;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600;background:var(--surface-2);border-bottom:1px solid var(--rule)}
+  .skel-table tbody td{padding:13px 14px;border-top:1px solid var(--rule);background:var(--surface)}
+  .skel-table tbody tr:first-child td{border-top:none}
+  .skel-table .bar{height:11px;background:linear-gradient(90deg,var(--surface-2) 0%,var(--rule) 50%,var(--surface-2) 100%);background-size:200% 100%;animation:shimmer 1.4s linear infinite;border-radius:2px}
+  .skel-table .bar.s{width:60%}
+  .skel-table .bar.m{width:80%}
+  .skel-table .bar.l{width:95%}
+
+  .footnotes{margin-top:64px;padding-top:32px;border-top:1px solid var(--rule);font-size:12px;color:var(--ink-3);line-height:1.6}
+  .footnotes strong{color:var(--ink-2);font-weight:500}
+
+  @media (max-width:1080px){.layout{grid-template-columns:1fr}.toc{position:static;padding:24px 0 0}.toc ol{display:grid;grid-template-columns:repeat(2,1fr);gap:0}.api-pad{grid-template-columns:1fr}.api-pad .left{border-right:none;border-bottom:1px solid var(--rule)}}
+  @media (max-width:640px){.nav-inner{padding:0 20px;gap:12px;height:56px}.layout{padding:0 20px;gap:24px}h1.title{font-size:34px}.demo-row{padding:14px 16px;gap:10px}.demo-row .lbl{width:100%;margin-bottom:0}.ds-card,.kpi{width:100%}.filter-side{width:100%}}
+  *:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+  @keyframes fade-up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .fade-in{animation:fade-up 320ms cubic-bezier(0.2,0,0,1) both}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#"><span class="brand-mark"></span>GovLink<span class="brand-divider">Components</span></a>
+    <div class="nav-right">
+      <span class="v">v1.0.2</span>
+      <span><a href="style-guide.html" style="border-bottom:1px solid var(--rule);padding-bottom:1px">Style guide</a> · Components</span>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.5 3.5l1.4 1.4M11.1 11.1l1.4 1.4M3.5 12.5l1.4-1.4M11.1 4.9l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <aside class="toc" aria-label="Components contents">
+    <h5>Components</h5>
+    <ol>
+      <li><a href="#buttons"><span class="num">01</span>Buttons</a></li>
+      <li><a href="#inputs"><span class="num">02</span>Inputs &amp; search</a></li>
+      <li><a href="#chips"><span class="num">03</span>Chips &amp; badges</a></li>
+      <li><a href="#dataset-card"><span class="num">04</span>Dataset card</a></li>
+      <li><a href="#kpi"><span class="num">05</span>KPI card</a></li>
+      <li><a href="#filter"><span class="num">06</span>Filter sidebar</a></li>
+      <li><a href="#schema"><span class="num">07</span>Schema table</a></li>
+      <li><a href="#api"><span class="num">08</span>API playground</a></li>
+      <li><a href="#code"><span class="num">09</span>Code snippet</a></li>
+      <li><a href="#feedback"><span class="num">10</span>Feedback</a></li>
+      <li><a href="#nav"><span class="num">11</span>Navigation</a></li>
+      <li><a href="#loading"><span class="num">12</span>Loading state</a></li>
+    </ol>
+  </aside>
+  <main class="content">
+    <header class="masthead fade-in">
+      <span class="eyebrow">Component library · v1.0</span>
+      <h1 class="title">Every component, every state.</h1>
+      <p class="lead">The atoms and molecules of GovLink. Each component lists the shadcn/ui primitive it extends and shows the states the design system expects engineering to wire — default, hover, focus, active, disabled, loading. Data-bearing surfaces also have empty and error states.</p>
+    </header>
+
+    <section class="bay" id="buttons">
+      <span class="section-num">§ 01</span>
+      <h2>Buttons</h2>
+      <p class="section-lead">Four variants. Primary uses <code class="mono" style="font-size:13px;color:var(--ink)">--accent</code> and is the only filled button on most pages. Secondary is the workhorse. Ghost is for low-stakes actions in dense surfaces. Destructive is reserved for irreversible operations.</p>
+
+      <h3>Primary <span class="shadcn">extends Button variant=default</span></h3>
+      <div class="demo">
+        <div class="demo-row"><span class="lbl">Default</span><button class="btn btn-primary">Browse datasets</button><button class="btn btn-primary">Get API key</button><button class="btn btn-primary"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 2v9M4 7l4 4 4-4M2 14h12"/></svg>Download CSV</button></div>
+        <div class="demo-row"><span class="lbl">Hover</span><button class="btn btn-primary hover">Browse datasets</button><span style="font-size:12px;color:var(--ink-3)">→ background shifts to <code class="mono" style="font-size:11px;color:var(--ink-2)">--accent-hover</code></span></div>
+        <div class="demo-row"><span class="lbl">Focus</span><button class="btn btn-primary focus">Browse datasets</button><span style="font-size:12px;color:var(--ink-3)">→ 2 px ring, <code class="mono" style="font-size:11px;color:var(--ink-2)">--accent</code>, 2 px offset</span></div>
+        <div class="demo-row"><span class="lbl">Active</span><button class="btn btn-primary active">Browse datasets</button><span style="font-size:12px;color:var(--ink-3)">→ 0.5 px translate-y on press</span></div>
+        <div class="demo-row"><span class="lbl">Disabled</span><button class="btn btn-primary disabled" disabled>Browse datasets</button><span style="font-size:12px;color:var(--ink-3)">→ rule-2 background, ink-3 text</span></div>
+        <div class="demo-row"><span class="lbl">Loading</span><button class="btn btn-primary loading"><span class="spin"></span>Generating</button><span style="font-size:12px;color:var(--ink-3)">→ 0.7 s linear spinner, pointer-events: none</span></div>
+        <div class="demo-meta"><strong>Sizes</strong><span>sm 28 · default 36 · lg 44 px (touch)</span></div>
+      </div>
+
+      <h3>Secondary <span class="shadcn">extends Button variant=outline</span></h3>
+      <div class="demo">
+        <div class="demo-row"><span class="lbl">All states</span><button class="btn btn-secondary">Read report</button><button class="btn btn-secondary hover">Hover</button><button class="btn btn-secondary focus">Focus</button><button class="btn btn-secondary active">Active</button><button class="btn btn-secondary disabled" disabled>Disabled</button></div>
+      </div>
+
+      <h3>Ghost <span class="shadcn">extends Button variant=ghost</span></h3>
+      <div class="demo">
+        <div class="demo-row"><span class="lbl">All states</span><button class="btn btn-ghost">Sign in</button><button class="btn btn-ghost hover">Hover</button><button class="btn btn-ghost focus">Focus</button><button class="btn btn-ghost disabled" disabled>Disabled</button></div>
+      </div>
+
+      <h3>Destructive <span class="shadcn">extends Button variant=destructive</span></h3>
+      <div class="demo">
+        <div class="demo-row"><span class="lbl">Default</span><button class="btn btn-destructive">Revoke API key</button><button class="btn btn-destructive">Delete dataset</button></div>
+      </div>
+
+      <h3>Icon button <span class="shadcn">extends Button size=icon</span></h3>
+      <div class="demo">
+        <div class="demo-row"><span class="lbl">Default</span><button class="icon-btn" aria-label="Settings"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="2.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.5 3.5l1.4 1.4M11.1 11.1l1.4 1.4M3.5 12.5l1.4-1.4M11.1 4.9l1.4-1.4"/></svg></button><button class="icon-btn active" aria-label="Filter"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4h12M4 8h8M6 12h4"/></svg></button><button class="icon-btn" aria-label="Bell"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6a5 5 0 1 1 10 0v3l1.5 2h-13L3 9z"/><path d="M6 13a2 2 0 0 0 4 0"/></svg></button><span style="font-size:12px;color:var(--ink-3);margin-left:8px">Default · Active · Default</span></div>
+      </div>
+    </section>
+
+    <section class="bay" id="inputs">
+      <span class="section-num">§ 02</span>
+      <h2>Inputs &amp; search</h2>
+      <p class="section-lead">Single 36-px height for forms. Search uses a 32-px chrome and pairs with the platform-wide ⌘K command palette. Every form input has a label, optional helper text, and an error state.</p>
+
+      <h3>Text input <span class="shadcn">extends Input</span></h3>
+      <div class="demo">
+        <div class="demo-row"><span class="lbl">Default</span><input class="input" placeholder="ministry@gov.gm" /></div>
+        <div class="demo-row"><span class="lbl">Hover</span><input class="input" style="border-color:var(--ink-3)" placeholder="ministry@gov.gm" /></div>
+        <div class="demo-row"><span class="lbl">Focus</span><input class="input focus" placeholder="ministry@gov.gm" value="awa.touray" /></div>
+        <div class="demo-row"><span class="lbl">Filled</span><input class="input" value="awa.touray@health.gov.gm" /></div>
+        <div class="demo-row"><span class="lbl">Error</span><div class="input-group"><input class="input error" value="awa.touray" /><span class="err">Must be a verified <code class="mono" style="font-size:11px;color:var(--ink)">.gov.gm</code> address.</span></div></div>
+        <div class="demo-row"><span class="lbl">Disabled</span><input class="input disabled" value="locked@gov.gm" disabled /></div>
+        <div class="demo-row"><span class="lbl">With label</span><div class="input-group"><label>API rate limit</label><input class="input" value="1,000 / hour" /><span class="help">Default tier · contact <code class="mono" style="font-size:11px;color:var(--ink)">api@gbos.gm</code> to raise.</span></div></div>
+      </div>
+
+      <h3>Search bar <span class="shadcn">extends Input + Command (cmd+K)</span></h3>
+      <div class="demo">
+        <div class="demo-row"><span class="lbl">Trigger</span><div class="search"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="m13 13-2.5-2.5"/></svg><input placeholder="Search datasets, reports, organizations…" /><span class="kbd">⌘K</span></div></div>
+        <div class="demo-row"><span class="lbl">With value</span><div class="search" style="border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-tint)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="m13 13-2.5-2.5"/></svg><input value="health facility" /><span class="kbd">esc</span></div></div>
+        <div class="demo-meta"><strong>Cmd+K palette</strong><span>Opens platform-wide command menu — datasets, reports, orgs, navigation</span></div>
+      </div>
+
+      <h3>Segmented control <span class="shadcn">extends Tabs</span></h3>
+      <div class="demo">
+        <div class="demo-row"><span class="lbl">Default</span><div class="seg"><button>7 d</button><button class="on">30 d</button><button>90 d</button><button>12 mo</button><button>All</button></div></div>
+      </div>
+    </section>
+
+    <section class="bay" id="chips">
+      <span class="section-num">§ 03</span>
+      <h2>Chips &amp; badges</h2>
+
+      <h3>Type chip <span class="shadcn">extends Badge variant=outline</span></h3>
+      <div class="demo">
+        <div class="demo-row"><span class="lbl">Format</span><span class="chip">CSV</span><span class="chip">XLSX</span><span class="chip">SPSS</span><span class="chip">GeoJSON</span><span class="chip">PDF</span><span class="chip">API</span></div>
+        <div class="demo-row"><span class="lbl">Status</span><span class="chip success">Verified publisher</span><span class="chip warning">Awaiting review</span><span class="chip danger">License expired</span><span class="chip accent">New</span><span class="chip solid">Featured</span></div>
+        <div class="demo-row"><span class="lbl">Removable</span><span class="chip removable">Region: West Coast<span class="x">×</span></span><span class="chip removable">Updated &lt; 30 d<span class="x">×</span></span></div>
+      </div>
+
+      <h3>Coverage chip <span class="shadcn">extends Badge with prefix dot</span></h3>
+      <div class="demo">
+        <div class="demo-row"><span class="lbl">Geo · time</span><span class="chip"><svg width="9" height="9" viewBox="0 0 16 16" fill="currentColor" style="margin-right:5px;color:var(--accent)"><path d="M8 1a5 5 0 0 0-5 5c0 4 5 9 5 9s5-5 5-9a5 5 0 0 0-5-5zm0 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>National (8 LGAs)</span><span class="chip"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" style="margin-right:5px;color:var(--accent)"><circle cx="8" cy="8" r="6"/><path d="M8 4v4l2.5 1.5"/></svg>2014 – 2024</span><span class="chip">CC BY 4.0</span></div>
+      </div>
+
+      <h3>Org badge <span class="shadcn">custom · combines Avatar + verified Icon</span></h3>
+      <div class="demo">
+        <div class="demo-row"><span class="lbl">Inline</span><span class="org-badge"><span class="org-mark">M</span>Ministry of Health<svg class="verified" width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5 9.6 3l2.2-.3.4 2.2 2 .9-.9 2 .9 2-2 .9-.4 2.2-2.2-.3L8 14.5 6.4 13l-2.2.3-.4-2.2-2-.9.9-2-.9-2 2-.9.4-2.2 2.2.3L8 1.5Z"/><path d="m5.5 8 1.8 1.8L10.8 6.3" stroke="var(--surface)" stroke-width="1.4" fill="none"/></svg></span></div>
+        <div class="demo-row"><span class="lbl">Large</span><span class="org-badge"><span class="org-mark lg solid">G</span><span style="display:flex;flex-direction:column;gap:2px"><span style="color:var(--ink);font-weight:500">Gambia Bureau of Statistics</span><span style="font-size:11px;color:var(--ink-3)">42 datasets · verified publisher</span></span></span></div>
+        <div class="demo-row"><span class="lbl">Unverified</span><span class="org-badge"><span class="org-mark">A</span>Action Aid The Gambia<span style="font-size:11px;color:var(--ink-3);margin-left:4px">(unverified)</span></span></div>
+      </div>
+    </section>
+
+    <section class="bay" id="dataset-card">
+      <span class="section-num">§ 04</span>
+      <h2>Dataset card <span class="shadcn" style="margin-left:6px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0;color:var(--ink-3);font-weight:400;padding:2px 7px;border:1px solid var(--rule);border-radius:2px">extends Card</span></h2>
+      <p class="section-lead">The most-repeated component across the public surface. Hierarchy: org → title → description → format chips + last-updated. The whole card is the click target; on hover the border tightens and the title underlines.</p>
+
+      <div class="demo">
+        <div class="demo-row" style="gap:18px;align-items:stretch"><span class="lbl" style="width:60px">Default</span>
+          <div class="ds-card">
+            <div class="top"><span class="org-badge"><span class="org-mark">M</span>Ministry of Health</span><svg class="verified" width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5 9.6 3l2.2-.3.4 2.2 2 .9-.9 2 .9 2-2 .9-.4 2.2-2.2-.3L8 14.5 6.4 13l-2.2.3-.4-2.2-2-.9.9-2-.9-2 2-.9.4-2.2 2.2.3L8 1.5Z"/><path d="m5.5 8 1.8 1.8L10.8 6.3" stroke="var(--surface)" stroke-width="1.4" fill="none"/></svg></div>
+            <h5>Health Facility Census 2024</h5>
+            <p>Comprehensive register of all 728 healthcare facilities in The Gambia — ownership, services, staffing, geocoded location.</p>
+            <div class="meta"><span class="chip">CSV</span><span class="chip">GeoJSON</span><span class="chip">API</span><span class="meta-dot"></span><span>Updated 12 May 2025</span></div>
+          </div>
+          <div class="ds-card hover">
+            <div class="top"><span class="org-badge"><span class="org-mark">G</span>GBoS</span><svg class="verified" width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5 9.6 3l2.2-.3.4 2.2 2 .9-.9 2 .9 2-2 .9-.4 2.2-2.2-.3L8 14.5 6.4 13l-2.2.3-.4-2.2-2-.9.9-2-.9-2 2-.9.4-2.2 2.2.3L8 1.5Z"/><path d="m5.5 8 1.8 1.8L10.8 6.3" stroke="var(--surface)" stroke-width="1.4" fill="none"/></svg></div>
+            <h5 style="text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px">Integrated Household Survey 2023/24</h5>
+            <p>Nationally representative survey of 13,400 households across all eight LGAs — consumption, expenditure, labour, migration.</p>
+            <div class="meta"><span class="chip">SPSS</span><span class="chip">CSV</span><span class="chip">PDF</span><span class="meta-dot"></span><span>Updated 28 Mar 2025</span></div>
+          </div>
+        </div>
+        <div class="demo-row" style="gap:18px;align-items:stretch"><span class="lbl" style="width:60px">Loading</span>
+          <div class="ds-card skel">
+            <div class="skel-org"></div>
+            <div class="skel-title"></div>
+            <div class="skel-line"></div>
+            <div class="skel-line b"></div>
+            <div class="skel-meta"></div>
+          </div>
+          <div class="ds-card skel" style="opacity:0.7">
+            <div class="skel-org"></div>
+            <div class="skel-title"></div>
+            <div class="skel-line"></div>
+            <div class="skel-line b"></div>
+            <div class="skel-meta"></div>
+          </div>
+        </div>
+        <div class="demo-meta"><strong>States</strong><span>default · hover · focus · loading skeleton matches final layout</span></div>
+      </div>
+    </section>
+
+    <section class="bay" id="kpi">
+      <span class="section-num">§ 05</span>
+      <h2>KPI card <span class="shadcn" style="margin-left:6px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0;color:var(--ink-3);font-weight:400;padding:2px 7px;border:1px solid var(--rule);border-radius:2px">custom · Card with sparkline</span></h2>
+      <p class="section-lead">Used in the admin overview and dataset insights. Headline number is in Fraunces — the editorial weight is what makes a 1.27 M call count feel like a fact, not a vanity metric. Sparkline is optional and never the primary affordance.</p>
+
+      <div class="demo">
+        <div class="demo-row" style="gap:18px;align-items:stretch"><span class="lbl" style="width:60px">Default</span>
+          <div class="kpi"><span class="label">API calls · 30 d <span style="width:13px;height:13px;border:1px solid var(--rule-2);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:9px;color:var(--ink-3);font-family:'Fraunces',serif">i</span></span><span class="v">1.27<span class="unit">M</span></span><span class="trend"><span class="delta">▲ 18.4%</span><span>vs prior 30 d</span></span><svg class="spark" viewBox="0 0 64 24" preserveAspectRatio="none"><polyline points="0,18 12,16 24,17 36,12 48,9 64,3" fill="none" stroke="var(--accent)" stroke-width="1.4"/></svg></div>
+          <div class="kpi"><span class="label">Downloads · 30 d</span><span class="v">4,892</span><span class="trend"><span class="delta neg">▼ 6.1%</span><span>vs prior 30 d</span></span><svg class="spark" viewBox="0 0 64 24" preserveAspectRatio="none"><polyline points="0,5 12,7 24,9 36,8 48,12 64,16" fill="none" stroke="var(--accent)" stroke-width="1.4"/></svg></div>
+        </div>
+        <div class="demo-row" style="gap:18px;align-items:stretch"><span class="lbl" style="width:60px">Loading</span>
+          <div class="kpi skel"><span class="label">·</span><span class="v">·</span><span class="trend">·</span></div>
+          <div class="kpi skel" style="opacity:0.7"><span class="label">·</span><span class="v">·</span><span class="trend">·</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bay" id="filter">
+      <span class="section-num">§ 06</span>
+      <h2>Filter sidebar <span class="shadcn" style="margin-left:6px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0;color:var(--ink-3);font-weight:400;padding:2px 7px;border:1px solid var(--rule);border-radius:2px">extends Accordion + Checkbox</span></h2>
+      <p class="section-lead">Used on Browse. Faceted by category, organization, region, tags, license. Each group is collapsible; counts come from the search backend and update live. Selected filters surface as removable chips above the result grid.</p>
+
+      <div class="demo">
+        <div class="demo-row" style="gap:24px;align-items:flex-start;padding:24px"><span class="lbl">Default</span>
+          <div class="filter-side">
+            <div class="filter-h"><span>Filters</span><span class="clear">Clear (3)</span></div>
+            <div class="filter-grp">
+              <h6>Category <span class="arr">▾</span></h6>
+              <label class="filter-row"><input type="checkbox" checked />Health<span class="count">94</span></label>
+              <label class="filter-row"><input type="checkbox" />Economy<span class="count">68</span></label>
+              <label class="filter-row"><input type="checkbox" checked />Education<span class="count">52</span></label>
+              <label class="filter-row"><input type="checkbox" />Agriculture<span class="count">38</span></label>
+              <label class="filter-row"><input type="checkbox" />Environment<span class="count">29</span></label>
+              <button style="font-size:11px;color:var(--accent);padding:6px 0 0;border:none;background:none;cursor:pointer;font-weight:500">Show 4 more</button>
+            </div>
+            <div class="filter-grp">
+              <h6>Region <span class="arr">▾</span></h6>
+              <label class="filter-row"><input type="checkbox" />Greater Banjul<span class="count">142</span></label>
+              <label class="filter-row"><input type="checkbox" checked />West Coast<span class="count">128</span></label>
+              <label class="filter-row"><input type="checkbox" />North Bank<span class="count">61</span></label>
+              <label class="filter-row"><input type="checkbox" />Central River<span class="count">59</span></label>
+            </div>
+            <div class="filter-grp">
+              <h6>License <span class="arr">▾</span></h6>
+              <label class="filter-row"><input type="checkbox" />CC BY 4.0<span class="count">312</span></label>
+              <label class="filter-row"><input type="checkbox" />CC0<span class="count">68</span></label>
+              <label class="filter-row"><input type="checkbox" />Restricted<span class="count">47</span></label>
+            </div>
+          </div>
+          <div style="flex:1;font-size:13px;color:var(--ink-2);line-height:1.65;max-width:42ch">
+            <p><strong>Behaviour</strong></p>
+            <ul style="padding-left:18px;margin:0">
+              <li>Group headers toggle open/closed; state persists in URL params for shareable filtered views.</li>
+              <li>Counts reflect remaining filters applied (e.g. Health = 94 dataset matches given the Region filter is also active).</li>
+              <li>Clear button shows the count of active filters and removes them all in one click.</li>
+              <li>Mobile collapses the sidebar into a Sheet (shadcn) opened by a "Filter (3)" button above the grid.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bay" id="schema">
+      <span class="section-num">§ 07</span>
+      <h2>Schema table <span class="shadcn" style="margin-left:6px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0;color:var(--ink-3);font-weight:400;padding:2px 7px;border:1px solid var(--rule);border-radius:2px">extends Table + Select + Badge</span></h2>
+      <p class="section-lead">Used in the Ingestion wizard step 2 and on every Dataset detail Preview tab. Column name, inferred type (editable), null-percent badge, sample value. Null badges are colour-coded — green &lt; 5%, ochre 5–20%, rust &gt; 20%.</p>
+
+      <div style="overflow-x:auto;margin-bottom:14px">
+      <table class="schema-table">
+        <thead><tr><th>Column</th><th>Type</th><th class="r">Nulls</th><th class="r">Distinct</th><th>Sample</th></tr></thead>
+        <tbody>
+          <tr><td><span class="col-name">facility_id</span></td><td><span class="type-pill">string · id</span></td><td class="r"><span class="null-badge">0%</span></td><td class="r">728</td><td><span class="mono" style="font-size:12px;color:var(--ink-2)">hf-WC-0042</span></td></tr>
+          <tr><td><span class="col-name">facility_name</span></td><td><span class="type-pill">string</span></td><td class="r"><span class="null-badge">0%</span></td><td class="r">726</td><td>Brikama District Hospital</td></tr>
+          <tr><td><span class="col-name">region_code</span></td><td><span class="type-pill">enum (8)</span></td><td class="r"><span class="null-badge">0%</span></td><td class="r">8</td><td><span class="mono" style="font-size:12px;color:var(--ink-2)">WCR</span></td></tr>
+          <tr><td><span class="col-name">facility_type</span></td><td><span class="type-pill">enum (6)</span></td><td class="r"><span class="null-badge warn">7.4%</span></td><td class="r">6</td><td>district_hospital</td></tr>
+          <tr><td><span class="col-name">ownership</span></td><td><span class="type-pill">enum (4)</span></td><td class="r"><span class="null-badge danger">22.1%</span></td><td class="r">4</td><td>public</td></tr>
+          <tr><td><span class="col-name">beds_total</span></td><td><span class="type-pill">integer</span></td><td class="r"><span class="null-badge warn">12.8%</span></td><td class="r">94</td><td>128</td></tr>
+          <tr><td><span class="col-name">latitude</span></td><td><span class="type-pill">float · lat</span></td><td class="r"><span class="null-badge">0%</span></td><td class="r">728</td><td>13.2705</td></tr>
+          <tr><td><span class="col-name">last_inspected</span></td><td><span class="type-pill">date</span></td><td class="r"><span class="null-badge warn">9.1%</span></td><td class="r">412</td><td>14 Mar 2025</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="demo-meta" style="border-radius:6px;border:1px solid var(--rule);background:var(--surface-2)"><strong>Editing</strong><span>Type pill is a Select. Null badge is read-only. Right-click a row → Replace nulls with default / Drop column.</span></div>
+    </section>
+
+    <section class="bay" id="api">
+      <span class="section-num">§ 08</span>
+      <h2>API playground <span class="shadcn" style="margin-left:6px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0;color:var(--ink-3);font-weight:400;padding:2px 7px;border:1px solid var(--rule);border-radius:2px">custom · Form + ScrollArea + JSON viewer</span></h2>
+      <p class="section-lead">Lives on the Dataset → API tab. Live param builder on the left, syntax-highlighted JSON response on the right. Postman-lite, with request status and timing in the footer. The full code is available in four languages on the next component.</p>
+
+      <div class="api-pad">
+        <div class="left">
+          <div class="endpoint"><span class="verb">GET</span><span class="path">/v1/health/facilities</span></div>
+          <h6>Parameters</h6>
+          <div class="param"><span class="pn">region</span><input class="pi" value="west-coast" /></div>
+          <div class="param"><span class="pn">facility_type</span><input class="pi" value="district_hospital" /></div>
+          <div class="param"><span class="pn">per_page</span><input class="pi" value="50" /></div>
+          <h6 style="margin-top:18px">Headers <button class="btn-ghost btn" style="font-size:11px;padding:2px 6px;font-weight:500;color:var(--accent)">+ Add</button></h6>
+          <div class="param"><span class="pn">Authorization</span><input class="pi" value="Bearer •••• kfj9" disabled style="opacity:0.7" /></div>
+          <button class="btn btn-primary" style="margin-top:18px">Send request <span class="kbd" style="background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.3);color:#fff">⌘↵</span></button>
+        </div>
+        <pre class="right">{
+  <span class="c-key">"meta"</span>: { <span class="c-key">"total"</span>: <span class="c-num">142</span>, <span class="c-key">"page"</span>: <span class="c-num">1</span>, <span class="c-key">"per_page"</span>: <span class="c-num">50</span> },
+  <span class="c-key">"data"</span>: [
+    {
+      <span class="c-key">"id"</span>: <span class="c-string">"hf-WC-0042"</span>,
+      <span class="c-key">"name"</span>: <span class="c-string">"Brikama District Hospital"</span>,
+      <span class="c-key">"type"</span>: <span class="c-string">"district_hospital"</span>,
+      <span class="c-key">"region"</span>: <span class="c-string">"west-coast"</span>,
+      <span class="c-key">"beds"</span>: <span class="c-num">128</span>,
+      <span class="c-key">"lat"</span>: <span class="c-num">13.2705</span>,
+      <span class="c-key">"lon"</span>: <span class="c-num">-16.6486</span>
+    },
+    { <span class="c-comment">/* … 49 more rows */</span> }
+  ]
+}</pre>
+        <div class="pad-foot">
+          <div class="status"><span class="dot"></span><span style="color:var(--success);font-weight:500">200 OK</span><span style="color:var(--ink-3)">·</span><span>142 ms</span><span style="color:var(--ink-3)">·</span><span>4.2 kB</span></div>
+          <div><button class="btn-ghost btn" style="padding:4px 10px;font-size:11.5px">Copy as cURL</button><button class="btn-ghost btn" style="padding:4px 10px;font-size:11.5px">Open in Postman</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bay" id="code">
+      <span class="section-num">§ 09</span>
+      <h2>Code snippet <span class="shadcn" style="margin-left:6px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0;color:var(--ink-3);font-weight:400;padding:2px 7px;border:1px solid var(--rule);border-radius:2px">extends Tabs + ScrollArea</span></h2>
+      <p class="section-lead">Tabbed snippet block in four languages — every API page ships with this. Syntax highlighting uses the GovLink palette (purple keys, ochre strings, forest numbers). Tab selection persists per visitor in localStorage.</p>
+
+      <div class="code-snip">
+        <div class="code-snip-tabs"><button>curl</button><button class="on">Python</button><button>JavaScript</button><button>R</button></div>
+        <pre><span class="c-comment"># Health facilities in West Coast Region, paginated</span>
+<span class="c-key">import</span> govlink
+
+client = govlink.Client(api_key=<span class="c-string">"$GOVLINK_KEY"</span>)
+
+facilities = client.<span class="c-method">health</span>.<span class="c-method">facilities</span>.<span class="c-method">list</span>(
+    region=<span class="c-string">"west-coast"</span>,
+    facility_type=<span class="c-string">"district_hospital"</span>,
+    per_page=<span class="c-num">50</span>,
+)
+
+<span class="c-key">for</span> hf <span class="c-key">in</span> facilities.data:
+    <span class="c-method">print</span>(hf.id, hf.name, hf.beds)</pre>
+      </div>
+    </section>
+
+    <section class="bay" id="feedback">
+      <span class="section-num">§ 10</span>
+      <h2>Feedback &amp; states</h2>
+      <p class="section-lead">Empty, error, toast, dialog. The voice across all four is the same as the rest of the system — direct, specific, and useful, never apologetic or chatty.</p>
+
+      <h3>Empty state <span class="shadcn">custom</span></h3>
+      <div class="demo">
+        <div class="demo-row"><span class="lbl">Default</span>
+          <div class="empty" style="flex:1">
+            <div class="ic"><svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="m13 13-2.5-2.5"/></svg></div>
+            <h6>No datasets match these filters</h6>
+            <p>Try clearing the <strong>License</strong> filter, or broaden the date range to before 2020. There are 386 datasets that fall outside your current selection.</p>
+            <div class="acts"><button class="btn btn-secondary">Clear filters</button><button class="btn btn-ghost">Browse all 427 →</button></div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Error state <span class="shadcn">custom · Alert variant=destructive</span></h3>
+      <div class="demo">
+        <div class="demo-row"><span class="lbl">Default</span>
+          <div class="errs" style="flex:1">
+            <div class="ic"><svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1 1 14h14L8 1zM8 6v3M8 11v.5"/></svg></div>
+            <h6>Couldn't load the dataset preview</h6>
+            <p>The ingestion service returned a 503. The queue is at <code class="mono" style="font-size:12px;color:var(--ink)">/admin/queue</code> — page operations on-call if this persists past 10 minutes.</p>
+            <div class="acts"><button class="btn btn-secondary">Retry</button><button class="btn btn-ghost">View status →</button></div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Toast <span class="shadcn">extends Toast / Sonner</span></h3>
+      <div class="demo">
+        <div class="demo-row" style="background:var(--surface-2);padding:32px"><span class="lbl">Stack</span>
+          <div class="toast-stack">
+            <div class="toast success">
+              <span class="ic"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l3 3 7-7"/></svg></span>
+              <div><strong>API key generated</strong><span>Copy and store it now — we won't show it again. Limit 1,000 calls / hour.</span></div>
+              <span class="x">×</span>
+            </div>
+            <div class="toast">
+              <span class="ic"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="8" r="6"/><path d="M8 5v3M8 11v.5"/></svg></span>
+              <div><strong>Ingestion queued</strong><span>"School Enrolment 2025" · job <code class="mono" style="font-size:11px;color:#fff;opacity:0.85">ing_8a4f</code></span></div>
+              <span class="x">×</span>
+            </div>
+            <div class="toast danger">
+              <span class="ic"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l8 8M4 12 12 4"/></svg></span>
+              <div><strong>Couldn't publish</strong><span>3 columns are missing types. Open the wizard's Step 2 to assign them.</span></div>
+              <span class="x">×</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Dialog <span class="shadcn">extends Dialog</span></h3>
+      <div class="demo">
+        <div class="demo-row" style="background:var(--surface-2);padding:48px;justify-content:center"><span class="lbl">Destructive</span>
+          <div class="dialog">
+            <div class="dialog-h">
+              <h6>Revoke API key?</h6>
+              <p>Key <code>kfj9 ····</code> is currently used by <strong>UNDP Gambia</strong>. Revoking will break their integration immediately.</p>
+            </div>
+            <div class="dialog-body">
+              The change is logged to the audit trail. The owner organization can request a new key at any time from the Developer page.
+            </div>
+            <div class="dialog-foot">
+              <button class="btn btn-ghost">Cancel</button>
+              <button class="btn btn-destructive">Revoke key</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bay" id="nav">
+      <span class="section-num">§ 11</span>
+      <h2>Navigation</h2>
+
+      <h3>Pagination <span class="shadcn">extends Pagination</span></h3>
+      <div class="demo">
+        <div class="demo-row"><span class="lbl">Default</span><div class="pagn"><button class="arrow">← Prev</button><button>1</button><button class="on">2</button><button>3</button><button>4</button><span class="gap">…</span><button>22</button><button class="arrow">Next →</button></div></div>
+        <div class="demo-meta"><strong>Behaviour</strong><span>page state in URL · ⌘← / ⌘→ jumps · disabled when at boundary</span></div>
+      </div>
+
+      <h3>Breadcrumbs <span class="shadcn">extends Breadcrumb</span></h3>
+      <div class="demo">
+        <div class="demo-row"><span class="lbl">Default</span><div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-3)"><a href="#">Datasets</a><span style="color:var(--rule-2)">/</span><a href="#">Health</a><span style="color:var(--rule-2)">/</span><span style="color:var(--ink-2);font-weight:500">Health Facility Census 2024</span></div></div>
+        <div class="demo-row"><span class="lbl">Admin</span><div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-3)"><a href="#">Admin</a><span style="color:var(--rule-2)">/</span><a href="#">Datasets</a><span style="color:var(--rule-2)">/</span><a href="#" style="color:var(--ink);font-weight:500">Health Facility Census 2024</a><span style="color:var(--rule-2)">/</span><span style="color:var(--ink-2)">Insights</span></div></div>
+      </div>
+    </section>
+
+    <section class="bay" id="loading">
+      <span class="section-num">§ 12</span>
+      <h2>Loading state <span class="shadcn" style="margin-left:6px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0;color:var(--ink-3);font-weight:400;padding:2px 7px;border:1px solid var(--rule);border-radius:2px">extends Skeleton</span></h2>
+      <p class="section-lead">Skeletons match the final layout. Bars are the height of one line; widths are 60% / 80% / 95% to imply real content underneath. Shimmer runs at <code class="mono" style="font-size:13px;color:var(--ink)">linear 1.4 s</code>.</p>
+
+      <div style="overflow-x:auto">
+      <table class="skel-table">
+        <thead><tr><th>Dataset</th><th>Organization</th><th>Last updated</th><th class="r">API calls (30 d)</th></tr></thead>
+        <tbody>
+          <tr><td><div class="bar l"></div></td><td><div class="bar m"></div></td><td><div class="bar s"></div></td><td><div class="bar s" style="margin-left:auto;width:50%"></div></td></tr>
+          <tr><td><div class="bar m"></div></td><td><div class="bar l"></div></td><td><div class="bar s"></div></td><td><div class="bar s" style="margin-left:auto;width:50%"></div></td></tr>
+          <tr><td><div class="bar l"></div></td><td><div class="bar m"></div></td><td><div class="bar s"></div></td><td><div class="bar s" style="margin-left:auto;width:50%"></div></td></tr>
+          <tr><td><div class="bar m"></div></td><td><div class="bar m"></div></td><td><div class="bar s"></div></td><td><div class="bar s" style="margin-left:auto;width:50%"></div></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="margin-top:14px">Use this <em>only</em> when the wait is &gt; 200 ms. For shorter waits, render the empty layout instantly and let real content swap in. Skeletons that flash are noise.</p>
+    </section>
+
+    <p class="footnotes">
+      <strong>shadcn mapping summary:</strong> Button · Input · Select · Tabs · Checkbox · Accordion · Card · Badge · Avatar · Table · Dialog · Sheet · Toast / Sonner · Pagination · Breadcrumb · Command (⌘K) · Skeleton · Alert · ScrollArea.<br/><br/>
+      <strong>Components without a shadcn base</strong> — DatasetCard, KpiCard, FilterSidebar, SchemaTable, ApiPlayground, OrgBadge, EndpointHeatmap. These are GovLink-specific compositions on top of the primitives above and are documented in <strong>handoff.html</strong>.
+    </p>
+  </main>
+</div>
+<script>
+  const root = document.documentElement;
+  const stored = localStorage.getItem('govlink-theme');
+  if (stored) root.dataset.theme = stored;
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    localStorage.setItem('govlink-theme', next);
+  });
+</script>
+</body>
+</html>

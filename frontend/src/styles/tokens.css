@@ -1,0 +1,193 @@
+/* ============================================================
+   GovLink — Design Tokens
+   ------------------------------------------------------------
+   Single source of truth for the visual system.
+   Drop this file at the top of your global stylesheet, or
+   @import it before any component CSS. Tailwind users: the
+   companion tailwind.config.ts file maps these variables onto
+   Tailwind's theme so utilities stay in sync.
+
+   Theme is controlled by [data-theme="light"] | [data-theme="dark"]
+   on <html>. Default is light.
+   ============================================================ */
+
+:root,
+[data-theme="light"] {
+  /* ---- surfaces ---- */
+  --canvas:        #FAF8F4;   /* page background — warm paper, not pure white */
+  --surface:       #FFFFFF;   /* cards, dropdowns, code blocks (when inverted) */
+  --surface-2:     #F2EFE8;   /* sidebars, faint banding, footer */
+
+  /* ---- text ---- */
+  --ink:           #1A1A1A;   /* primary text, headlines */
+  --ink-2:         #3D3D3D;   /* secondary text, body labels */
+  --ink-3:         #6B6B6B;   /* muted captions, table column headers */
+
+  /* ---- structure ---- */
+  --rule:          #E5E2DA;   /* subtle borders, table rules */
+  --rule-2:        #D5D0C4;   /* stronger borders, focused inputs */
+
+  /* ---- accent ---- */
+  --accent:        #0F4C5C;   /* primary action, link hover, active tab */
+  --accent-hover:  #0A3A47;   /* pressed / hover on accent */
+  --accent-tint:   #E5EFF1;   /* active-tab bg, link-rest underline tint */
+
+  /* ---- status ---- */
+  --success:       #2F6B3D;   /* forest green — verified, success pills */
+  --warning:       #B27800;   /* ochre — schema null-% pills, soft alerts */
+  --danger:        #A03B2C;   /* rust red — destructive only */
+
+  /* ---- data-viz · sequential 5-stop ramp anchored on --accent ---- */
+  --ramp-1:        #CFE0E5;
+  --ramp-2:        #93BCC4;
+  --ramp-3:        #4F8E9C;
+  --ramp-4:        #0F4C5C;
+  --ramp-5:        #093642;
+
+  /* ---- data-viz · categorical 6-color (AA on --canvas) ---- */
+  --cat-1:         #0F4C5C;   /* teal */
+  --cat-2:         #B27800;   /* ochre */
+  --cat-3:         #6B4F8C;   /* aubergine */
+  --cat-4:         #2F6B3D;   /* forest */
+  --cat-5:         #A03B2C;   /* rust */
+  --cat-6:         #4A4A4A;   /* slate */
+
+  /* ---- code surfaces ---- */
+  --code-bg:       #1A1A1A;
+  --code-fg:       #F0EDE6;
+
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --canvas:        #141312;
+  --surface:       #1C1B19;
+  --surface-2:     #222020;
+
+  --ink:           #F0EDE6;
+  --ink-2:         #C0BBB0;
+  --ink-3:         #8A867D;
+
+  --rule:          #2A2826;
+  --rule-2:        #3A3835;
+
+  --accent:        #5FB8CC;
+  --accent-hover:  #7CCCDF;
+  --accent-tint:   #1F3A40;
+
+  --success:       #5CA374;
+  --warning:       #D8A33A;
+  --danger:        #D17265;
+
+  /* sequential ramp inverts so darker = more (read-direction holds in dark) */
+  --ramp-1:        #1F3A40;
+  --ramp-2:        #2D5963;
+  --ramp-3:        #3F7E8C;
+  --ramp-4:        #5FB8CC;
+  --ramp-5:        #9DD6E2;
+
+  /* categorical re-tuned for dark canvas (AA against #141312) */
+  --cat-1:         #5FB8CC;
+  --cat-2:         #D8A33A;
+  --cat-3:         #A88BC4;
+  --cat-4:         #5CA374;
+  --cat-5:         #D17265;
+  --cat-6:         #8A867D;
+
+  --code-bg:       #0E0D0C;
+  --code-fg:       #E5E2DA;
+
+  color-scheme: dark;
+}
+
+:root {
+  /* ============================================================
+     Typography
+     ============================================================ */
+  --font-display:  'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --font-body:     'Geist', 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:     'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+  /* 8-step type scale · paired size + line-height */
+  --text-eyebrow:        11px;   --lh-eyebrow:  1.25;
+  --text-xs:             12px;   --lh-xs:       1.4;
+  --text-sm:             13px;   --lh-sm:       1.5;
+  --text-base:           15px;   --lh-base:     1.6;
+  --text-md:             17px;   --lh-md:       1.55;
+  --text-lg:             21px;   --lh-lg:       1.4;
+  --text-xl:             32px;   --lh-xl:       1.2;
+  --text-display:        56px;   --lh-display:  1.05;
+
+  --tracking-display:    -0.02em;
+  --tracking-tight:      -0.01em;
+  --tracking-eyebrow:    0.14em;
+
+  /* ============================================================
+     Spacing scale (4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96)
+     No values outside this scale.
+     ============================================================ */
+  --space-1:     4px;
+  --space-2:     8px;
+  --space-3:    12px;
+  --space-4:    16px;
+  --space-6:    24px;
+  --space-8:    32px;
+  --space-12:   48px;
+  --space-16:   64px;
+  --space-24:   96px;
+
+  /* ============================================================
+     Radii — nothing larger than 8. No squircles.
+     ============================================================ */
+  --radius-0:    0;     /* rules, dividers */
+  --radius-1:    2px;   /* chips, status pills */
+  --radius-2:    4px;   /* inputs, buttons */
+  --radius-3:    6px;   /* cards */
+  --radius-4:    8px;   /* modals, top-level surfaces */
+
+  /* ============================================================
+     Layout — 12-col, content max 1200, three breakpoints
+     ============================================================ */
+  --content-max:    1200px;
+  --gutter-desktop: 32px;     /* 1440 viewport: 120px outer (margin auto) */
+  --gutter-tablet:  32px;     /* 768  viewport: 32px outer, 8-col */
+  --gutter-mobile:  20px;     /* 375  viewport: 20px outer, 1-col */
+  --bp-tablet:      768px;
+  --bp-desktop:    1024px;
+  --bp-wide:       1280px;
+
+  /* ============================================================
+     Motion — restrained. No bouncing.
+     ============================================================ */
+  --ease:           cubic-bezier(0.2, 0, 0, 1);
+  --ease-in:        cubic-bezier(0.4, 0, 1, 1);
+  --dur-1:          120ms;    /* focus ring, instant */
+  --dur-2:          180ms;    /* hover, fade */
+  --dur-3:          280ms;    /* page-load fade */
+  --stagger:         40ms;    /* between hero elements on initial load */
+
+  /* ============================================================
+     Shadows — used sparingly. Most surfaces use rules instead.
+     ============================================================ */
+  --shadow-1:  0 1px 0 rgba(26, 26, 26, 0.04);
+  --shadow-2:  0 2px 6px rgba(26, 26, 26, 0.05), 0 1px 2px rgba(26, 26, 26, 0.04);
+  --shadow-3:  0 8px 24px rgba(26, 26, 26, 0.08);
+}
+
+[data-theme="dark"] {
+  --shadow-1:  0 1px 0 rgba(0, 0, 0, 0.4);
+  --shadow-2:  0 2px 6px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-3:  0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* ============================================================
+   Reduced motion — disable all transitions/animations.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

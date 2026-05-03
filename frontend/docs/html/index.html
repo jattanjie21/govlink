@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GovLink — design exploration · 4 screens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root[data-theme="light"] {
+    --canvas:#FAF8F4; --surface:#FFFFFF; --surface-2:#F2EFE8;
+    --ink:#1A1A1A; --ink-2:#3D3D3D; --ink-3:#6B6B6B;
+    --rule:#E5E2DA; --rule-2:#D5D0C4;
+    --accent:#0F4C5C; --accent-hover:#0A3A47; --accent-tint:#E5EFF1;
+    --success:#2F6B3D; --warning:#B27800; --danger:#A03B2C;
+  }
+  :root[data-theme="dark"] {
+    --canvas:#141312; --surface:#1C1B19; --surface-2:#222020;
+    --ink:#F0EDE6; --ink-2:#C0BBB0; --ink-3:#8A867D;
+    --rule:#2A2826; --rule-2:#3A3835;
+    --accent:#5FB8CC; --accent-hover:#7CCCDF; --accent-tint:#1F3A40;
+    --success:#5CA374; --warning:#D8A33A; --danger:#D17265;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--canvas);color:var(--ink);font-family:'Geist','Inter Tight',ui-sans-serif,system-ui,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"ss01","cv11";transition:background 180ms ease,color 180ms ease}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
+  .num{font-variant-numeric:tabular-nums}
+
+  .wrap{max-width:1280px;margin:0 auto;padding:0 32px}
+  @media (max-width:480px){.wrap{padding:0 20px}}
+
+  .nav{border-bottom:1px solid var(--rule);background:var(--canvas);position:sticky;top:0;z-index:50;backdrop-filter:saturate(120%) blur(8px)}
+  .nav-inner{display:flex;align-items:center;gap:32px;height:64px}
+  .brand{display:flex;align-items:baseline;gap:8px;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:21px;letter-spacing:-0.01em}
+  .brand-mark{display:inline-block;width:8px;height:24px;background:var(--accent);transform:translateY(4px)}
+  .brand-tag{font-family:'Geist',sans-serif;font-size:12px;font-weight:500;color:var(--ink-3);letter-spacing:0.06em;text-transform:uppercase;border-left:1px solid var(--rule);padding-left:14px;margin-left:6px;align-self:center}
+  .nav-right{margin-left:auto;display:flex;align-items:center;gap:14px}
+  .meta-pill{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .theme-toggle{width:32px;height:32px;border:1px solid var(--rule);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink-2)}
+  .theme-toggle:hover{border-color:var(--rule-2);color:var(--ink)}
+
+  .top{padding:80px 0 48px;border-bottom:1px solid var(--rule)}
+  .eyebrow{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);font-weight:500;display:flex;align-items:center;gap:10px}
+  .eyebrow::before{content:"";width:24px;height:1px;background:var(--accent)}
+  .top h1{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:clamp(40px,5vw,64px);line-height:1.05;letter-spacing:-0.02em;margin:24px 0 24px;max-width:18ch}
+  .top h1 em{font-style:italic;color:var(--accent)}
+  .top-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:64px;align-items:flex-start;margin-top:32px}
+  .top-lead{font-size:18px;line-height:1.55;color:var(--ink-2);max-width:62ch;margin:0;text-wrap:pretty}
+  .top-meta{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;font-size:13px;color:var(--ink-2);padding:20px 24px;border:1px solid var(--rule);background:var(--surface);border-radius:6px}
+  .top-meta dt{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:0 0 4px}
+  .top-meta dd{margin:0 0 10px;font-variant-numeric:tabular-nums;color:var(--ink)}
+  .top-meta dd:last-child{margin-bottom:0}
+
+  section.bay{padding:80px 0;border-bottom:1px solid var(--rule)}
+  .bay-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:36px;gap:32px}
+  .bay-head h2{font-family:'Fraunces',serif;font-weight:400;font-size:32px;letter-spacing:-0.01em;margin:0;line-height:1.2}
+  .bay-head p{color:var(--ink-3);font-size:13px;margin:0;text-align:right;max-width:36ch}
+
+  .screens{display:grid;grid-template-columns:repeat(2,1fr);gap:32px}
+  .screen-card{display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:8px;background:var(--surface);overflow:hidden;transition:border-color 180ms ease,transform 180ms ease}
+  .screen-card:hover{border-color:var(--ink-3);transform:translateY(-2px)}
+  .screen-frame{position:relative;height:380px;overflow:hidden;background:var(--surface-2);border-bottom:1px solid var(--rule)}
+  .screen-frame iframe{position:absolute;top:0;left:0;width:1440px;height:1900px;transform:scale(0.41);transform-origin:0 0;border:none;pointer-events:none;background:var(--canvas)}
+  .screen-meta{padding:24px 28px}
+  .screen-tag{display:flex;align-items:center;gap:14px;margin-bottom:14px;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+  .screen-tag .num-badge{font-family:'Fraunces',serif;font-size:18px;font-weight:400;color:var(--ink-2);letter-spacing:0;font-variant-numeric:tabular-nums;text-transform:none}
+  .screen-tag .group{flex:1}
+  .screen-tag .ok{color:var(--success)}
+  .screen-card h3{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:24px;line-height:1.25;letter-spacing:-0.01em;margin:0 0 10px}
+  .screen-card p{font-size:14px;color:var(--ink-2);margin:0 0 18px;line-height:1.55;max-width:54ch}
+  .screen-foot{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-top:1px solid var(--rule);background:var(--surface-2);font-size:12px;color:var(--ink-3)}
+  .screen-foot .ranges{display:flex;gap:12px;font-variant-numeric:tabular-nums}
+  .screen-foot .open-arrow{color:var(--accent);font-weight:500;display:inline-flex;align-items:center;gap:6px}
+
+  .tokens-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+
+  .token-block h3{font-family:'Fraunces',serif;font-weight:400;font-size:22px;margin:0 0 6px;letter-spacing:-0.01em}
+  .token-block .desc{font-size:13px;color:var(--ink-3);margin:0 0 18px;max-width:48ch;line-height:1.55}
+
+  .swatches{display:grid;grid-template-columns:repeat(6,1fr);gap:0;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+  .swatch{display:flex;flex-direction:column;justify-content:flex-end;height:96px;padding:10px;font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.3;border-right:1px solid var(--rule)}
+  .swatch:last-child{border-right:none}
+  .swatch .name{font-weight:500;display:block;font-size:11px;font-family:'Geist',sans-serif;letter-spacing:0.02em}
+  .swatch .hex{opacity:0.7;font-variant-numeric:tabular-nums}
+  .swatch.dk{color:#fff}
+  .swatch.lt{color:var(--ink)}
+
+  .ramp{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid var(--rule);border-radius:6px;overflow:hidden;margin-top:14px}
+  .ramp-cell{height:48px;display:flex;align-items:flex-end;padding:6px 8px;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:rgba(255,255,255,0.85)}
+  .ramp-cell.lt{color:var(--ink-2)}
+
+  .type-scale{border-top:1px solid var(--rule);font-size:0}
+  .type-row{display:grid;grid-template-columns:80px 1fr 90px;gap:24px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--rule);font-size:14px}
+  .type-row .label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .type-row .sample{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .type-row .meta{font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums;text-align:right;font-family:'JetBrains Mono',monospace}
+  .type-row.fr .sample{font-family:'Fraunces',serif;font-weight:400;letter-spacing:-0.01em}
+
+  .motion-list{margin-top:14px;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+  .motion-row{display:grid;grid-template-columns:90px 1fr 90px;gap:16px;padding:12px 16px;border-bottom:1px solid var(--rule);font-size:13px;align-items:center}
+  .motion-row:last-child{border-bottom:none}
+  .motion-row .name{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-2);font-weight:500}
+  .motion-row .bar{height:3px;background:var(--rule);border-radius:2px;overflow:hidden;position:relative}
+  .motion-row .bar::after{content:"";position:absolute;top:0;left:0;height:100%;background:var(--accent);width:0;animation:bar 2.4s cubic-bezier(.2,0,0,1) infinite alternate}
+  .motion-row.r1 .bar::after{animation-duration:1.2s;width:25%}
+  .motion-row.r2 .bar::after{animation-duration:1.6s;width:55%}
+  .motion-row.r3 .bar::after{animation-duration:2.4s;width:90%}
+  .motion-row .dur{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);text-align:right;font-variant-numeric:tabular-nums}
+  @keyframes bar{0%{transform:translateX(-100%)}100%{transform:translateX(0)}}
+
+  .notes{padding:64px 0 96px}
+  .notes h2{font-family:'Fraunces',serif;font-weight:400;font-size:28px;letter-spacing:-0.01em;margin:0 0 24px}
+  .notes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+  .note h4{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:0 0 12px;display:flex;align-items:center;gap:10px}
+  .note h4::before{content:"";width:18px;height:1px;background:var(--accent)}
+  .note p{font-size:14px;color:var(--ink-2);line-height:1.6;margin:0 0 8px;max-width:42ch}
+  .note ul{padding-left:18px;margin:0;color:var(--ink-2);font-size:14px;line-height:1.6}
+  .note li{margin-bottom:6px}
+  .note code{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surface-2);padding:1px 5px;border-radius:2px}
+
+  footer{padding:32px 0;border-top:1px solid var(--rule);background:var(--surface-2);font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .foot-bar{display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .flag-stripe{display:inline-flex;align-items:center;gap:0;height:8px;width:24px;border:1px solid var(--rule);border-radius:1px;overflow:hidden}
+  .flag-stripe span{flex:1;height:100%}
+  .flag-stripe .s1{background:#CE1126}
+  .flag-stripe .s2{background:#0C1C8C}
+  .flag-stripe .s3{background:#3A7728}
+
+  @media (max-width:1024px){
+    .top-grid{grid-template-columns:1fr;gap:32px}
+    .screens{grid-template-columns:1fr}
+    .screen-frame{height:340px}
+    .screen-frame iframe{transform:scale(0.5)}
+    .tokens-grid{grid-template-columns:1fr;gap:48px}
+    .notes-grid{grid-template-columns:1fr 1fr;gap:28px}
+  }
+  @media (max-width:640px){
+    .nav-inner{height:56px;gap:14px}
+    .brand-tag{display:none}
+    .top{padding:48px 0 32px}
+    .top h1{font-size:36px}
+    .top-lead{font-size:16px}
+    .bay{padding:56px 0}
+    .bay-head{flex-direction:column;align-items:flex-start;gap:8px;margin-bottom:24px}
+    .bay-head p{text-align:left}
+    .bay-head h2{font-size:26px}
+    .screen-frame{height:240px}
+    .screen-frame iframe{transform:scale(0.26)}
+    .swatches{grid-template-columns:repeat(3,1fr)}
+    .swatches .swatch:nth-child(3){border-right:none}
+    .ramp{grid-template-columns:repeat(5,1fr)}
+    .notes-grid{grid-template-columns:1fr}
+    .foot-bar{flex-direction:column;align-items:flex-start;gap:8px}
+    .meta-pill{display:none}
+  }
+
+  *:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+
+  @keyframes fade-up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .fade-in{animation:fade-up 280ms cubic-bezier(0.2,0,0,1) both}
+  .fade-in-2{animation:fade-up 280ms cubic-bezier(0.2,0,0,1) 40ms both}
+  .fade-in-3{animation:fade-up 280ms cubic-bezier(0.2,0,0,1) 80ms both}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <div class="brand">
+      <span class="brand-mark"></span>GovLink
+      <span class="brand-tag">Design exploration · v0.1</span>
+    </div>
+    <div class="nav-right">
+      <span class="meta-pill">4 screens · light + dark · 1440 · 768 · 375</span>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.5 3.5l1.4 1.4M11.1 11.1l1.4 1.4M3.5 12.5l1.4-1.4M11.1 4.9l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="top">
+  <div class="wrap">
+    <span class="eyebrow fade-in">National data platform · The Gambia · Nexu Labs</span>
+    <h1 class="fade-in-2">A serious data platform, <em>built for serious work.</em></h1>
+    <div class="top-grid fade-in-3">
+      <p class="top-lead">
+        GovLink aggregates open data from Gambian ministries, the Bureau of Statistics, and development partners — UNDP, UNICEF, WHO, the World Bank, AfDB — into one citable, queryable platform. The visual reference is closer to The Pudding × Our World in Data × Stripe Docs than to Kaggle. Editorial gravitas, restrained accent, real Gambian context, and tables that read like a serious newspaper would publish them.
+      </p>
+      <dl class="top-meta">
+        <div>
+          <dt>Type system</dt>
+          <dd>Fraunces · Geist · JetBrains Mono</dd>
+        </div>
+        <div>
+          <dt>Accent</dt>
+          <dd>Deep teal · #0F4C5C</dd>
+        </div>
+        <div>
+          <dt>Canvas</dt>
+          <dd>Warm paper · #FAF8F4</dd>
+        </div>
+        <div>
+          <dt>Modes</dt>
+          <dd>Light + dark</dd>
+        </div>
+        <div>
+          <dt>Implements as</dt>
+          <dd>React · Tailwind · shadcn/ui</dd>
+        </div>
+        <div>
+          <dt>Ships next</dt>
+          <dd>Reports · Admin · Insights</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section class="bay">
+  <div class="wrap">
+    <div class="bay-head">
+      <div>
+        <span class="eyebrow" style="margin-bottom:14px;display:flex">Screens · 4 of 15</span>
+        <h2>Public surface, end-to-end</h2>
+      </div>
+      <p>From discovery through to drop-in API integration. Each screen is responsive across 1440 / 768 / 375 with a shared light + dark token system.</p>
+    </div>
+
+    <div class="screens">
+
+      <a class="screen-card" href="home.html" target="_blank" rel="noopener">
+        <div class="screen-frame">
+          <iframe src="home.html" loading="lazy" title="Home preview" aria-hidden="true"></iframe>
+        </div>
+        <div class="screen-meta">
+          <div class="screen-tag">
+            <span class="num-badge">01</span>
+            <span class="group">Public landing</span>
+            <span class="ok">Ready ✓</span>
+          </div>
+          <h3>Home</h3>
+          <p>Editorial hero, three featured datasets curated by the GovLink desk, three latest reports, and a developer strip with a live curl snippet against the health endpoint.</p>
+        </div>
+        <div class="screen-foot">
+          <span class="ranges">1440 · 768 · 375</span>
+          <span class="open-arrow">Open in new tab →</span>
+        </div>
+      </a>
+
+      <a class="screen-card" href="browse.html" target="_blank" rel="noopener">
+        <div class="screen-frame">
+          <iframe src="browse.html" loading="lazy" title="Browse preview" aria-hidden="true"></iframe>
+        </div>
+        <div class="screen-meta">
+          <div class="screen-tag">
+            <span class="num-badge">02</span>
+            <span class="group">Discovery</span>
+            <span class="ok">Ready ✓</span>
+          </div>
+          <h3>Browse datasets</h3>
+          <p>Faceted filtering across category, publisher, region, format, license, and recency. Dense newspaper-style result cards with org badges, coverage chips, and download counts.</p>
+        </div>
+        <div class="screen-foot">
+          <span class="ranges">1440 · 768 · 375</span>
+          <span class="open-arrow">Open in new tab →</span>
+        </div>
+      </a>
+
+      <a class="screen-card" href="dataset-detail.html" target="_blank" rel="noopener">
+        <div class="screen-frame">
+          <iframe src="dataset-detail.html" loading="lazy" title="Dataset detail preview" aria-hidden="true"></iframe>
+        </div>
+        <div class="screen-meta">
+          <div class="screen-tag">
+            <span class="num-badge">03</span>
+            <span class="group">Hero screen of the platform</span>
+            <span class="ok">Ready ✓</span>
+          </div>
+          <h3>Dataset detail — Health Facility Census 2024</h3>
+          <p>Verified-org pill, geo and time coverage, three primary CTAs, four-tab navigation. Schema preview with type badges and measured null-% bars. Stylized Gambia coverage map with a sequential ramp tied to the accent.</p>
+        </div>
+        <div class="screen-foot">
+          <span class="ranges">1440 · 768 · 375</span>
+          <span class="open-arrow">Open in new tab →</span>
+        </div>
+      </a>
+
+      <a class="screen-card" href="dataset-api.html" target="_blank" rel="noopener">
+        <div class="screen-frame">
+          <iframe src="dataset-api.html" loading="lazy" title="Dataset API preview" aria-hidden="true"></iframe>
+        </div>
+        <div class="screen-meta">
+          <div class="screen-tag">
+            <span class="num-badge">04</span>
+            <span class="group">Developer surface</span>
+            <span class="ok">Ready ✓</span>
+          </div>
+          <h3>Dataset → API</h3>
+          <p>Endpoints rail, live parameter builder, response panel with status pill and timing, and code snippets in curl, Python, JavaScript, and R — switchable, syntax-highlighted, copyable.</p>
+        </div>
+        <div class="screen-foot">
+          <span class="ranges">1440 · 768 · 375</span>
+          <span class="open-arrow">Open in new tab →</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<section class="bay">
+  <div class="wrap">
+    <div class="bay-head">
+      <div>
+        <span class="eyebrow" style="margin-bottom:14px;display:flex">Foundations</span>
+        <h2>Tokens, type, motion</h2>
+      </div>
+      <p>Designed to drop straight into Tailwind theme extensions and shadcn/ui — no token guessing at handoff.</p>
+    </div>
+
+    <div class="tokens-grid">
+
+      <div class="token-block">
+        <h3>Color</h3>
+        <p class="desc">Warm paper canvas, ink-not-black text, single deep-teal accent. Status colors are muted, never Bootstrap-bright. Dark mode is a token mirror, not a different system.</p>
+
+        <div class="swatches">
+          <div class="swatch lt" style="background:#FAF8F4"><span class="name">canvas</span><span class="hex">#FAF8F4</span></div>
+          <div class="swatch lt" style="background:#FFFFFF"><span class="name">surface</span><span class="hex">#FFFFFF</span></div>
+          <div class="swatch dk" style="background:#1A1A1A"><span class="name">ink</span><span class="hex">#1A1A1A</span></div>
+          <div class="swatch dk" style="background:#0F4C5C"><span class="name">accent</span><span class="hex">#0F4C5C</span></div>
+          <div class="swatch dk" style="background:#2F6B3D"><span class="name">success</span><span class="hex">#2F6B3D</span></div>
+          <div class="swatch dk" style="background:#A03B2C"><span class="name">danger</span><span class="hex">#A03B2C</span></div>
+        </div>
+
+        <div style="margin-top:24px">
+          <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin-bottom:8px">Sequential ramp · 5 stops</div>
+          <div class="ramp">
+            <div class="ramp-cell lt" style="background:#CFE0E5">CFE0E5</div>
+            <div class="ramp-cell lt" style="background:#93BCC4">93BCC4</div>
+            <div class="ramp-cell" style="background:#4F8E9C">4F8E9C</div>
+            <div class="ramp-cell" style="background:#0F4C5C">0F4C5C</div>
+            <div class="ramp-cell" style="background:#093642">093642</div>
+          </div>
+        </div>
+
+        <div style="margin-top:24px">
+          <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin-bottom:8px">Categorical · 6 hues</div>
+          <div class="ramp" style="grid-template-columns:repeat(6,1fr)">
+            <div class="ramp-cell" style="background:#0F4C5C">teal</div>
+            <div class="ramp-cell" style="background:#B27800">ochre</div>
+            <div class="ramp-cell" style="background:#6B4F8C">violet</div>
+            <div class="ramp-cell" style="background:#2F6B3D">forest</div>
+            <div class="ramp-cell" style="background:#A03B2C">rust</div>
+            <div class="ramp-cell" style="background:#4A4A4A">graphite</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="token-block">
+        <h3>Type</h3>
+        <p class="desc">Fraunces (display) for hero numbers, page titles, and dataset names. Geist (UI &amp; body) for everything else. JetBrains Mono for code and IDs. Tabular numerals always on data.</p>
+
+        <div class="type-scale">
+          <div class="type-row fr">
+            <span class="label">display</span>
+            <span class="sample" style="font-size:48px">Health Facility Census</span>
+            <span class="meta">56 / 1.05 · Fraunces</span>
+          </div>
+          <div class="type-row fr">
+            <span class="label">xl</span>
+            <span class="sample" style="font-size:32px">Browse datasets</span>
+            <span class="meta">32 / 1.2 · Fraunces</span>
+          </div>
+          <div class="type-row fr">
+            <span class="label">lg</span>
+            <span class="sample" style="font-size:21px">Featured datasets</span>
+            <span class="meta">21 / 1.4 · Fraunces</span>
+          </div>
+          <div class="type-row">
+            <span class="label">md</span>
+            <span class="sample" style="font-size:17px">Lead paragraph copy.</span>
+            <span class="meta">17 / 1.55 · Geist</span>
+          </div>
+          <div class="type-row">
+            <span class="label">base</span>
+            <span class="sample" style="font-size:15px">Body. Default for everything.</span>
+            <span class="meta">15 / 1.6 · Geist</span>
+          </div>
+          <div class="type-row">
+            <span class="label">sm</span>
+            <span class="sample" style="font-size:13px">Table cells, labels, meta strips.</span>
+            <span class="meta">13 / 1.5 · Geist</span>
+          </div>
+          <div class="type-row">
+            <span class="label">eyebrow</span>
+            <span class="sample" style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);font-weight:500">Section eyebrow</span>
+            <span class="meta">11 · 0.14em</span>
+          </div>
+        </div>
+
+        <h3 style="margin-top:36px;margin-bottom:6px">Motion</h3>
+        <p class="desc">Restrained. Page-load fade-up with 40ms stagger. Hover transitions at 180ms. No bouncing, no parallax.</p>
+        <div class="motion-list">
+          <div class="motion-row r1">
+            <span class="name">--dur-1</span><span class="bar"></span><span class="dur">120ms</span>
+          </div>
+          <div class="motion-row r2">
+            <span class="name">--dur-2</span><span class="bar"></span><span class="dur">180ms</span>
+          </div>
+          <div class="motion-row r3">
+            <span class="name">--dur-3</span><span class="bar"></span><span class="dur">280ms</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="notes">
+  <div class="wrap">
+    <h2>Implementation notes</h2>
+
+    <div class="notes-grid">
+      <div class="note">
+        <h4>For the engineering team</h4>
+        <ul>
+          <li>Tokens map directly to Tailwind <code>theme.extend.colors</code> and CSS custom properties — no derivation required.</li>
+          <li>Each component below maps to a shadcn/ui primitive plus a small custom layer.</li>
+          <li>Tabular numerals via <code>font-variant-numeric: tabular-nums</code> on every number — already on the body's font-feature-settings stack.</li>
+          <li>Dark mode is a single <code>data-theme="dark"</code> attribute on <code>&lt;html&gt;</code>, persisted to localStorage.</li>
+        </ul>
+      </div>
+      <div class="note">
+        <h4>shadcn primitives in play</h4>
+        <ul>
+          <li><code>Button</code>, <code>Tabs</code>, <code>Card</code>, <code>Table</code>, <code>Sheet</code> (mobile filters)</li>
+          <li><code>Command</code> (⌘K palette)</li>
+          <li><code>Dialog</code> (download format picker)</li>
+          <li><code>Tooltip</code>, <code>Toast</code>, <code>Skeleton</code> (LoadingTable matching final shape)</li>
+          <li><code>Popover</code> (param help text)</li>
+        </ul>
+      </div>
+      <div class="note">
+        <h4>What's intentionally not here</h4>
+        <ul>
+          <li>No purple gradients, no glassmorphism, no parallax — every anti-pattern in the brief was treated as a hard rule.</li>
+          <li>No flag-as-UI. The single nod is the 24×8 footer stripe.</li>
+          <li>No Inter as a display face. Geist body, Fraunces display.</li>
+          <li>No invented stats. Numbers are plausible Gambian figures (LGAs, ministries, partner orgs); GBoS, MoH, and partner-org names are real.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-bar">
+    <div style="display:flex;align-items:center;gap:14px">
+      <span class="flag-stripe" aria-hidden="true"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+      <span>GovLink · Banjul · For Open Design / Nexu Labs · v0.1 design exploration</span>
+    </div>
+    <div>4 of 15 screens · 03 May 2026</div>
+  </div>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  const stored = localStorage.getItem('govlink-theme');
+  if (stored) root.dataset.theme = stored;
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    localStorage.setItem('govlink-theme', next);
+    document.querySelectorAll('.screen-frame iframe').forEach(f => {
+      try { f.contentWindow.localStorage.setItem('govlink-theme', next); } catch {}
+      f.src = f.src;
+    });
+  });
+</script>
+
+</body>
+</html>
