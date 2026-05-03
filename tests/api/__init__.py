@@ -1,1 +1,1 @@
-"""API tests — exercise the FastAPI app via TestClient."""
+"""API tests — exercise the FastAPI app via httpx.AsyncClient + ASGITransport."""

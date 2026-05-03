@@ -10,9 +10,15 @@ dataset they describe.
 from __future__ import annotations
 
 from datetime import UTC, date, datetime
-from typing import Any
+from decimal import Decimal
+from typing import Annotated, Any
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, PlainSerializer
+
+# Project-wide convention: financial decimal fields serialise to plain string
+# (no scientific notation, no float drift). Use this alias instead of bare
+# ``Decimal`` for any field that will appear in API responses or CSV exports.
+DecimalStr = Annotated[Decimal, PlainSerializer(lambda v: str(v), return_type=str)]
 
 
 class PaginationParams(BaseModel):

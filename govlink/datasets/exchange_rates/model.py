@@ -29,6 +29,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import Mapped, mapped_column
 
+from govlink.core.schemas import DecimalStr
 from govlink.db import Base
 
 _CURRENCY_CODE_PATTERN = re.compile(r"^[A-Z]{3,4}$")
@@ -82,8 +83,13 @@ class ExchangeRate(Base):
         )
 
 
-# Decimal field bounds chosen to mirror the ORM column precision.
-_RateField = Annotated[Decimal, Field(gt=Decimal("0"), max_digits=18, decimal_places=6)]
+# Decimal field bounds chosen to mirror the ORM column precision. The
+# DecimalStr serialisation alias from core.schemas ensures these values
+# round-trip through JSON and CSV as plain strings, never floats.
+_RateField = Annotated[
+    DecimalStr,
+    Field(gt=Decimal("0"), max_digits=18, decimal_places=6),
+]
 
 
 class ExchangeRateRecord(BaseModel):
@@ -114,7 +120,7 @@ class ExchangeRateRecord(BaseModel):
 
     @computed_field  # type: ignore[prop-decorator]
     @property
-    def rate_per_unit(self) -> Decimal:
+    def rate_per_unit(self) -> DecimalStr:
         return self.rate / Decimal(self.unit_multiplier)
 
 
@@ -131,9 +137,9 @@ class ExchangeRateResponseItem(BaseModel):
     snapshot_date: date
     currency_code: str
     currency_name: str
-    rate: Decimal
+    rate: DecimalStr
     unit_multiplier: int
-    rate_per_unit: Decimal
+    rate_per_unit: DecimalStr
 
     @field_validator("rate", "rate_per_unit", mode="before")
     @classmethod
