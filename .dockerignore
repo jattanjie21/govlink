@@ -1,0 +1,48 @@
+# Version control
+.git/
+.gitignore
+.github/
+
+# Python caches
+__pycache__/
+*.py[cod]
+*.pyc
+*.so
+.Python
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment files (never bake into images)
+.env
+.env.docker
+
+# Local databases / data
+*.db
+*.sqlite
+*.sqlite*
+data/
+
+# Test + coverage artifacts (not needed at runtime)
+tests/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+
+# Docs (not needed at runtime — keep image small)
+docs/
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/

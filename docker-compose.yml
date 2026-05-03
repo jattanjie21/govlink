@@ -1,0 +1,48 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: govlink
+      POSTGRES_USER: govlink
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-govlink_dev}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U govlink -d govlink"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  migrate:
+    build: .
+    command: alembic upgrade head
+    environment:
+      GOVLINK_ENV: production
+      GOVLINK_DATABASE_URL: postgresql+psycopg://govlink:${POSTGRES_PASSWORD:-govlink_dev}@db:5432/govlink
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api:
+    build: .
+    ports:
+      - "${API_PORT:-8000}:8000"
+    environment:
+      GOVLINK_ENV: production
+      GOVLINK_DATABASE_URL: postgresql+psycopg://govlink:${POSTGRES_PASSWORD:-govlink_dev}@db:5432/govlink
+      GOVLINK_RAW_DATA_DIR: /app/data/raw
+      GOVLINK_RATE_LIMIT_PER_MINUTE: ${RATE_LIMIT:-60}
+      GOVLINK_CORS_ORIGINS: ${CORS_ORIGINS:-*}
+      GOVLINK_LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      - rawdata:/app/data/raw
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  rawdata:
