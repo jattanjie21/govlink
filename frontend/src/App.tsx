@@ -5,6 +5,7 @@ import Browse from "@/routes/Browse";
 import DatasetLayout from "@/routes/dataset/DatasetLayout";
 import DatasetOverview from "@/routes/dataset/Overview";
 import DatasetPreview from "@/routes/dataset/Preview";
+import DatasetApi from "@/routes/dataset/Api";
 import Placeholder from "@/routes/Placeholder";
 
 export default function App() {
@@ -17,10 +18,7 @@ export default function App() {
         <Route path="/datasets/:slug" element={<DatasetLayout />}>
           <Route index element={<DatasetOverview />} />
           <Route path="preview" element={<DatasetPreview />} />
-          <Route
-            path="api"
-            element={<Placeholder title="Dataset API" step="Step 7" />}
-          />
+          <Route path="api" element={<DatasetApi />} />
         </Route>
 
         <Route
