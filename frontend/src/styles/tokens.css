@@ -14,9 +14,9 @@
 :root,
 [data-theme="light"] {
   /* ---- surfaces ---- */
-  --canvas:        #FAF8F4;   /* page background — warm paper, not pure white */
+  --canvas:        #FFFFFF;   /* page background — pure white */
   --surface:       #FFFFFF;   /* cards, dropdowns, code blocks (when inverted) */
-  --surface-2:     #F2EFE8;   /* sidebars, faint banding, footer */
+  --surface-2:     #F5F5F5;   /* sidebars, faint banding, footer */
 
   /* ---- text ---- */
   --ink:           #1A1A1A;   /* primary text, headlines */
