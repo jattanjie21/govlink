@@ -56,6 +56,55 @@ def test_create_engine_with_postgres_url_uses_default_pool(
     assert "connect_args" not in captured["kwargs"]
 
 
+def test_create_engine_normalises_bare_postgresql_url_to_psycopg_v3(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """``postgresql://`` URLs (e.g. from Railway/Heroku) must be pinned to psycopg v3.
+
+    SQLAlchemy resolves the bare scheme to the legacy ``psycopg2`` driver,
+    which we do not ship; we depend on ``psycopg[binary]`` (v3) instead.
+    """
+    captured: dict[str, Any] = {}
+
+    def fake_create_engine(url: Any, **kwargs: Any) -> Any:
+        captured["url"] = url
+        return MagicMock(spec=Engine)
+
+    monkeypatch.setattr(db_module, "create_engine", fake_create_engine)
+    create_engine_from_url("postgresql://u:p@host:5432/db")
+    assert captured["url"] == "postgresql+psycopg://u:p@host:5432/db"
+
+
+def test_create_engine_normalises_legacy_postgres_url_to_psycopg_v3(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """``postgres://`` (Heroku-style legacy form) must also be pinned to psycopg v3."""
+    captured: dict[str, Any] = {}
+
+    def fake_create_engine(url: Any, **kwargs: Any) -> Any:
+        captured["url"] = url
+        return MagicMock(spec=Engine)
+
+    monkeypatch.setattr(db_module, "create_engine", fake_create_engine)
+    create_engine_from_url("postgres://u:p@host:5432/db")
+    assert captured["url"] == "postgresql+psycopg://u:p@host:5432/db"
+
+
+def test_create_engine_preserves_explicit_postgres_driver_choice(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Explicit ``postgresql+<driver>://`` URLs must not be rewritten."""
+    captured: dict[str, Any] = {}
+
+    def fake_create_engine(url: Any, **kwargs: Any) -> Any:
+        captured["url"] = url
+        return MagicMock(spec=Engine)
+
+    monkeypatch.setattr(db_module, "create_engine", fake_create_engine)
+    create_engine_from_url("postgresql+psycopg2://u:p@host:5432/db")
+    assert captured["url"] == "postgresql+psycopg2://u:p@host:5432/db"
+
+
 def test_create_engine_enables_sqlite_foreign_keys(tmp_path: Path) -> None:
     """SQLite engines must enforce ``PRAGMA foreign_keys=ON`` on every connection."""
     db_path = tmp_path / "fk.db"
