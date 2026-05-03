@@ -33,10 +33,12 @@ const config: Config = {
       },
     },
     screens: {
+      // CSS variables aren't valid inside @media queries — keep these
+      // as literal values; mirror the --bp-* tokens from tokens.css.
       sm: '640px',
-      md: 'var(--bp-tablet)',     // 768
-      lg: 'var(--bp-desktop)',    // 1024
-      xl: 'var(--bp-wide)',       // 1280
+      md: '768px',     // --bp-tablet
+      lg: '1024px',    // --bp-desktop
+      xl: '1280px',    // --bp-wide
       '2xl': '1440px',
     },
     extend: {

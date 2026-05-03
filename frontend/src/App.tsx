@@ -1,13 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 import SiteLayout from "@/layouts/SiteLayout";
-import HomeStub from "@/routes/HomeStub";
+import Home from "@/routes/Home";
 import Placeholder from "@/routes/Placeholder";
 
 export default function App() {
   return (
     <Routes>
       <Route element={<SiteLayout />}>
-        <Route index element={<HomeStub />} />
+        <Route index element={<Home />} />
         <Route
           path="/datasets"
           element={<Placeholder title="Browse datasets" step="Step 5" />}
