@@ -43,7 +43,6 @@ export default function DatasetLayout() {
           <Breadcrumbs
             items={[
               { label: "Home", to: "/" },
-              { label: "Datasets", to: "/datasets" },
               { label: d.title },
             ]}
           />

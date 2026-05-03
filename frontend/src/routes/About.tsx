@@ -3,34 +3,45 @@ import { ArrowRight, ExternalLink } from "lucide-react";
 import { Container } from "@/components/Container";
 import { Eyebrow } from "@/components/Eyebrow";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { API_PUBLIC_URL } from "@/lib/env";
 
 export default function About() {
   return (
     <>
-      <section className="border-b border-rule pb-12 pt-12 md:pt-16">
+      <section className="border-b border-rule py-20 md:py-24">
         <Container>
           <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "About" }]} />
-          <Eyebrow className="mt-6">About</Eyebrow>
-          <h1 className="mt-4 max-w-[20ch] font-display text-[clamp(32px,4vw,48px)] font-normal leading-[1.05] tracking-tight">
-            Public data,{" "}
-            <em className="font-display italic text-accent">
-              made usable.
-            </em>
+          <Eyebrow className="mt-6">National data platform · The Gambia</Eyebrow>
+          <h1 className="mt-6 max-w-[18ch] font-display text-[clamp(40px,5vw,64px)] font-normal leading-[1.05] tracking-tight">
+            Open data,{" "}
+            <em className="font-display italic text-accent">plainly served.</em>
           </h1>
-          <p className="mt-6 max-w-[62ch] text-md leading-relaxed text-ink-2">
-            GovLink is an open-source platform that makes Gambian government
-            data accessible to researchers, journalists, civic technologists,
-            and developers. Public data published by Gambian institutions is
-            overwhelmingly distributed as PDFs scattered across departmental
-            websites — useful for a human reader, but effectively closed to
-            anyone trying to build on it.
-          </p>
-          <p className="mt-4 max-w-[62ch] text-md leading-relaxed text-ink-2">
-            We do the scraping, parsing, and normalising once, in the open,
-            and expose the result through a clean web interface and a stable
-            REST API. No sign-up. No quota gates. Citable, queryable,
-            structured.
-          </p>
+
+          <div className="mt-8 grid gap-12 md:grid-cols-[1.4fr_1fr] md:items-start md:gap-16">
+            <div className="max-w-[62ch] space-y-4 text-md leading-relaxed text-ink-2">
+              <p>
+                GovLink scrapes, parses, and normalises Gambian government
+                data once, in the open, and serves it through a stable REST
+                API. Starting with the Central Bank of The Gambia daily
+                exchange rates and growing one dataset at a time. No sign-up.
+                No quota gates. Citable, queryable, and structured.
+              </p>
+              <p>
+                Public data published by Gambian institutions is overwhelmingly
+                distributed as PDFs scattered across departmental websites —
+                useful for a human reader, but effectively closed to anyone
+                trying to build on it.
+              </p>
+            </div>
+
+            <dl className="grid grid-cols-2 gap-x-6 gap-y-3.5 rounded-lg border border-rule bg-surface px-6 py-5 text-sm">
+              <Meta label="Audience">Researchers · journalists · devs</Meta>
+              <Meta label="Datasets">Growing</Meta>
+              <Meta label="Rate limit">60 req/min</Meta>
+              <Meta label="Auth">None</Meta>
+              <Meta label="License">MIT (code) · Source as published</Meta>
+            </dl>
+          </div>
         </Container>
       </section>
 
@@ -165,6 +176,51 @@ export default function About() {
         </Container>
       </section>
 
+      {/* Developer strip */}
+      <section className="border-b border-rule py-16">
+        <Container>
+          <div className="grid gap-10 md:grid-cols-[1.2fr_1fr] md:items-center">
+            <div>
+              <Eyebrow>For developers</Eyebrow>
+              <h2 className="mt-4 font-display text-xl font-normal leading-tight tracking-tight">
+                One API, every dataset.
+              </h2>
+              <p className="mt-4 max-w-prose text-sm leading-relaxed text-ink-2">
+                Every registered dataset exposes the same generic endpoints:
+                metadata, latest snapshot, paginated history, CSV export. No
+                per-dataset client code, no API keys, just stable JSON.
+              </p>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link
+                  to="/api-docs"
+                  className="inline-flex items-center gap-1.5 rounded bg-accent px-4 py-2 text-sm font-medium text-white transition-colors duration-2 ease hover:bg-accent-hover"
+                >
+                  API documentation
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+                <a
+                  href={`${API_PUBLIC_URL}/docs`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded border border-rule px-4 py-2 text-sm transition-colors duration-2 ease hover:border-rule-2 hover:bg-accent-tint"
+                >
+                  Swagger UI
+                </a>
+              </div>
+            </div>
+
+            <pre className="overflow-x-auto rounded-lg border border-rule bg-[var(--code-bg)] p-5 font-mono text-xs leading-relaxed text-[var(--code-fg)]">
+{`# Latest exchange-rate snapshot
+curl ${API_PUBLIC_URL}/datasets/exchange-rates/latest
+
+# Filter by date and currency
+curl '${API_PUBLIC_URL}/datasets/exchange-rates/historical \\
+  ?from=2026-01-01&to=2026-04-30&currency=USD'`}
+            </pre>
+          </div>
+        </Container>
+      </section>
+
       <section className="py-16">
         <Container>
           <div className="rounded-lg border border-rule bg-surface p-8 md:p-10">
@@ -192,6 +248,17 @@ export default function About() {
         </Container>
       </section>
     </>
+  );
+}
+
+function Meta({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <dt className="text-[10px] font-semibold uppercase tracking-[0.12em] text-ink-3">
+        {label}
+      </dt>
+      <dd className="mt-1 text-ink num">{children}</dd>
+    </div>
   );
 }
 

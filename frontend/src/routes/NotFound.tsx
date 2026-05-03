@@ -21,12 +21,6 @@ export default function NotFound() {
             to="/"
             className="inline-flex items-center gap-1.5 rounded bg-accent px-4 py-2 text-sm font-medium text-white transition-colors duration-2 ease hover:bg-accent-hover"
           >
-            Home
-          </Link>
-          <Link
-            to="/datasets"
-            className="inline-flex items-center gap-1.5 rounded border border-rule px-4 py-2 text-sm transition-colors duration-2 ease hover:border-rule-2 hover:bg-accent-tint"
-          >
             Browse datasets
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>

@@ -11,8 +11,7 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   { to: "/", label: "Home", end: true },
-  { to: "/datasets", label: "Datasets" },
-  { to: "/api-docs", label: "Developers" },
+  { to: "/api-docs", label: "API" },
   { to: "/about", label: "About" },
 ];
 

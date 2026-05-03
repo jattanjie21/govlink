@@ -1,147 +1,205 @@
-import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Search, X } from "lucide-react";
 import { Container } from "@/components/Container";
 import { Eyebrow } from "@/components/Eyebrow";
 import { DatasetCard } from "@/components/DatasetCard";
+import { InstitutionCard } from "@/components/InstitutionCard";
 import { EmptyState, ErrorState, LoadingCardGrid } from "@/components/States";
 import { useDatasets } from "@/lib/queries";
-import { API_PUBLIC_URL } from "@/lib/env";
+import { slugify } from "@/lib/utils";
+import type { DatasetSummary } from "@/lib/types";
+
+interface Institution {
+  publisher: string;
+  slug: string;
+  datasets: DatasetSummary[];
+}
+
+interface InstitutionMeta {
+  description?: string;
+  sector?: string;
+  logoUrl?: string;
+}
+
+const INSTITUTIONS: Record<string, InstitutionMeta> = {
+  "central-bank-of-the-gambia": {
+    sector: "Central bank",
+    description:
+      "The central bank and primary monetary authority of The Gambia. Issues currency, regulates the financial system, and publishes official daily valuation exchange rates.",
+    // logoUrl: "/logos/central-bank-of-the-gambia.png",
+  },
+};
+
+function groupByInstitution(list: DatasetSummary[]): Institution[] {
+  const map = new Map<string, Institution>();
+  for (const d of list) {
+    const slug = slugify(d.publisher);
+    let inst = map.get(slug);
+    if (!inst) {
+      inst = { publisher: d.publisher, slug, datasets: [] };
+      map.set(slug, inst);
+    }
+    inst.datasets.push(d);
+  }
+  return [...map.values()].sort((a, b) =>
+    a.publisher.localeCompare(b.publisher),
+  );
+}
+
+function matches(d: DatasetSummary, q: string): boolean {
+  return (
+    d.title.toLowerCase().includes(q) ||
+    d.publisher.toLowerCase().includes(q) ||
+    d.description.toLowerCase().includes(q) ||
+    d.slug.toLowerCase().includes(q)
+  );
+}
 
 export default function Home() {
   const { data, isLoading, isError, error } = useDatasets();
+  const [query, setQuery] = useState("");
+
+  const institutions = useMemo(
+    () => (data ? groupByInstitution(data) : []),
+    [data],
+  );
+
+  const q = query.trim().toLowerCase();
+  const isSearching = q.length > 0;
+  const filteredDatasets = useMemo(() => {
+    if (!data || !isSearching) return [];
+    return data.filter((d) => matches(d, q));
+  }, [data, q, isSearching]);
 
   return (
     <>
-      {/* Hero */}
-      <section className="border-b border-rule py-20 md:py-24">
+      <section className="border-b border-rule py-12 md:py-16">
         <Container>
-          <Eyebrow>National data platform · The Gambia</Eyebrow>
-          <h1 className="mt-6 max-w-[18ch] font-display text-[clamp(40px,5vw,64px)] font-normal leading-[1.05] tracking-tight">
-            Open data,{" "}
-            <em className="font-display italic text-accent">plainly served.</em>
-          </h1>
-
-          <div className="mt-8 grid gap-12 md:grid-cols-[1.4fr_1fr] md:items-start md:gap-16">
-            <p className="max-w-[62ch] text-md leading-relaxed text-ink-2">
-              GovLink scrapes, parses, and normalises Gambian government data
-              once, in the open, and serves it through a stable REST API.
-              Starting with the Central Bank of The Gambia daily exchange
-              rates and growing one dataset at a time. No sign-up. No quota
-              gates. Citable, queryable, and structured.
-            </p>
-
-            <dl className="grid grid-cols-2 gap-x-6 gap-y-3.5 rounded-lg border border-rule bg-surface px-6 py-5 text-sm">
-              <Meta label="Audience">Researchers · journalists · devs</Meta>
-              <Meta label="Datasets">Growing</Meta>
-              <Meta label="Rate limit">60 req/min</Meta>
-              <Meta label="Auth">None</Meta>
-              <Meta label="License">MIT (code) · Source as published</Meta>
-            </dl>
-          </div>
+          <label className="relative mx-auto block max-w-2xl">
+            <Search
+              aria-hidden
+              className="pointer-events-none absolute left-3.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-ink-3"
+            />
+            <input
+              type="search"
+              placeholder="Search datasets by title, publisher, or keyword (e.g. exchange, CBG, daily)…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="w-full rounded border border-rule bg-surface px-9 py-2.5 text-sm text-ink outline-none transition-colors duration-2 ease placeholder:text-ink-3 focus:border-accent focus:ring-2 focus:ring-accent/20"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                aria-label="Clear search"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded p-1 text-ink-3 hover:bg-rule hover:text-ink"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            )}
+          </label>
         </Container>
       </section>
 
-      {/* Featured datasets */}
-      <section className="border-b border-rule py-20">
+      <section className="py-10">
         <Container>
-          <header className="mb-9 flex items-baseline justify-between gap-8">
-            <div>
-              <Eyebrow className="mb-3.5 flex">Datasets</Eyebrow>
-              <h2 className="font-display text-xl font-normal leading-tight tracking-tight">
-                Available now
-              </h2>
-            </div>
-            <p className="max-w-[36ch] text-right text-sm text-ink-3">
-              Each dataset is structured, paginated, and exportable as CSV.
-              More land via the backend's plugin pattern.
-            </p>
+          <header className="mb-6 text-sm text-ink-3">
+            {data && isSearching && (
+              <p>
+                <span className="num text-ink">{filteredDatasets.length}</span>{" "}
+                {filteredDatasets.length === 1 ? "dataset" : "datasets"} matching{" "}
+                <span className="text-ink">"{query}"</span>
+                {data.length !== filteredDatasets.length && (
+                  <span> · {data.length} total</span>
+                )}
+              </p>
+            )}
+            {data && !isSearching && (
+              <p>
+                <span className="num text-ink">{institutions.length}</span>{" "}
+                {institutions.length === 1 ? "institution" : "institutions"}
+                {" · "}
+                <span className="num text-ink">{data.length}</span>{" "}
+                {data.length === 1 ? "dataset" : "datasets"}
+              </p>
+            )}
           </header>
 
           {isLoading && <LoadingCardGrid count={3} />}
           {isError && <ErrorState error={error} context="GET /datasets" />}
-          {data && data.length === 0 && (
-            <EmptyState
-              title="No datasets registered yet"
-              description="Once a dataset plugin is registered in the backend, it will appear here."
-            />
-          )}
-          {data && data.length > 0 && (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {data.map((d) => (
-                <DatasetCard key={d.slug} dataset={d} />
-              ))}
-            </div>
+
+          {!isLoading && !isError && isSearching && (
+            <>
+              {filteredDatasets.length === 0 && (
+                <EmptyState
+                  title="No matches"
+                  description={`Nothing matches "${query}". Try a broader term, or clear the search.`}
+                  action={
+                    <button
+                      type="button"
+                      onClick={() => setQuery("")}
+                      className="rounded border border-rule px-4 py-2 text-sm hover:bg-accent-tint hover:border-rule-2"
+                    >
+                      Clear search
+                    </button>
+                  }
+                />
+              )}
+              {filteredDatasets.length > 0 && (
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {filteredDatasets.map((d) => (
+                    <DatasetCard key={d.slug} dataset={d} />
+                  ))}
+                </div>
+              )}
+            </>
           )}
 
-          {data && data.length > 0 && (
-            <div className="mt-10">
-              <Link
-                to="/datasets"
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-hover"
-              >
-                Browse all datasets
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
+          {!isLoading && !isError && !isSearching && (
+            <>
+              {data && institutions.length === 0 && (
+                <EmptyState
+                  title="No datasets registered yet"
+                  description="Once a dataset plugin is registered in the backend, it will appear here."
+                />
+              )}
+              {institutions.length > 0 && (
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {institutions.map((inst) => {
+                    const meta = INSTITUTIONS[inst.slug] ?? {};
+                    return (
+                      <InstitutionCard
+                        key={inst.slug}
+                        publisher={inst.publisher}
+                        slug={inst.slug}
+                        datasetCount={inst.datasets.length}
+                        sector={meta.sector}
+                        description={meta.description}
+                        logoUrl={meta.logoUrl}
+                      />
+                    );
+                  })}
+                </div>
+              )}
+            </>
           )}
         </Container>
       </section>
 
-      {/* Developer strip */}
-      <section className="py-20">
+      <section className="border-t border-rule py-16 md:py-20">
         <Container>
-          <div className="grid gap-10 md:grid-cols-[1.2fr_1fr] md:items-center">
-            <div>
-              <Eyebrow>For developers</Eyebrow>
-              <h2 className="mt-4 font-display text-xl font-normal leading-tight tracking-tight">
-                One API, every dataset.
-              </h2>
-              <p className="mt-4 max-w-prose text-sm leading-relaxed text-ink-2">
-                Every registered dataset exposes the same generic endpoints:
-                metadata, latest snapshot, paginated history, CSV export. No
-                per-dataset client code, no API keys, just stable JSON.
-              </p>
-              <div className="mt-7 flex flex-wrap gap-3">
-                <Link
-                  to="/api-docs"
-                  className="inline-flex items-center gap-1.5 rounded bg-accent px-4 py-2 text-sm font-medium text-white transition-colors duration-2 ease hover:bg-accent-hover"
-                >
-                  API documentation
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-                <a
-                  href={`${API_PUBLIC_URL}/docs`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded border border-rule px-4 py-2 text-sm transition-colors duration-2 ease hover:border-rule-2 hover:bg-accent-tint"
-                >
-                  Swagger UI
-                </a>
-              </div>
-            </div>
-
-            <pre className="overflow-x-auto rounded-lg border border-rule bg-[var(--code-bg)] p-5 font-mono text-xs leading-relaxed text-[var(--code-fg)]">
-{`# Latest exchange-rate snapshot
-curl ${API_PUBLIC_URL}/datasets/exchange-rates/latest
-
-# Filter by date and currency
-curl '${API_PUBLIC_URL}/datasets/exchange-rates/historical \\
-  ?from=2026-01-01&to=2026-04-30&currency=USD'`}
-            </pre>
-          </div>
+          <Eyebrow>Datasets</Eyebrow>
+          <h2 className="mt-4 font-display text-[clamp(32px,4vw,48px)] font-normal leading-[1.05] tracking-tight">
+            Browse data by{" "}
+            <em className="font-display italic text-accent">institution</em>.
+          </h2>
+          <p className="mt-5 text-md leading-relaxed text-ink-2">
+            Each card represents a Gambian institution publishing structured
+            data through GovLink. Open one to see every dataset from that
+            publisher — or search across all datasets directly.
+          </p>
         </Container>
       </section>
     </>
-  );
-}
-
-function Meta({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <dt className="text-[10px] font-semibold uppercase tracking-[0.12em] text-ink-3">
-        {label}
-      </dt>
-      <dd className="mt-1 text-ink num">{children}</dd>
-    </div>
   );
 }
