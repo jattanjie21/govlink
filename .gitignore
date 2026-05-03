@@ -79,6 +79,12 @@ dist-ssr
 .env.*.local
 !.env.example
 
+# Vercel
+.vercel
+
+# Claude Code per-user permissions (project-shared config goes in settings.json)
+.claude/settings.local.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
