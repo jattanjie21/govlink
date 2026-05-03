@@ -37,6 +37,7 @@ dependencies = [
     "structlog>=24.4",
     "slowapi>=0.1.9",
     "python-multipart>=0.0.12",
+    "psycopg[binary]>=3.2",
 ]
 
 [project.scripts]
@@ -56,6 +57,8 @@ dev = [
     "mypy>=1.13",
     "pre-commit>=4.0",
     "types-beautifulsoup4",
+    "pyyaml>=6.0",
+    "types-pyyaml>=6.0",
 ]
 
 [build-system]

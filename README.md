@@ -22,35 +22,85 @@ Bank of The Gambia daily exchange rate sheet; many more are planned.
 
 ## Status
 
-![Status](https://img.shields.io/badge/status-pre--alpha-orange)
+![Status](https://img.shields.io/badge/status-alpha-orange)
 ![Python](https://img.shields.io/badge/python-3.12-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
+![Tests](https://img.shields.io/badge/tests-311%20passing-brightgreen)
+![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 
-This project is in **pre-alpha**. The repository currently contains only the
-project scaffold — no working ingestion, no API endpoints, no published data.
-The skeleton is being filled in across a series of phased contributions.
+The project is in **alpha**: one fully-functional dataset (CBG daily exchange
+rates) is in production-ready shape, the ingestion pipeline and REST API are
+both live, and the architecture is set up to scale to many more datasets via
+the plugin pattern.
+
+## Available datasets
+
+| Dataset | Publisher | Frequency | Status |
+|---------|-----------|-----------|--------|
+| [Daily Exchange Rates](https://www.cbg.gm/daily-valuation-exchange-rate) | Central Bank of The Gambia | Daily (weekdays) | Active |
+
+More datasets coming soon. Want to contribute one? See the
+[contributor guide](docs/adding-a-dataset.md).
 
 ## Quickstart (local, SQLite)
 
-`govlink` is managed with [uv](https://docs.astral.sh/uv/). To get started:
+Requires Python 3.12 and [uv](https://docs.astral.sh/uv/).
 
 ```bash
 git clone https://github.com/TODO/govlink.git
 cd govlink
-uv sync
 cp .env.example .env
-uv run govlink --help
+uv sync
+
+# Initialise the local SQLite database
+uv run govlink db init
+
+# Pull the latest CBG exchange rate PDF and load it
+uv run govlink ingest exchange-rates
+
+# Start the API server
+uv run uvicorn govlink.main:create_app --factory --host 127.0.0.1 --port 8000
+
+# In another terminal:
+curl http://localhost:8000/datasets/exchange-rates/latest
 ```
 
-> The `govlink` CLI and the API surface are placeholders in this phase. The
-> commands above will install dependencies and confirm the package is
-> importable; they will not yet perform ingestion or serve data.
+Open `http://localhost:8000/docs` for the Swagger UI.
 
 ## Quickstart (Docker)
 
-Docker support will be added in a later phase. Once available, the workflow
-will be `docker compose up` against a bundled `compose.yaml` that runs the
-API, a Postgres instance, and a one-shot ingestion job.
+Requires Docker and Docker Compose v2.
+
+```bash
+git clone https://github.com/TODO/govlink.git
+cd govlink
+docker compose up -d
+
+# Verify
+curl http://localhost:8000/health
+# => {"status": "ok"}
+
+# Open Swagger docs
+open http://localhost:8000/docs
+
+# Pull the first batch of data
+docker compose exec api govlink ingest exchange-rates
+
+# Stop
+docker compose down
+```
+
+Postgres data and downloaded raw PDFs persist across restarts via Docker
+volumes (`pgdata`, `rawdata`). To wipe state:
+
+```bash
+docker compose down -v
+```
+
+> **Production note:** `.env.docker` ships with dev-only defaults. Set a
+> real `POSTGRES_PASSWORD` (and any other overrides) via your
+> orchestrator's secrets system before deploying — never commit a
+> production password to git.
 
 ## Project structure
 
@@ -69,6 +119,30 @@ govlink/
 ├── docs/             # contributor and operator documentation
 └── pyproject.toml
 ```
+
+## API usage
+
+Once the server is running (locally or via Docker):
+
+```bash
+# Latest snapshot for a dataset
+curl http://localhost:8000/datasets/exchange-rates/latest
+
+# Historical records, date-filtered
+curl "http://localhost:8000/datasets/exchange-rates/historical?from=2026-01-01&to=2026-04-30"
+
+# Filter by currency
+curl "http://localhost:8000/datasets/exchange-rates/historical?currency=USD"
+
+# CSV download
+curl -O http://localhost:8000/datasets/exchange-rates/csv
+
+# Per-dataset freshness (for monitoring)
+curl http://localhost:8000/admin/health
+```
+
+Full endpoint reference: [`docs/api-reference.md`](docs/api-reference.md).
+Interactive Swagger UI: `http://localhost:8000/docs` while the server is up.
 
 ## Adding a new dataset
 
@@ -113,11 +187,13 @@ uv run pre-commit install
 
 ## Contributing
 
-Contributions are welcome. The project is intentionally small in scope per
-phase, and the contribution model favours small, well-tested pull requests.
-All PRs must pass the full test suite, the ruff lint check, and the mypy
-type check before they can be merged. Please open an issue before starting
-non-trivial work so we can align on approach.
+Contributions are welcome — bug reports, new datasets, documentation
+fixes, anything. The full guide lives at
+[`CONTRIBUTING.md`](CONTRIBUTING.md). PRs must pass the test suite,
+`ruff check`, `ruff format --check`, and `mypy --strict` to merge.
+
+If you want to add a new dataset, the dedicated walkthrough is at
+[`docs/adding-a-dataset.md`](docs/adding-a-dataset.md).
 
 ## License
 
@@ -125,8 +201,13 @@ non-trivial work so we can align on approach.
 
 ## Acknowledgements
 
-`govlink` is built on top of public data published by the people and
-institutions of The Gambia. Particular thanks are owed to the **Central
-Bank of The Gambia**, whose published exchange rate sheets are the project's
-first dataset. Additional acknowledgements will be added as new sources are
-integrated.
+- The **[Central Bank of The Gambia](https://www.cbg.gm/)** for publishing
+  daily exchange rate data — the project's first dataset.
+- Built with [FastAPI](https://fastapi.tiangolo.com/),
+  [SQLAlchemy 2.0](https://www.sqlalchemy.org/),
+  [Pydantic](https://docs.pydantic.dev/),
+  [pdfplumber](https://github.com/jsvine/pdfplumber),
+  [structlog](https://www.structlog.org/),
+  and [Typer](https://typer.tiangolo.com/).
+- Inspired by the need for accessible open-data infrastructure in
+  The Gambia.

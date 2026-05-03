@@ -55,6 +55,12 @@ class ExchangeRatesSource(BaseSource):
         )
 
     def discover(self) -> Iterable[SourceFileRef]:
+        """Scrape the CBG listing page and yield one ref per PDF entry.
+
+        Anchors that don't reference ``/downloads-file/<uuid>`` or whose
+        link text doesn't mention ``pdf`` are silently skipped (with a
+        warning log). HTTP errors propagate.
+        """
         response = self._client.get(self._listing_url)
         response.raise_for_status()
         refs = list(self._parse_listing(response.text))
@@ -62,6 +68,12 @@ class ExchangeRatesSource(BaseSource):
         return refs
 
     def fetch(self, ref: SourceFileRef) -> bytes:
+        """Download and return the bytes of a single source file.
+
+        HTTP non-2xx responses raise :class:`httpx.HTTPStatusError`;
+        timeouts raise :class:`httpx.TimeoutException`. Both propagate so
+        the caller (the orchestrator) decides retry policy.
+        """
         # If the source was constructed with a caller-supplied client that
         # doesn't carry our User-Agent header, attach it on a per-request
         # basis so test transports still see it.

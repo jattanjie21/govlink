@@ -68,6 +68,13 @@ class ExchangeRatesParser(BaseParser[ExchangeRateRecord]):
     """Parse CBG daily valuation PDFs into a list of :class:`ExchangeRateRecord`."""
 
     def parse(self, raw_bytes: bytes) -> list[ExchangeRateRecord]:
+        """Parse a CBG daily valuation PDF into typed records.
+
+        Raises :class:`ParseError` for empty input, missing snapshot date,
+        or zero currency rows; raises
+        :class:`govlink.ingestion.currency_codes.UnknownCurrencyError` if
+        the PDF contains a currency name absent from the canonical mapping.
+        """
         if not raw_bytes:
             raise ParseError("empty input bytes")
         text = self._extract_text(raw_bytes)

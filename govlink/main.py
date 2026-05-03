@@ -93,6 +93,7 @@ def create_app() -> FastAPI:
 
 # Backwards-compatible accessor: some tooling expects a callable named ``app``.
 def app() -> FastAPI:  # pragma: no cover — convenience wrapper for `uvicorn ... --factory`
+    """Convenience wrapper around :func:`create_app` for ``uvicorn --factory``."""
     return create_app()
 
 

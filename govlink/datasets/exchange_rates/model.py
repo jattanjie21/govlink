@@ -121,6 +121,7 @@ class ExchangeRateRecord(BaseModel):
     @computed_field  # type: ignore[prop-decorator]
     @property
     def rate_per_unit(self) -> DecimalStr:
+        """GMD per single foreign-currency unit, normalising the multiplier."""
         return self.rate / Decimal(self.unit_multiplier)
 
 
